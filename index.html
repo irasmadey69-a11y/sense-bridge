@@ -1,43 +1,637 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sense Bridge</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sense Bridge — zrozum pismo, zanim odpowiesz</title>
+  <meta name="description" content="Sense Bridge pomaga zrozumieć pisma urzędowe: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji." />
+  <meta name="theme-color" content="#0b1020" />
+
   <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f6f7f8;
-      color: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+    :root{
+      --bg1:#070a16;
+      --bg2:#0a1230;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.58);
+      --accent1:#5b7cfa;
+      --accent2:#8f58ff;
+      --good:#21c55d;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+      --radius2: 16px;
     }
-    .box {
-      background: #fff;
-      padding: 32px;
-      border-radius: 12px;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(143,88,255,.20), transparent 55%),
+        radial-gradient(1200px 700px at 80% 25%, rgba(91,124,250,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
     }
-    h1 {
-      margin-top: 0;
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ width:min(1100px, 92vw); margin:0 auto; }
+
+    /* Top bar */
+    .top{
+      padding:18px 0 10px;
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(7,10,22,.75), rgba(7,10,22,.35));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      z-index:20;
     }
-    p {
-      line-height: 1.5;
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 190px;
+    }
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+      flex:0 0 auto;
+    }
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brandText b{ font-size:16px; letter-spacing:.2px; }
+    .brandText small{ font-size:12px; color:var(--muted2); }
+
+    .topRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .lang{
+      display:flex;
+      gap:8px;
+      padding:8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .lang button{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:.3px;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .lang button:active{ transform: scale(.98); }
+    .lang button.active{
+      background: linear-gradient(135deg, rgba(91,124,250,.35), rgba(143,88,255,.35));
+      border-color: rgba(255,255,255,.28);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      padding:12px 16px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(91,124,250,.55), rgba(143,88,255,.55));
+      border-color: rgba(255,255,255,.22);
+      box-shadow: var(--shadow);
+    }
+    .btn.small{ padding:10px 14px; font-size:13px; font-weight:800; }
+
+    /* Hero */
+    .hero{
+      padding:32px 0 18px;
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      border-radius: var(--radius);
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      padding:22px;
+    }
+    .card2{
+      border-radius: var(--radius);
+      background: var(--card2);
+      border:1px solid rgba(255,255,255,.10);
+      padding:22px;
+    }
+
+    h1{
+      margin:0 0 12px 0;
+      font-size: clamp(30px, 3.6vw, 48px);
+      line-height:1.06;
+      letter-spacing:-.6px;
+    }
+    .lead{
+      margin:0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height:1.5;
+      max-width: 62ch;
+    }
+
+    .ctaRow{
+      display:flex;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .proofTitle{
+      font-size:14px;
+      color: var(--muted2);
+      margin:0 0 10px 0;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .miniList{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .miniItem{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:12px 14px;
+      border-radius: var(--radius2);
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      margin-top:5px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      flex:0 0 auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+    .miniItem b{ display:block; margin-bottom:2px; }
+    .miniItem span{ color: var(--muted); font-size:13px; line-height:1.35; }
+
+    /* Section */
+    .section{
+      padding:14px 0 46px;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    h2{
+      margin:0 0 10px 0;
+      font-size: 20px;
+      letter-spacing:-.2px;
+    }
+    .p{
+      margin:0;
+      color: var(--muted);
+      line-height:1.6;
+      font-size: 15px;
+    }
+    .steps{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+    .step{
+      padding:14px 14px;
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .step b{ display:block; margin-bottom:4px; }
+    .step small{ color: var(--muted); font-size:13px; line-height:1.4; display:block; }
+
+    .footer{
+      padding:22px 0 32px;
+      color: rgba(255,255,255,.55);
+      font-size:12px;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.10);
+    }
+
+    @media (max-width: 880px){
+      .heroGrid{ grid-template-columns: 1fr; }
+      .split{ grid-template-columns: 1fr; }
+      .brand{ min-width: auto; }
+      .topRight{ gap:8px; }
+      .btn.small{ width:100%; }
+      .lang{ width:100%; justify-content:center; }
     }
   </style>
 </head>
+
 <body>
-  <div class="box">
-    <h1>Sense Bridge</h1>
-    <p>
-      To jest testowa strona startowa.<br>
-      Jeśli to widzisz — deploy działa.
-    </p>
+  <!-- TOP -->
+  <div class="top">
+    <div class="wrap">
+      <div class="topRow">
+        <div class="brand" aria-label="Sense Bridge">
+          <div class="logo" aria-hidden="true">
+            <!-- Built-in logo (always works) -->
+            <svg viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#5b7cfa"/>
+                  <stop offset="1" stop-color="#8f58ff"/>
+                </linearGradient>
+              </defs>
+              <rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.14)"/>
+              <path d="M18 38c7 9 21 9 28 0" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
+              <path d="M18 26c7-9 21-9 28 0" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="22" cy="32" r="2.2" fill="rgba(255,255,255,.75)"/>
+              <circle cx="42" cy="32" r="2.2" fill="rgba(255,255,255,.75)"/>
+            </svg>
+          </div>
+          <div class="brandText">
+            <b>Sense Bridge</b>
+            <small data-i18n="tag">Zrozum pismo. Bez presji.</small>
+          </div>
+        </div>
+
+        <div class="topRight">
+          <div class="lang" aria-label="Language switch">
+            <button type="button" class="lang-btn" data-lang="pl">PL</button>
+            <button type="button" class="lang-btn" data-lang="nl">NL</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+            <button type="button" class="lang-btn" data-lang="de">DE</button>
+          </div>
+
+          <a class="btn small primary" href="/app/" data-i18n="openApp">Otwórz aplikację</a>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap">
+      <div class="heroGrid">
+        <div class="card">
+          <h1 data-i18n="h1">Zrozum sens pisma urzędowego w 30 sekund.</h1>
+          <p class="lead" data-i18n="lead">
+            Sense Bridge analizuje pisma urzędowe w obcych językach i pokazuje: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn primary" href="/app/" data-i18n="openMain">Otwórz Sense Bridge</a>
+            <button class="btn" type="button" id="btnHow" data-i18n="howBtn">Zobacz jak działa</button>
+          </div>
+
+          <div class="chips" aria-label="Key promises">
+            <div class="chip" data-i18n="chip1">Bez porad i nacisku</div>
+            <div class="chip" data-i18n="chip2">Bez rejestracji</div>
+            <div class="chip" data-i18n="chip3">Bez “pierwszej odpowiedzi”</div>
+            <div class="chip" data-i18n="chip4">Decyzja zawsze po Twojej stronie</div>
+          </div>
+        </div>
+
+        <div class="card2">
+          <p class="proofTitle" data-i18n="miniTitle">Co dostajesz w wyniku</p>
+
+          <div class="miniList">
+            <div class="miniItem">
+              <div class="dot"></div>
+              <div>
+                <b data-i18n="m1t">Sens pisma</b>
+                <span data-i18n="m1d">O co dokładnie chodzi i czego urząd oczekuje.</span>
+              </div>
+            </div>
+
+            <div class="miniItem">
+              <div class="dot"></div>
+              <div>
+                <b data-i18n="m2t">Ryzyka i konsekwencje</b>
+                <span data-i18n="m2d">Co się stanie, jeśli zrobisz X / nie zrobisz Y.</span>
+              </div>
+            </div>
+
+            <div class="miniItem">
+              <div class="dot"></div>
+              <div>
+                <b data-i18n="m3t">Neutralne odpowiedzi</b>
+                <span data-i18n="m3d">Kilka wariantów grzecznych odpowiedzi — bez “radzenia”.</span>
+              </div>
+            </div>
+
+            <div class="miniItem">
+              <div class="dot"></div>
+              <div>
+                <b data-i18n="m4t">Most językowy</b>
+                <span data-i18n="m4d">Twoje słowa + język odbiorcy + opcja zapasowa (EN).</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section" id="how">
+    <div class="wrap">
+      <div class="split">
+        <div class="card2">
+          <h2 data-i18n="h2a">Jak to działa (bez kombinowania)</h2>
+          <p class="p" data-i18n="pa">
+            Wklejasz treść pisma. Wybierasz język (albo AUTO). Klikasz analizę. Dostajesz czytelny wynik: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi.
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              <b data-i18n="s1t">1) Wklej pismo</b>
+              <small data-i18n="s1d">Może być e-mail, PDF skopiowany jako tekst, wiadomość z urzędu.</small>
+            </div>
+            <div class="step">
+              <b data-i18n="s2t">2) Kliknij „Analizuj”</b>
+              <small data-i18n="s2d">Bez tworzenia kont, bez tutoriali, bez gadania.</small>
+            </div>
+            <div class="step">
+              <b data-i18n="s3t">3) Podejmij decyzję spokojnie</b>
+              <small data-i18n="s3d">To Ty decydujesz — Sense Bridge pomaga zrozumieć, nie prowadzi za rękę.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="card2">
+          <h2 data-i18n="h2b">Dla kogo</h2>
+          <p class="p" data-i18n="pb">
+            Dla ludzi żyjących między językami (PL/NL/EN/DE…). Gdy pismo brzmi groźnie albo niejasno — najpierw zrozum, potem odpowiadaj.
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              <b data-i18n="u1t">Urzędy / UWV / gmina</b>
+              <small data-i18n="u1d">Terminy, prośby o dokumenty, konsekwencje braku odpowiedzi.</small>
+            </div>
+            <div class="step">
+              <b data-i18n="u2t">Praca / agencje / HR</b>
+              <small data-i18n="u2d">Umowy, mail z wymaganiami, formalne komunikaty.</small>
+            </div>
+            <div class="step">
+              <b data-i18n="u3t">Szkoła / lekarz / instytucje</b>
+              <small data-i18n="u3d">Ważne informacje, które łatwo źle zrozumieć w obcym języku.</small>
+            </div>
+          </div>
+
+          <div class="ctaRow" style="margin-top:16px;">
+            <a class="btn primary" href="/app/" data-i18n="openBottom">Przejdź do aplikacji</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="wrap">
+      <div data-i18n="foot">
+        Sense Bridge — bez porad, bez presji. Najpierw zrozum, potem odpowiadaj.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const I18N = {
+      pl: {
+        tag: "Zrozum pismo. Bez presji.",
+        h1: "Zrozum sens pisma urzędowego w 30 sekund.",
+        lead: "Sense Bridge analizuje pisma urzędowe w obcych językach i pokazuje: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji.",
+        openApp: "Otwórz aplikację",
+        openMain: "Otwórz Sense Bridge",
+        howBtn: "Zobacz jak działa",
+        chip1: "Bez porad i nacisku",
+        chip2: "Bez rejestracji",
+        chip3: "Bez “pierwszej odpowiedzi”",
+        chip4: "Decyzja zawsze po Twojej stronie",
+
+        miniTitle: "Co dostajesz w wyniku",
+        m1t: "Sens pisma", m1d: "O co dokładnie chodzi i czego urząd oczekuje.",
+        m2t: "Ryzyka i konsekwencje", m2d: "Co się stanie, jeśli zrobisz X / nie zrobisz Y.",
+        m3t: "Neutralne odpowiedzi", m3d: "Kilka wariantów grzecznych odpowiedzi — bez “radzenia”.",
+        m4t: "Most językowy", m4d: "Twoje słowa + język odbiorcy + opcja zapasowa (EN).",
+
+        h2a:"Jak to działa (bez kombinowania)",
+        pa:"Wklejasz treść pisma. Wybierasz język (albo AUTO). Klikasz analizę. Dostajesz czytelny wynik: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi.",
+        s1t:"1) Wklej pismo", s1d:"Może być e-mail, PDF skopiowany jako tekst, wiadomość z urzędu.",
+        s2t:"2) Kliknij „Analizuj”", s2d:"Bez tworzenia kont, bez tutoriali, bez gadania.",
+        s3t:"3) Podejmij decyzję spokojnie", s3d:"To Ty decydujesz — Sense Bridge pomaga zrozumieć, nie prowadzi za rękę.",
+
+        h2b:"Dla kogo",
+        pb:"Dla ludzi żyjących między językami (PL/NL/EN/DE…). Gdy pismo brzmi groźnie albo niejasno — najpierw zrozum, potem odpowiadaj.",
+        u1t:"Urzędy / UWV / gmina", u1d:"Terminy, prośby o dokumenty, konsekwencje braku odpowiedzi.",
+        u2t:"Praca / agencje / HR", u2d:"Umowy, mail z wymaganiami, formalne komunikaty.",
+        u3t:"Szkoła / lekarz / instytucje", u3d:"Ważne informacje, które łatwo źle zrozumieć w obcym języku.",
+        openBottom:"Przejdź do aplikacji",
+
+        foot:"Sense Bridge — bez porad, bez presji. Najpierw zrozum, potem odpowiadaj."
+      },
+
+      nl: {
+        tag: "Begrijp brieven. Zonder druk.",
+        h1: "Begrijp de betekenis van een officiële brief in 30 seconden.",
+        lead: "Sense Bridge analyseert officiële brieven in vreemde talen en toont: betekenis, risico’s, gevolgen en neutrale antwoordopties — zonder advies en zonder druk.",
+        openApp: "Open de app",
+        openMain: "Open Sense Bridge",
+        howBtn: "Bekijk hoe het werkt",
+        chip1: "Geen advies, geen druk",
+        chip2: "Geen registratie",
+        chip3: "Niet ‘het eerste antwoord’",
+        chip4: "De keuze blijft bij jou",
+
+        miniTitle: "Wat je terugkrijgt",
+        m1t: "Betekenis", m1d: "Waar het precies om gaat en wat men van je verwacht.",
+        m2t: "Risico’s & gevolgen", m2d: "Wat er gebeurt als je X doet of Y niet doet.",
+        m3t: "Neutrale reacties", m3d: "Een paar nette opties — zonder ‘advies’ te geven.",
+        m4t: "Taalbrug", m4d: "Jouw woorden + taal van de ontvanger + back-up (EN).",
+
+        h2a:"Hoe het werkt (simpel)",
+        pa:"Je plakt de tekst. Je kiest de taal (of AUTO). Je klikt analyseren. Je krijgt een duidelijke uitkomst: betekenis, risico’s, gevolgen en neutrale reacties.",
+        s1t:"1) Plak de brief", s1d:"Kan e-mail zijn, PDF als tekst, bericht van een instantie.",
+        s2t:"2) Klik ‘Analyseren’", s2d:"Geen account, geen tutorial, geen gedoe.",
+        s3t:"3) Beslis rustig", s3d:"Jij beslist — Sense Bridge helpt begrijpen, niet sturen.",
+
+        h2b:"Voor wie",
+        pb:"Voor mensen tussen talen (PL/NL/EN/DE…). Als een brief streng of onduidelijk klinkt: eerst begrijpen, dan pas reageren.",
+        u1t:"Instanties / UWV / gemeente", u1d:"Termijnen, documentverzoeken, gevolgen bij geen reactie.",
+        u2t:"Werk / bureaus / HR", u2d:"Contracten, eisen per mail, formele communicatie.",
+        u3t:"School / huisarts / instellingen", u3d:"Belangrijke info die je snel verkeerd begrijpt in een andere taal.",
+        openBottom:"Ga naar de app",
+
+        foot:"Sense Bridge — geen advies, geen druk. Eerst begrijpen, dan reageren."
+      },
+
+      en: {
+        tag: "Understand letters. No pressure.",
+        h1: "Understand an official letter in 30 seconds.",
+        lead: "Sense Bridge analyzes official letters in foreign languages and shows: meaning, risks, consequences, and neutral reply options — no advice, no pressure.",
+        openApp: "Open the app",
+        openMain: "Open Sense Bridge",
+        howBtn: "See how it works",
+        chip1: "No advice, no pressure",
+        chip2: "No sign-up",
+        chip3: "Not a ‘first answer’ bot",
+        chip4: "Decision stays with you",
+
+        miniTitle: "What you get",
+        m1t: "Meaning", m1d: "What it’s about and what is expected from you.",
+        m2t: "Risks & consequences", m2d: "What happens if you do X / don’t do Y.",
+        m3t: "Neutral replies", m3d: "A few polite options — without ‘telling you what to do’.",
+        m4t: "Language bridge", m4d: "Your words + recipient language + fallback (EN).",
+
+        h2a:"How it works (simple)",
+        pa:"Paste the letter. Choose language (or AUTO). Click analyze. Get a clear output: meaning, risks, consequences, and neutral replies.",
+        s1t:"1) Paste the letter", s1d:"Email, copied PDF text, message from an institution — all good.",
+        s2t:"2) Click ‘Analyze’", s2d:"No account. No tutorial. No nonsense.",
+        s3t:"3) Decide calmly", s3d:"You decide — Sense Bridge helps you understand, not push.",
+
+        h2b:"Who it’s for",
+        pb:"For people living between languages (PL/NL/EN/DE…). When a letter feels strict or unclear: understand first, reply second.",
+        u1t:"Government / UWV / municipality", u1d:"Deadlines, document requests, consequences if you don’t respond.",
+        u2t:"Work / agencies / HR", u2d:"Contracts, formal emails, requirements.",
+        u3t:"School / doctor / institutions", u3d:"Important info that’s easy to misunderstand in another language.",
+        openBottom:"Go to the app",
+
+        foot:"Sense Bridge — no advice, no pressure. Understand first, reply second."
+      },
+
+      de: {
+        tag: "Briefe verstehen. Ohne Druck.",
+        h1: "Verstehe den Sinn eines Behördenbriefs in 30 Sekunden.",
+        lead: "Sense Bridge analysiert Behördenbriefe in Fremdsprachen und zeigt: Sinn, Risiken, Folgen und neutrale Antwortvarianten — ohne Beratung und ohne Druck.",
+        openApp: "App öffnen",
+        openMain: "Sense Bridge öffnen",
+        howBtn: "So funktioniert’s",
+        chip1: "Keine Beratung, kein Druck",
+        chip2: "Keine Registrierung",
+        chip3: "Kein „erstes Antwort“-Bot",
+        chip4: "Entscheidung bleibt bei dir",
+
+        miniTitle: "Was du bekommst",
+        m1t: "Sinn", m1d: "Worum es geht und was von dir erwartet wird.",
+        m2t: "Risiken & Folgen", m2d: "Was passiert, wenn du X tust / Y nicht tust.",
+        m3t: "Neutrale Antworten", m3d: "Ein paar höfliche Optionen — ohne dir etwas zu raten.",
+        m4t: "Sprachbrücke", m4d: "Deine Worte + Sprache des Empfängers + Backup (EN).",
+
+        h2a:"So funktioniert’s (einfach)",
+        pa:"Text einfügen. Sprache wählen (oder AUTO). Analysieren klicken. Ergebnis: Sinn, Risiken, Folgen und neutrale Antworten.",
+        s1t:"1) Brief einfügen", s1d:"E-Mail, kopierter PDF-Text, Nachricht von einer Behörde.",
+        s2t:"2) ‚Analysieren‘ klicken", s2d:"Kein Konto. Kein Tutorial. Kein Aufwand.",
+        s3t:"3) Ruhig entscheiden", s3d:"Du entscheidest — Sense Bridge hilft zu verstehen, nicht zu drängen.",
+
+        h2b:"Für wen",
+        pb:"Für Menschen zwischen Sprachen (PL/NL/EN/DE…). Wenn ein Brief streng oder unklar wirkt: erst verstehen, dann antworten.",
+        u1t:"Behörden / UWV / Gemeinde", u1d:"Fristen, Dokumentanforderungen, Folgen ohne Antwort.",
+        u2t:"Arbeit / Agenturen / HR", u2d:"Verträge, formelle E-Mails, Anforderungen.",
+        u3t:"Schule / Arzt / Institutionen", u3d:"Wichtige Infos, die man leicht missversteht.",
+        openBottom:"Zur App",
+
+        foot:"Sense Bridge — ohne Beratung, ohne Druck. Erst verstehen, dann antworten."
+      }
+    };
+
+    function setLang(lang){
+      const t = I18N[lang] || I18N.pl;
+
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll("[data-i18n]").forEach(el=>{
+        const key = el.getAttribute("data-i18n");
+        if(t[key]) el.textContent = t[key];
+      });
+
+      document.querySelectorAll(".lang-btn").forEach(b=>{
+        b.classList.toggle("active", b.dataset.lang === lang);
+      });
+
+      localStorage.setItem("sb_lang", lang);
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      // smooth scroll
+      const btnHow = document.getElementById("btnHow");
+      if(btnHow){
+        btnHow.addEventListener("click", ()=>{
+          document.getElementById("how")?.scrollIntoView({behavior:"smooth", block:"start"});
+        });
+      }
+
+      // language buttons
+      document.querySelectorAll(".lang-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=> setLang(btn.dataset.lang));
+      });
+
+      const saved = localStorage.getItem("sb_lang") || "pl";
+      setLang(saved);
+    });
+  </script>
 </body>
 </html>
