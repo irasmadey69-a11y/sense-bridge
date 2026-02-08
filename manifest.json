@@ -1,8 +1,9 @@
 {
+  "id": "/",
   "name": "Sense Bridge",
   "short_name": "SenseBridge",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0E2A47",
   "theme_color": "#0E2A47",

@@ -1,637 +1,848 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sense Bridge — zrozum pismo, zanim odpowiesz</title>
-  <meta name="description" content="Sense Bridge pomaga zrozumieć pisma urzędowe: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji." />
-  <meta name="theme-color" content="#0b1020" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0E2A47">
+
+  <title>Sense Bridge — zrozum pisma urzędowe</title>
+
+  <!-- ✅ paths safe for /app/ -->
+  <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="manifest" href="/manifest.json">
 
   <style>
     :root{
-      --bg1:#070a16;
-      --bg2:#0a1230;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.06);
-      --border: rgba(255,255,255,.16);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --muted2: rgba(255,255,255,.58);
-      --accent1:#5b7cfa;
-      --accent2:#8f58ff;
-      --good:#21c55d;
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-      --radius2: 16px;
+      --bg:#f6f7f9;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --primary:#4f8f7a;
+      --primary-hover:#447d6a;
+      --warn:#fef3c7;
+      --warn-text:#92400e;
+      --border:#e5e7eb;
+      --ok:#5fb3a2;
+      --ok-hover:#4aa091;
+      --danger:#ef4444;
     }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
       color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(143,88,255,.20), transparent 55%),
-        radial-gradient(1200px 700px at 80% 25%, rgba(91,124,250,.18), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      overflow-x:hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height:1.5;
     }
-
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ width:min(1100px, 92vw); margin:0 auto; }
-
-    /* Top bar */
-    .top{
-      padding:18px 0 10px;
-      position:sticky;
-      top:0;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(7,10,22,.75), rgba(7,10,22,.35));
-      border-bottom:1px solid rgba(255,255,255,.08);
-      z-index:20;
+    main{
+      max-width:900px;
+      margin:0 auto;
+      padding:24px 16px 64px;
     }
-    .topRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width: 190px;
-    }
-    .logo{
-      width:44px;
-      height:44px;
+    h1,h2,h3{margin:0 0 8px}
+    p{margin:0 0 12px;color:var(--muted)}
+    .card{
+      background:var(--card);
       border-radius:14px;
-      overflow:hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.05);
-      flex:0 0 auto;
+      border:1px solid var(--border);
+      padding:16px;
+      margin-bottom:16px;
     }
-    .brandText{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
+    textarea{
+      width:100%;
+      min-height:160px;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:15px;
+      resize:vertical;
     }
-    .brandText b{ font-size:16px; letter-spacing:.2px; }
-    .brandText small{ font-size:12px; color:var(--muted2); }
+    select,button{
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:14px;
+    }
+    button.primary{
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+    button.primary:hover{background:var(--primary-hover)}
+    button.primary:disabled{
+      background:#93c5fd;
+      cursor:not-allowed;
+    }
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .grow{flex:1}
+    .section-title{
+      font-size:15px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .box-warn{
+      background:var(--warn);
+      color:var(--warn-text);
+      border-radius:10px;
+      padding:10px 12px;
+      margin-bottom:8px;
+    }
+    pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:13px;
+      background:#f9fafb;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+    }
 
-    .topRight{
+    .topbar{
       display:flex;
-      align-items:center;
+      justify-content:space-between;
       gap:10px;
+      align-items:center;
       flex-wrap:wrap;
-      justify-content:flex-end;
+      margin-bottom:10px;
     }
-
-    .lang{
+    .ui-switch{
       display:flex;
       gap:8px;
-      padding:8px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .lang button{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius:999px;
-      font-weight:700;
-      font-size:13px;
-      letter-spacing:.3px;
-      cursor:pointer;
-      transition: transform .08s ease, background .2s ease, border-color .2s ease;
-    }
-    .lang button:active{ transform: scale(.98); }
-    .lang button.active{
-      background: linear-gradient(135deg, rgba(91,124,250,.35), rgba(143,88,255,.35));
-      border-color: rgba(255,255,255,.28);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      padding:12px 16px;
-      border-radius:999px;
-      font-weight:800;
-      cursor:pointer;
-      transition: transform .08s ease, background .2s ease, border-color .2s ease;
-      display:inline-flex;
-      gap:10px;
       align-items:center;
-      justify-content:center;
-      user-select:none;
-      white-space:nowrap;
-    }
-    .btn:active{ transform: scale(.98); }
-    .btn.primary{
-      background: linear-gradient(135deg, rgba(91,124,250,.55), rgba(143,88,255,.55));
-      border-color: rgba(255,255,255,.22);
-      box-shadow: var(--shadow);
-    }
-    .btn.small{ padding:10px 14px; font-size:13px; font-weight:800; }
-
-    /* Hero */
-    .hero{
-      padding:32px 0 18px;
-    }
-    .heroGrid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-      align-items:stretch;
-    }
-    .card{
-      border-radius: var(--radius);
-      background: var(--card);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      padding:22px;
-    }
-    .card2{
-      border-radius: var(--radius);
-      background: var(--card2);
-      border:1px solid rgba(255,255,255,.10);
-      padding:22px;
-    }
-
-    h1{
-      margin:0 0 12px 0;
-      font-size: clamp(30px, 3.6vw, 48px);
-      line-height:1.06;
-      letter-spacing:-.6px;
-    }
-    .lead{
-      margin:0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height:1.5;
-      max-width: 62ch;
-    }
-
-    .ctaRow{
-      display:flex;
-      gap:12px;
-      margin-top:18px;
       flex-wrap:wrap;
     }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:18px;
-    }
-    .chip{
-      padding:10px 12px;
+    .ui-btn{
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      padding:8px 10px;
       border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      color: var(--muted);
-      font-weight:700;
       font-size:13px;
+      color:var(--muted);
+    }
+    .ui-btn.active{
+      border-color:var(--primary);
+      color:var(--text);
+      box-shadow: 0 0 0 3px rgba(79,143,122,0.18);
     }
 
-    .proofTitle{
-      font-size:14px;
-      color: var(--muted2);
-      margin:0 0 10px 0;
-      font-weight:800;
-      letter-spacing:.2px;
+    .access{
+      margin-top:24px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      padding:16px;
     }
-    .miniList{
+    .access.hidden{ display:none; }
+    .plans{
       display:grid;
-      gap:10px;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:12px;
+      margin:12px 0;
+    }
+    .plan{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+      cursor:pointer;
+      text-align:left;
+      position:relative;
+    }
+    .plan:hover{ border-color:#cbd5e1; }
+    .plan.best{ border-color:var(--ok); }
+    .badge{
+      position:absolute;
+      top:10px;
+      right:10px;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#dcfce7;
+      color:#166534;
+      border:1px solid #86efac;
+    }
+    .plan .name{ font-weight:600; margin-bottom:4px; }
+    .plan .price{ font-size:22px; font-weight:800; }
+    .plan .meta{ color:var(--muted); font-size:13px; margin-top:4px; }
+
+    .fine{
+      font-size:13px;
+      color:var(--muted);
       margin-top:10px;
     }
-    .miniItem{
+
+    .statusbar{
       display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:12px 14px;
-      border-radius: var(--radius2);
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed var(--border);
     }
-    .dot{
-      width:10px;
-      height:10px;
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--border);
       border-radius:999px;
-      margin-top:5px;
-      background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      flex:0 0 auto;
-      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+      padding:6px 10px;
+      background:#fff;
+      font-size:13px;
+      color:var(--muted);
     }
-    .miniItem b{ display:block; margin-bottom:2px; }
-    .miniItem span{ color: var(--muted); font-size:13px; line-height:1.35; }
+    .chip strong{ color:var(--text); }
+    .link{
+      background:none;
+      border:none;
+      color:var(--primary);
+      cursor:pointer;
+      padding:0;
+      font-size:13px;
+    }
+    .link:hover{ text-decoration:underline; }
 
-    /* Section */
-    .section{
-      padding:14px 0 46px;
+    .lock{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid #fecaca;
+      background:#fff1f2;
+      color:#991b1b;
+      display:none;
     }
-    .split{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:18px;
-    }
-    h2{
-      margin:0 0 10px 0;
-      font-size: 20px;
-      letter-spacing:-.2px;
-    }
-    .p{
-      margin:0;
-      color: var(--muted);
-      line-height:1.6;
-      font-size: 15px;
-    }
-    .steps{
-      display:grid;
-      gap:10px;
-      margin-top:14px;
-    }
-    .step{
-      padding:14px 14px;
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .step b{ display:block; margin-bottom:4px; }
-    .step small{ color: var(--muted); font-size:13px; line-height:1.4; display:block; }
+    .lock.show{ display:block; }
 
-    .footer{
-      padding:22px 0 32px;
-      color: rgba(255,255,255,.55);
-      font-size:12px;
-      text-align:center;
-      border-top:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.10);
+    .tools{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:8px;
     }
-
-    @media (max-width: 880px){
-      .heroGrid{ grid-template-columns: 1fr; }
-      .split{ grid-template-columns: 1fr; }
-      .brand{ min-width: auto; }
-      .topRight{ gap:8px; }
-      .btn.small{ width:100%; }
-      .lang{ width:100%; justify-content:center; }
+    .tool-btn{
+      background:#fff;
+      border:1px solid var(--border);
+      cursor:pointer;
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .tool-btn:hover{border-color:#cbd5e1}
+    .hint{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:8px;
     }
   </style>
 </head>
 
 <body>
-  <!-- TOP -->
-  <div class="top">
-    <div class="wrap">
-      <div class="topRow">
-        <div class="brand" aria-label="Sense Bridge">
-          <div class="logo" aria-hidden="true">
-            <!-- Built-in logo (always works) -->
-            <svg viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#5b7cfa"/>
-                  <stop offset="1" stop-color="#8f58ff"/>
-                </linearGradient>
-              </defs>
-              <rect x="6" y="6" width="52" height="52" rx="16" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.14)"/>
-              <path d="M18 38c7 9 21 9 28 0" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
-              <path d="M18 26c7-9 21-9 28 0" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="5" stroke-linecap="round"/>
-              <circle cx="22" cy="32" r="2.2" fill="rgba(255,255,255,.75)"/>
-              <circle cx="42" cy="32" r="2.2" fill="rgba(255,255,255,.75)"/>
-            </svg>
-          </div>
-          <div class="brandText">
-            <b>Sense Bridge</b>
-            <small data-i18n="tag">Zrozum pismo. Bez presji.</small>
-          </div>
-        </div>
+<main>
 
-        <div class="topRight">
-          <div class="lang" aria-label="Language switch">
-            <button type="button" class="lang-btn" data-lang="pl">PL</button>
-            <button type="button" class="lang-btn" data-lang="nl">NL</button>
-            <button type="button" class="lang-btn" data-lang="en">EN</button>
-            <button type="button" class="lang-btn" data-lang="de">DE</button>
-          </div>
-
-          <a class="btn small primary" href="/app/" data-i18n="openApp">Otwórz aplikację</a>
-        </div>
+  <div class="card">
+    <div class="topbar">
+      <div>
+        <h1 id="hTitle">Sense Bridge</h1>
+        <p id="hDesc">Pomaga zrozumieć pisma urzędowe. Bez porad. Bez presji.</p>
       </div>
+
+      <div class="ui-switch" aria-label="Język strony">
+        <button class="ui-btn" type="button" data-ui="PL" onclick="setUiLang('PL')">PL</button>
+        <button class="ui-btn" type="button" data-ui="NL" onclick="setUiLang('NL')">NL</button>
+        <button class="ui-btn" type="button" data-ui="EN" onclick="setUiLang('EN')">EN</button>
+        <button class="ui-btn" type="button" data-ui="DE" onclick="setUiLang('DE')">DE</button>
+      </div>
+    </div>
+
+    <!-- ✅ paid message OUTSIDE topbar but inside header card -->
+    <div id="paidMsg" class="card" style="display:none;margin:12px 0 0;">
+      <p id="paidText" style="margin:0;color:#1f2937;font-weight:600;"></p>
     </div>
   </div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="wrap">
-      <div class="heroGrid">
-        <div class="card">
-          <h1 data-i18n="h1">Zrozum sens pisma urzędowego w 30 sekund.</h1>
-          <p class="lead" data-i18n="lead">
-            Sense Bridge analizuje pisma urzędowe w obcych językach i pokazuje: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji.
-          </p>
+  <div class="card">
+    <div class="section-title" id="lblPaste">Wklej pismo</div>
+    <textarea id="inputText" placeholder="Wklej treść pisma lub e-maila z urzędu…"></textarea>
 
-          <div class="ctaRow">
-            <a class="btn primary" href="/app/" data-i18n="openMain">Otwórz Sense Bridge</a>
-            <button class="btn" type="button" id="btnHow" data-i18n="howBtn">Zobacz jak działa</button>
-          </div>
+    <div class="row" style="margin-top:8px">
+      <select id="sourceLang" aria-label="Język dokumentu">
+        <option value="AUTO">Język dokumentu: AUTO</option>
+        <option value="NL">NL</option>
+        <option value="DE">DE</option>
+        <option value="EN">EN</option>
+        <option value="PL">PL</option>
+      </select>
 
-          <div class="chips" aria-label="Key promises">
-            <div class="chip" data-i18n="chip1">Bez porad i nacisku</div>
-            <div class="chip" data-i18n="chip2">Bez rejestracji</div>
-            <div class="chip" data-i18n="chip3">Bez “pierwszej odpowiedzi”</div>
-            <div class="chip" data-i18n="chip4">Decyzja zawsze po Twojej stronie</div>
-          </div>
-        </div>
+      <select id="userLang" aria-label="Twój język">
+        <option value="PL">Twój język: PL</option>
+        <option value="DE">DE</option>
+        <option value="NL">NL</option>
+        <option value="EN">EN</option>
+      </select>
 
-        <div class="card2">
-          <p class="proofTitle" data-i18n="miniTitle">Co dostajesz w wyniku</p>
+      <button id="btnAnalyze" class="primary grow" onclick="analyze()">Analizuj pismo</button>
+    </div>
 
-          <div class="miniList">
-            <div class="miniItem">
-              <div class="dot"></div>
-              <div>
-                <b data-i18n="m1t">Sens pisma</b>
-                <span data-i18n="m1d">O co dokładnie chodzi i czego urząd oczekuje.</span>
-              </div>
-            </div>
+    <div class="tools">
+      <button class="tool-btn" type="button" onclick="clearInput()">Wyczyść</button>
+      <button class="tool-btn" type="button" onclick="copyText('translation')">Kopiuj tłumaczenie</button>
+      <button class="tool-btn" type="button" onclick="copyText('examples')">Kopiuj odpowiedzi</button>
+    </div>
 
-            <div class="miniItem">
-              <div class="dot"></div>
-              <div>
-                <b data-i18n="m2t">Ryzyka i konsekwencje</b>
-                <span data-i18n="m2d">Co się stanie, jeśli zrobisz X / nie zrobisz Y.</span>
-              </div>
-            </div>
-
-            <div class="miniItem">
-              <div class="dot"></div>
-              <div>
-                <b data-i18n="m3t">Neutralne odpowiedzi</b>
-                <span data-i18n="m3d">Kilka wariantów grzecznych odpowiedzi — bez “radzenia”.</span>
-              </div>
-            </div>
-
-            <div class="miniItem">
-              <div class="dot"></div>
-              <div>
-                <b data-i18n="m4t">Most językowy</b>
-                <span data-i18n="m4d">Twoje słowa + język odbiorcy + opcja zapasowa (EN).</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
+    <div class="statusbar">
+      <div class="chip">
+        <span id="lblFree">FREE:</span> <strong id="freeLeft">3</strong> <span id="lblAnalyses">analizy</span>
       </div>
+      <div class="chip">
+        <span id="lblAccess">Dostęp:</span> <strong id="accessState">FREE</strong>
+      </div>
+      <button class="link" onclick="resetFree()" title="Tylko do testów" id="btnReset" style="display:none">Reset testowy</button>
+    </div>
+
+    <div id="lockBox" class="lock">
+      Limit FREE został wykorzystany. Wybierz dostęp poniżej, aby kontynuować.
+    </div>
+
+    <div class="hint" id="hintUI">
+      „UI” to po prostu <strong>język strony</strong> (przycisków i opisów) — nie zmienia treści dokumentu ani analizy.
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="section" id="how">
-    <div class="wrap">
-      <div class="split">
-        <div class="card2">
-          <h2 data-i18n="h2a">Jak to działa (bez kombinowania)</h2>
-          <p class="p" data-i18n="pa">
-            Wklejasz treść pisma. Wybierasz język (albo AUTO). Klikasz analizę. Dostajesz czytelny wynik: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi.
-          </p>
-
-          <div class="steps">
-            <div class="step">
-              <b data-i18n="s1t">1) Wklej pismo</b>
-              <small data-i18n="s1d">Może być e-mail, PDF skopiowany jako tekst, wiadomość z urzędu.</small>
-            </div>
-            <div class="step">
-              <b data-i18n="s2t">2) Kliknij „Analizuj”</b>
-              <small data-i18n="s2d">Bez tworzenia kont, bez tutoriali, bez gadania.</small>
-            </div>
-            <div class="step">
-              <b data-i18n="s3t">3) Podejmij decyzję spokojnie</b>
-              <small data-i18n="s3d">To Ty decydujesz — Sense Bridge pomaga zrozumieć, nie prowadzi za rękę.</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="card2">
-          <h2 data-i18n="h2b">Dla kogo</h2>
-          <p class="p" data-i18n="pb">
-            Dla ludzi żyjących między językami (PL/NL/EN/DE…). Gdy pismo brzmi groźnie albo niejasno — najpierw zrozum, potem odpowiadaj.
-          </p>
-
-          <div class="steps">
-            <div class="step">
-              <b data-i18n="u1t">Urzędy / UWV / gmina</b>
-              <small data-i18n="u1d">Terminy, prośby o dokumenty, konsekwencje braku odpowiedzi.</small>
-            </div>
-            <div class="step">
-              <b data-i18n="u2t">Praca / agencje / HR</b>
-              <small data-i18n="u2d">Umowy, mail z wymaganiami, formalne komunikaty.</small>
-            </div>
-            <div class="step">
-              <b data-i18n="u3t">Szkoła / lekarz / instytucje</b>
-              <small data-i18n="u3d">Ważne informacje, które łatwo źle zrozumieć w obcym języku.</small>
-            </div>
-          </div>
-
-          <div class="ctaRow" style="margin-top:16px;">
-            <a class="btn primary" href="/app/" data-i18n="openBottom">Przejdź do aplikacji</a>
-          </div>
-
-        </div>
-      </div>
-    </div>
+  <div class="card">
+    <div class="section-title" id="lblTranslation">Tłumaczenie</div>
+    <pre id="translation"></pre>
   </div>
 
-  <div class="footer">
-    <div class="wrap">
-      <div data-i18n="foot">
-        Sense Bridge — bez porad, bez presji. Najpierw zrozum, potem odpowiadaj.
-      </div>
-    </div>
+  <div class="card">
+    <div class="section-title" id="lblSummary">Co urząd komunikuje</div>
+    <p id="summary"></p>
   </div>
 
-  <script>
-    const I18N = {
-      pl: {
-        tag: "Zrozum pismo. Bez presji.",
-        h1: "Zrozum sens pisma urzędowego w 30 sekund.",
-        lead: "Sense Bridge analizuje pisma urzędowe w obcych językach i pokazuje: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi — bez porad i bez presji.",
-        openApp: "Otwórz aplikację",
-        openMain: "Otwórz Sense Bridge",
-        howBtn: "Zobacz jak działa",
-        chip1: "Bez porad i nacisku",
-        chip2: "Bez rejestracji",
-        chip3: "Bez “pierwszej odpowiedzi”",
-        chip4: "Decyzja zawsze po Twojej stronie",
+  <div class="card">
+    <div class="section-title" id="lblRisks">Ryzyka komunikacyjne</div>
+    <div id="risks"></div>
+  </div>
 
-        miniTitle: "Co dostajesz w wyniku",
-        m1t: "Sens pisma", m1d: "O co dokładnie chodzi i czego urząd oczekuje.",
-        m2t: "Ryzyka i konsekwencje", m2d: "Co się stanie, jeśli zrobisz X / nie zrobisz Y.",
-        m3t: "Neutralne odpowiedzi", m3d: "Kilka wariantów grzecznych odpowiedzi — bez “radzenia”.",
-        m4t: "Most językowy", m4d: "Twoje słowa + język odbiorcy + opcja zapasowa (EN).",
+  <div class="card">
+    <div class="section-title" id="lblExamples">Przykłady odpowiedzi</div>
+    <pre id="examples"></pre>
+  </div>
 
-        h2a:"Jak to działa (bez kombinowania)",
-        pa:"Wklejasz treść pisma. Wybierasz język (albo AUTO). Klikasz analizę. Dostajesz czytelny wynik: sens, ryzyka, konsekwencje i neutralne warianty odpowiedzi.",
-        s1t:"1) Wklej pismo", s1d:"Może być e-mail, PDF skopiowany jako tekst, wiadomość z urzędu.",
-        s2t:"2) Kliknij „Analizuj”", s2d:"Bez tworzenia kont, bez tutoriali, bez gadania.",
-        s3t:"3) Podejmij decyzję spokojnie", s3d:"To Ty decydujesz — Sense Bridge pomaga zrozumieć, nie prowadzi za rękę.",
+  <section id="access" class="access hidden" aria-label="Dostęp Sense Bridge">
+    <h2 id="payTitle">Dostęp bez abonamentu</h2>
+    <p id="payDesc">Masz <strong>3 analizy FREE</strong> na sprawdzenie działania. Potem wybierasz spokojny dostęp czasowy.</p>
 
-        h2b:"Dla kogo",
-        pb:"Dla ludzi żyjących między językami (PL/NL/EN/DE…). Gdy pismo brzmi groźnie albo niejasno — najpierw zrozum, potem odpowiadaj.",
-        u1t:"Urzędy / UWV / gmina", u1d:"Terminy, prośby o dokumenty, konsekwencje braku odpowiedzi.",
-        u2t:"Praca / agencje / HR", u2d:"Umowy, mail z wymaganiami, formalne komunikaty.",
-        u3t:"Szkoła / lekarz / instytucje", u3d:"Ważne informacje, które łatwo źle zrozumieć w obcym języku.",
-        openBottom:"Przejdź do aplikacji",
+    <div class="plans">
+      <button class="plan" type="button" onclick="goPay('24h')" aria-label="Wybierz dostęp 24 godziny za 3 euro">
+        <div class="name" id="p24name">24h PASS</div>
+        <div class="price" id="p24price">3 €</div>
+        <div class="meta" id="p24meta">Dla jednego pilnego pisma</div>
+      </button>
 
-        foot:"Sense Bridge — bez porad, bez presji. Najpierw zrozum, potem odpowiadaj."
-      },
+      <button class="plan" type="button" onclick="goPay('7d')" aria-label="Wybierz dostęp 7 dni za 7 euro">
+        <div class="name" id="p7name">7 dni</div>
+        <div class="price" id="p7price">7 €</div>
+        <div class="meta" id="p7meta">Na serię wiadomości / odpowiedzi</div>
+      </button>
 
-      nl: {
-        tag: "Begrijp brieven. Zonder druk.",
-        h1: "Begrijp de betekenis van een officiële brief in 30 seconden.",
-        lead: "Sense Bridge analyseert officiële brieven in vreemde talen en toont: betekenis, risico’s, gevolgen en neutrale antwoordopties — zonder advies en zonder druk.",
-        openApp: "Open de app",
-        openMain: "Open Sense Bridge",
-        howBtn: "Bekijk hoe het werkt",
-        chip1: "Geen advies, geen druk",
-        chip2: "Geen registratie",
-        chip3: "Niet ‘het eerste antwoord’",
-        chip4: "De keuze blijft bij jou",
+      <button class="plan best" type="button" onclick="goPay('30d')" aria-label="Wybierz dostęp 30 dni za 15 euro">
+        <span class="badge" id="pBest">Najlepsza wartość</span>
+        <div class="name" id="p30name">30 dni</div>
+        <div class="price" id="p30price">15 €</div>
+        <div class="meta" id="p30meta">Spokój na cały miesiąc</div>
+      </button>
+    </div>
 
-        miniTitle: "Wat je terugkrijgt",
-        m1t: "Betekenis", m1d: "Waar het precies om gaat en wat men van je verwacht.",
-        m2t: "Risico’s & gevolgen", m2d: "Wat er gebeurt als je X doet of Y niet doet.",
-        m3t: "Neutrale reacties", m3d: "Een paar nette opties — zonder ‘advies’ te geven.",
-        m4t: "Taalbrug", m4d: "Jouw woorden + taal van de ontvanger + back-up (EN).",
+    <p class="fine" id="fine1">
+      Sense Bridge nie daje porad prawnych. Pomaga zrozumieć sens, ton i ryzyka pisma,
+      abyś mógł podjąć własną decyzję.
+    </p>
+    <p class="fine" id="fine2">
+      Sprzedajemy <strong>spokój i zrozumienie</strong>, nie „AI”.
+    </p>
+  </section>
 
-        h2a:"Hoe het werkt (simpel)",
-        pa:"Je plakt de tekst. Je kiest de taal (of AUTO). Je klikt analyseren. Je krijgt een duidelijke uitkomst: betekenis, risico’s, gevolgen en neutrale reacties.",
-        s1t:"1) Plak de brief", s1d:"Kan e-mail zijn, PDF als tekst, bericht van een instantie.",
-        s2t:"2) Klik ‘Analyseren’", s2d:"Geen account, geen tutorial, geen gedoe.",
-        s3t:"3) Beslis rustig", s3d:"Jij beslist — Sense Bridge helpt begrijpen, niet sturen.",
+</main>
 
-        h2b:"Voor wie",
-        pb:"Voor mensen tussen talen (PL/NL/EN/DE…). Als een brief streng of onduidelijk klinkt: eerst begrijpen, dan pas reageren.",
-        u1t:"Instanties / UWV / gemeente", u1d:"Termijnen, documentverzoeken, gevolgen bij geen reactie.",
-        u2t:"Werk / bureaus / HR", u2d:"Contracten, eisen per mail, formele communicatie.",
-        u3t:"School / huisarts / instellingen", u3d:"Belangrijke info die je snel verkeerd begrijpt in een andere taal.",
-        openBottom:"Ga naar de app",
+<script>
+/* =========================================================
+   CONFIG (Stripe + endpoints)
+   ========================================================= */
+const STRIPE_LINKS = {
+  "24h": "https://buy.stripe.com/test_dRm5kCgTk7wUeF2dgO53O00",
+  "7d":  "https://buy.stripe.com/test_cNi7sKauWaJ68gE2Ca53O01",
+  "30d": "https://buy.stripe.com/test_14A3cu5aC4kIfJ6dgO53O02"
+};
 
-        foot:"Sense Bridge — geen advies, geen druk. Eerst begrijpen, dan reageren."
-      },
+const ENDPOINTS = {
+  analyze: "/.netlify/functions/analyze",
+  translate: "/.netlify/functions/translate"
+};
 
-      en: {
-        tag: "Understand letters. No pressure.",
-        h1: "Understand an official letter in 30 seconds.",
-        lead: "Sense Bridge analyzes official letters in foreign languages and shows: meaning, risks, consequences, and neutral reply options — no advice, no pressure.",
-        openApp: "Open the app",
-        openMain: "Open Sense Bridge",
-        howBtn: "See how it works",
-        chip1: "No advice, no pressure",
-        chip2: "No sign-up",
-        chip3: "Not a ‘first answer’ bot",
-        chip4: "Decision stays with you",
+/* =========================================================
+   PAYWALL (local + stable)
+   ========================================================= */
+const SB = {
+  freeMax: 3,
+  keyFreeUsed: "sb_free_used_v2",
+  keyPass: "sb_pass_v2" // {type, exp}
+};
 
-        miniTitle: "What you get",
-        m1t: "Meaning", m1d: "What it’s about and what is expected from you.",
-        m2t: "Risks & consequences", m2d: "What happens if you do X / don’t do Y.",
-        m3t: "Neutral replies", m3d: "A few polite options — without ‘telling you what to do’.",
-        m4t: "Language bridge", m4d: "Your words + recipient language + fallback (EN).",
+function nowMs(){ return Date.now(); }
 
-        h2a:"How it works (simple)",
-        pa:"Paste the letter. Choose language (or AUTO). Click analyze. Get a clear output: meaning, risks, consequences, and neutral replies.",
-        s1t:"1) Paste the letter", s1d:"Email, copied PDF text, message from an institution — all good.",
-        s2t:"2) Click ‘Analyze’", s2d:"No account. No tutorial. No nonsense.",
-        s3t:"3) Decide calmly", s3d:"You decide — Sense Bridge helps you understand, not push.",
+function getFreeUsed(){
+  const n = parseInt(localStorage.getItem(SB.keyFreeUsed) || "0", 10);
+  return Number.isFinite(n) ? n : 0;
+}
+function setFreeUsed(n){
+  localStorage.setItem(SB.keyFreeUsed, String(Math.max(0, n|0)));
+}
 
-        h2b:"Who it’s for",
-        pb:"For people living between languages (PL/NL/EN/DE…). When a letter feels strict or unclear: understand first, reply second.",
-        u1t:"Government / UWV / municipality", u1d:"Deadlines, document requests, consequences if you don’t respond.",
-        u2t:"Work / agencies / HR", u2d:"Contracts, formal emails, requirements.",
-        u3t:"School / doctor / institutions", u3d:"Important info that’s easy to misunderstand in another language.",
-        openBottom:"Go to the app",
+function getPass(){
+  try {
+    const raw = localStorage.getItem(SB.keyPass);
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    if(!obj || !obj.type || !obj.exp) return null;
+    if(nowMs() > obj.exp) return null;
+    return obj;
+  } catch { return null; }
+}
+function setPass(type, exp){
+  localStorage.setItem(SB.keyPass, JSON.stringify({type, exp}));
+}
+function clearPass(){
+  localStorage.removeItem(SB.keyPass);
+}
 
-        foot:"Sense Bridge — no advice, no pressure. Understand first, reply second."
-      },
+function freeLeft(){
+  const used = getFreeUsed();
+  return Math.max(0, SB.freeMax - used);
+}
 
-      de: {
-        tag: "Briefe verstehen. Ohne Druck.",
-        h1: "Verstehe den Sinn eines Behördenbriefs in 30 Sekunden.",
-        lead: "Sense Bridge analysiert Behördenbriefe in Fremdsprachen und zeigt: Sinn, Risiken, Folgen und neutrale Antwortvarianten — ohne Beratung und ohne Druck.",
-        openApp: "App öffnen",
-        openMain: "Sense Bridge öffnen",
-        howBtn: "So funktioniert’s",
-        chip1: "Keine Beratung, kein Druck",
-        chip2: "Keine Registrierung",
-        chip3: "Kein „erstes Antwort“-Bot",
-        chip4: "Entscheidung bleibt bei dir",
+function hasAccess(){
+  const pass = getPass();
+  if(pass) return { mode:"PASS", label: pass.type.toUpperCase(), until: pass.exp };
+  const left = freeLeft();
+  if(left > 0) return { mode:"FREE", label: "FREE" };
+  return { mode:"LOCKED", label: "LOCKED" };
+}
 
-        miniTitle: "Was du bekommst",
-        m1t: "Sinn", m1d: "Worum es geht und was von dir erwartet wird.",
-        m2t: "Risiken & Folgen", m2d: "Was passiert, wenn du X tust / Y nicht tust.",
-        m3t: "Neutrale Antworten", m3d: "Ein paar höfliche Optionen — ohne dir etwas zu raten.",
-        m4t: "Sprachbrücke", m4d: "Deine Worte + Sprache des Empfängers + Backup (EN).",
+function refreshUI(){
+  document.getElementById("freeLeft").textContent = String(freeLeft());
 
-        h2a:"So funktioniert’s (einfach)",
-        pa:"Text einfügen. Sprache wählen (oder AUTO). Analysieren klicken. Ergebnis: Sinn, Risiken, Folgen und neutrale Antworten.",
-        s1t:"1) Brief einfügen", s1d:"E-Mail, kopierter PDF-Text, Nachricht von einer Behörde.",
-        s2t:"2) ‚Analysieren‘ klicken", s2d:"Kein Konto. Kein Tutorial. Kein Aufwand.",
-        s3t:"3) Ruhig entscheiden", s3d:"Du entscheidest — Sense Bridge hilft zu verstehen, nicht zu drängen.",
+  const access = hasAccess();
+  document.getElementById("accessState").textContent = access.label;
 
-        h2b:"Für wen",
-        pb:"Für Menschen zwischen Sprachen (PL/NL/EN/DE…). Wenn ein Brief streng oder unklar wirkt: erst verstehen, dann antworten.",
-        u1t:"Behörden / UWV / Gemeinde", u1d:"Fristen, Dokumentanforderungen, Folgen ohne Antwort.",
-        u2t:"Arbeit / Agenturen / HR", u2d:"Verträge, formelle E-Mails, Anforderungen.",
-        u3t:"Schule / Arzt / Institutionen", u3d:"Wichtige Infos, die man leicht missversteht.",
-        openBottom:"Zur App",
+  const btn = document.getElementById("btnAnalyze");
+  const lockBox = document.getElementById("lockBox");
+  const accessSection = document.getElementById("access");
 
-        foot:"Sense Bridge — ohne Beratung, ohne Druck. Erst verstehen, dann antworten."
-      }
-    };
+  if(access.mode === "LOCKED"){
+    btn.disabled = true;
+    lockBox.classList.add("show");
+    accessSection.classList.remove("hidden");
+  } else {
+    btn.disabled = false;
+    lockBox.classList.remove("show");
+    accessSection.classList.add("hidden");
+  }
+}
 
-    function setLang(lang){
-      const t = I18N[lang] || I18N.pl;
+function updatePaidMessage(){
+  const access = hasAccess();
+  const box = document.getElementById("paidMsg");
+  const text = document.getElementById("paidText");
+  if(!box || !text) return;
 
-      document.documentElement.lang = lang;
+  if(access.mode === "PASS"){
+    const until = new Date(access.until).toLocaleString();
+    text.innerHTML = `✅ <strong>Dostęp aktywny</strong> • ważny do: <strong>${until}</strong>`;
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
 
-      document.querySelectorAll("[data-i18n]").forEach(el=>{
-        const key = el.getAttribute("data-i18n");
-        if(t[key]) el.textContent = t[key];
-      });
+function consumeFreeIfNeeded(){
+  const access = hasAccess();
+  if(access.mode === "FREE"){
+    setFreeUsed(getFreeUsed() + 1);
+  }
+}
 
-      document.querySelectorAll(".lang-btn").forEach(b=>{
-        b.classList.toggle("active", b.dataset.lang === lang);
-      });
+function resetFree(){
+  setFreeUsed(0);
+  clearPass();
+  refreshUI();
+  updatePaidMessage();
+}
 
-      localStorage.setItem("sb_lang", lang);
+function enableDevReset(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get("dev") === "1"){
+    const btn = document.getElementById("btnReset");
+    if(btn) btn.style.display = "inline-block";
+  }
+}
+
+function applyPaidFromQuery(){
+  const url = new URL(window.location.href);
+  const paid = (url.searchParams.get("paid") || "").trim();
+  if(!paid) return;
+
+  let ms = 0;
+  if(paid === "24h") ms = 24*60*60*1000;
+  if(paid === "7d")  ms = 7*24*60*60*1000;
+  if(paid === "30d") ms = 30*24*60*60*1000;
+
+  if(ms > 0){
+    setPass(paid, nowMs() + ms);
+  }
+
+  url.searchParams.delete("paid");
+  window.history.replaceState({}, "", url.toString());
+}
+
+/* =========================================================
+   UI LANGUAGE (PL/NL/EN/DE)
+   ========================================================= */
+const UI = {
+  key: "sb_ui_lang_v1",
+  lang: "PL",
+  dict: {
+    PL: {
+      title: "Sense Bridge",
+      desc: "Pomaga zrozumieć pisma urzędowe. Bez porad. Bez presji.",
+      paste: "Wklej pismo",
+      placeholder: "Wklej treść pisma lub e-maila z urzędu…",
+      btnAnalyze: "Analizuj pismo",
+      free: "FREE:",
+      analyses: "analizy",
+      access: "Dostęp:",
+      reset: "Reset testowy",
+      lock: "Limit FREE został wykorzystany. Wybierz dostęp poniżej, aby kontynuować.",
+      translation: "Tłumaczenie",
+      summary: "Co urząd komunikuje",
+      risks: "Ryzyka komunikacyjne",
+      examples: "Przykłady odpowiedzi",
+      payTitle: "Dostęp bez abonamentu",
+      payDesc: "Masz 3 analizy FREE na sprawdzenie działania. Potem wybierasz spokojny dostęp czasowy.",
+      p24meta: "Dla jednego pilnego pisma",
+      p7meta: "Na serię wiadomości / odpowiedzi",
+      p30meta: "Spokój na cały miesiąc",
+      best: "Najlepsza wartość",
+      fine1: "Sense Bridge nie daje porad prawnych. Pomaga zrozumieć sens, ton i ryzyka pisma, abyś mógł podjąć własną decyzję.",
+      fine2: "Sprzedajemy spokój i zrozumienie, nie „AI”.",
+      hintUI: "„UI” to po prostu <strong>język strony</strong> (przycisków i opisów) — nie zmienia treści dokumentu ani analizy.",
+      srcAuto: "Język dokumentu: AUTO",
+      clear: "Wyczyść",
+      copyTr: "Kopiuj tłumaczenie",
+      copyEx: "Kopiuj odpowiedzi"
+    },
+    NL: {
+      title: "Sense Bridge",
+      desc: "Helpt officiële brieven begrijpen. Geen advies. Geen druk.",
+      paste: "Plak de brief",
+      placeholder: "Plak de tekst van de brief of e-mail…",
+      btnAnalyze: "Analyseer brief",
+      free: "FREE:",
+      analyses: "analyses",
+      access: "Toegang:",
+      reset: "Test reset",
+      lock: "Je FREE-limiet is op. Kies hieronder toegang om door te gaan.",
+      translation: "Vertaling",
+      summary: "Wat de instantie bedoelt",
+      risks: "Communicatierisico’s",
+      examples: "Voorbeelden van antwoorden",
+      payTitle: "Toegang zonder abonnement",
+      payDesc: "Je krijgt 3 FREE-analyses om te testen. Daarna kies je rustige tijdstoegang.",
+      p24meta: "Voor één urgente brief",
+      p7meta: "Voor een reeks berichten",
+      p30meta: "Rust voor een hele maand",
+      best: "Beste waarde",
+      fine1: "Sense Bridge geeft geen juridisch advies. Het helpt je de betekenis, toon en risico’s te begrijpen zodat je zelf beslist.",
+      fine2: "We verkopen rust en begrip, niet ‘AI’.",
+      hintUI: "‘UI’ is gewoon de taal van de pagina (knoppen en teksten) — dit verandert de analyse niet.",
+      srcAuto: "Taal document: AUTO",
+      clear: "Wissen",
+      copyTr: "Kopieer vertaling",
+      copyEx: "Kopieer antwoorden"
+    },
+    EN: {
+      title: "Sense Bridge",
+      desc: "Helps you understand official letters. No advice. No pressure.",
+      paste: "Paste the letter",
+      placeholder: "Paste the content of the letter or email…",
+      btnAnalyze: "Analyze letter",
+      free: "FREE:",
+      analyses: "analyses",
+      access: "Access:",
+      reset: "Test reset",
+      lock: "Your FREE limit is used. Choose access below to continue.",
+      translation: "Translation",
+      summary: "What the office is communicating",
+      risks: "Communication risks",
+      examples: "Reply examples",
+      payTitle: "No-subscription access",
+      payDesc: "You get 3 FREE analyses to test. Then choose a calm time pass.",
+      p24meta: "For one urgent letter",
+      p7meta: "For a series of messages",
+      p30meta: "Peace for a whole month",
+      best: "Best value",
+      fine1: "Sense Bridge does not provide legal advice. It helps you understand meaning, tone and risks so you can decide yourself.",
+      fine2: "We sell peace and understanding, not ‘AI’.",
+      hintUI: "‘UI’ is simply the page language (buttons and labels) — it doesn’t change the analysis.",
+      srcAuto: "Document language: AUTO",
+      clear: "Clear",
+      copyTr: "Copy translation",
+      copyEx: "Copy replies"
+    },
+    DE: {
+      title: "Sense Bridge",
+      desc: "Hilft, amtliche Schreiben zu verstehen. Keine Beratung. Kein Druck.",
+      paste: "Schreiben einfügen",
+      placeholder: "Füge den Text des Schreibens oder der E-Mail ein…",
+      btnAnalyze: "Schreiben analysieren",
+      free: "FREE:",
+      analyses: "Analysen",
+      access: "Zugang:",
+      reset: "Test-Reset",
+      lock: "Dein FREE-Limit ist aufgebraucht. Wähle unten einen Zugang, um fortzufahren.",
+      translation: "Übersetzung",
+      summary: "Was die Behörde mitteilt",
+      risks: "Kommunikationsrisiken",
+      examples: "Antwortbeispiele",
+      payTitle: "Zugang ohne Abo",
+      payDesc: "Du hast 3 FREE-Analysen zum Testen. Danach wählst du einen ruhigen Zeitpass.",
+      p24meta: "Für ein dringendes Schreiben",
+      p7meta: "Für mehrere Nachrichten",
+      p30meta: "Ruhe für einen ganzen Monat",
+      best: "Bester Wert",
+      fine1: "Sense Bridge gibt keine Rechtsberatung. Es hilft dir, Sinn, Ton und Risiken zu verstehen, damit du selbst entscheiden kannst.",
+      fine2: "Wir verkaufen Ruhe und Verständnis, nicht ‘KI’.",
+      hintUI: "‘UI’ ist einfach die Seitensprache (Buttons & Texte) — das ändert die Analyse nicht.",
+      srcAuto: "Dokumentsprache: AUTO",
+      clear: "Leeren",
+      copyTr: "Übersetzung kopieren",
+      copyEx: "Antworten kopieren"
+    }
+  }
+};
+
+function getUiLang(){
+  const saved = (localStorage.getItem(UI.key) || "").trim().toUpperCase();
+  if(UI.dict[saved]) return saved;
+  return "PL";
+}
+function setUiLang(lang){
+  const L = (lang || "").toUpperCase();
+  if(!UI.dict[L]) return;
+  UI.lang = L;
+  localStorage.setItem(UI.key, L);
+  applyUiLang();
+}
+function applyUiLang(){
+  const t = UI.dict[UI.lang];
+
+  document.getElementById("hTitle").textContent = t.title;
+  document.getElementById("hDesc").textContent = t.desc;
+
+  document.getElementById("lblPaste").textContent = t.paste;
+  document.getElementById("inputText").placeholder = t.placeholder;
+  document.getElementById("btnAnalyze").textContent = t.btnAnalyze;
+
+  document.getElementById("lblFree").textContent = t.free;
+  document.getElementById("lblAnalyses").textContent = t.analyses;
+  document.getElementById("lblAccess").textContent = t.access;
+  document.getElementById("btnReset").textContent = t.reset;
+  document.getElementById("lockBox").textContent = t.lock;
+
+  document.getElementById("lblTranslation").textContent = t.translation;
+  document.getElementById("lblSummary").textContent = t.summary;
+  document.getElementById("lblRisks").textContent = t.risks;
+  document.getElementById("lblExamples").textContent = t.examples;
+
+  document.getElementById("payTitle").textContent = t.payTitle;
+  document.getElementById("payDesc").textContent = t.payDesc;
+  document.getElementById("p24meta").textContent = t.p24meta;
+  document.getElementById("p7meta").textContent = t.p7meta;
+  document.getElementById("p30meta").textContent = t.p30meta;
+  document.getElementById("pBest").textContent = t.best;
+  document.getElementById("fine1").textContent = t.fine1;
+  document.getElementById("fine2").textContent = t.fine2;
+  document.getElementById("hintUI").innerHTML = t.hintUI;
+
+  const src = document.getElementById("sourceLang");
+  if(src && src.options && src.options.length){
+    src.options[0].textContent = t.srcAuto;
+  }
+
+  document.querySelectorAll(".ui-btn").forEach(b=>{
+    b.classList.toggle("active", b.getAttribute("data-ui") === UI.lang);
+  });
+
+  const toolButtons = document.querySelectorAll(".tool-btn");
+  if(toolButtons.length >= 3){
+    toolButtons[0].textContent = t.clear;
+    toolButtons[1].textContent = t.copyTr;
+    toolButtons[2].textContent = t.copyEx;
+  }
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function clearInput(){
+  document.getElementById("inputText").value = "";
+}
+async function copyText(id){
+  const el = document.getElementById(id);
+  const txt = (el && (el.textContent || "")).trim();
+  if(!txt){
+    alert("Brak treści do skopiowania.");
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(txt);
+  }catch{
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+}
+function safeArr(a){
+  return Array.isArray(a) ? a : [];
+}
+
+/* =========================================================
+   PAY (Stripe redirect)
+   ========================================================= */
+function goPay(which){
+  const url = STRIPE_LINKS[which];
+  if(!url){
+    alert("Brak linku płatności dla: " + which);
+    return;
+  }
+  window.location.href = url;
+}
+
+/* =========================================================
+   CORE: analyze + translate fallback
+   ========================================================= */
+function checkPaywall(){
+  const access = hasAccess();
+  if(access.mode === "LOCKED"){
+    refreshUI();
+    updatePaidMessage();
+    // pokaż sekcję płatności
+    const accessSection = document.getElementById("access");
+    if(accessSection) accessSection.classList.remove("hidden");
+    const lockBox = document.getElementById("lockBox");
+    if(lockBox) lockBox.classList.add("show");
+    return false;
+  }
+  return true;
+}
+async function analyze(){
+
+  if (!checkPaywall()) return;
+
+  const btn = document.getElementById("btnAnalyze");
+  btn.disabled = true;
+
+  try{
+    const text = (document.getElementById("inputText").value || "").trim();
+    const sourceLang = document.getElementById("sourceLang").value;
+    const userLang = document.getElementById("userLang").value;
+
+    if(!text){
+      alert("Wklej treść pisma.");
+      return;
     }
 
-    document.addEventListener("DOMContentLoaded", ()=>{
-      // smooth scroll
-      const btnHow = document.getElementById("btnHow");
-      if(btnHow){
-        btnHow.addEventListener("click", ()=>{
-          document.getElementById("how")?.scrollIntoView({behavior:"smooth", block:"start"});
-        });
-      }
-
-      // language buttons
-      document.querySelectorAll(".lang-btn").forEach(btn=>{
-        btn.addEventListener("click", ()=> setLang(btn.dataset.lang));
-      });
-
-      const saved = localStorage.getItem("sb_lang") || "pl";
-      setLang(saved);
+    const res = await fetch(ENDPOINTS.analyze,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ text, sourceLang, userLang })
     });
-  </script>
+
+    const data = await res.json();
+    if(!res.ok){
+      throw new Error((data && (data.error || data.message)) ? (data.error || data.message) : ("HTTP " + res.status));
+    }
+
+    document.getElementById("summary").textContent =
+      (data.summary || data.whatOfficeSays || data.communication || "").trim();
+
+    const risksBox = document.getElementById("risks");
+    risksBox.innerHTML = "";
+    safeArr(data.risks || data.riskList || data.riskChips).forEach(r=>{
+      const d=document.createElement("div");
+      d.className="box-warn";
+      d.textContent=String(r);
+      risksBox.appendChild(d);
+    });
+
+    const ex = data.examples || data.responseExamples || data.replies || {};
+    const parts = [];
+    if(ex.neutral) parts.push("NEUTRAL:\n" + ex.neutral);
+    if(ex.polite)  parts.push("UPRZEJMIE:\n" + ex.polite);
+    if(ex.firm)    parts.push("STANOWCZO:\n" + ex.firm);
+    document.getElementById("examples").textContent = parts.join("\n\n");
+
+    let translation = (data.translation || data.translatedText || data.translated || "").trim();
+
+    if(!translation){
+      const trRes = await fetch(ENDPOINTS.translate,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ text, sourceLang, userLang })
+      });
+      const trData = await trRes.json();
+      if(!trRes.ok){
+        throw new Error((trData && (trData.error || trData.message)) ? (trData.error || trData.message) : ("Translate HTTP " + trRes.status));
+      }
+      translation = (trData.translation || trData.translatedText || trData.translated || "").trim();
+    }
+
+    document.getElementById("translation").textContent = translation;
+
+    consumeFreeIfNeeded();
+    refreshUI();
+    updatePaidMessage();
+
+    document.getElementById("translation").scrollIntoView({behavior:"smooth"});
+  } catch (e){
+    alert("Błąd: " + (e?.message || e));
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+(function init(){
+  UI.lang = getUiLang();
+  applyUiLang();
+  applyPaidFromQuery();
+  refreshUI();
+  updatePaidMessage();
+  enableDevReset();
+})();
+</script>
+
 </body>
 </html>
