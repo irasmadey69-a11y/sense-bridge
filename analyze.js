@@ -246,12 +246,12 @@ async function callOpenAIText(apiKey, prompt) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
-      temperature: 0,
-      max_output_tokens: 1400,
-      input: prompt,
-      text: { format: { type: "text" } }
-    })
+  model: "gpt-4o-mini",
+  temperature: 0,
+  max_output_tokens: 900,
+  input: prompt,
+  text: { format: { type: "json_object" } }
+})
   });
 
   const data = await res.json();
