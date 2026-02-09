@@ -1,7 +1,14 @@
-export async function handler() {
+exports.handler = async (event, context) => {
   return {
     statusCode: 200,
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ ok: true, msg: "ping works" }),
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({
+      ok: true,
+      service: "sense-bridge",
+      time: new Date().toISOString(),
+    }),
   };
-}
+};
