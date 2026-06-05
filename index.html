@@ -7,22 +7,21 @@
 
   <title>Sense Bridge — zrozum pisma urzędowe</title>
 
-  <!-- ✅ paths safe for /app/ -->
   <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
 
   <style>
     :root{
-      --bg:#f6f7f9;
+      --bg:#f3f5f7;
       --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --primary:#4f8f7a;
-      --primary-hover:#447d6a;
+      --text:#172033;
+      --muted:#687385;
+      --primary:#3f8a72;
+      --primary-hover:#2f6f5c;
       --warn:#fef3c7;
       --warn-text:#92400e;
-      --border:#e5e7eb;
+      --border:rgba(63,138,114,0.28);
       --ok:#5fb3a2;
       --ok-hover:#4aa091;
       --danger:#ef4444;
@@ -38,39 +37,59 @@
     main{
       max-width:900px;
       margin:0 auto;
-      padding:24px 16px 64px;
+      padding:28px 16px 72px;
     }
     h1,h2,h3{margin:0 0 8px}
     p{margin:0 0 12px;color:var(--muted)}
     .card{
       background:var(--card);
-      border-radius:14px;
+      border-radius:18px;
       border:1px solid var(--border);
-      padding:16px;
-      margin-bottom:16px;
+      padding:18px;
+      margin-bottom:18px;
+      box-shadow:0 8px 24px rgba(15,23,42,0.045);
     }
     textarea{
       width:100%;
-      min-height:160px;
-      padding:12px;
-      border-radius:10px;
+      min-height:170px;
+      padding:14px;
+      border-radius:14px;
       border:1px solid var(--border);
       font-size:15px;
       resize:vertical;
+      background:#fff;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    textarea:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(63,138,114,0.16);
+      background:#ffffff;
     }
     select,button{
-      padding:10px 14px;
-      border-radius:10px;
+      padding:11px 15px;
+      border-radius:12px;
       border:1px solid var(--border);
       font-size:14px;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease, transform .12s ease;
+    }
+    select:focus,button:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(63,138,114,0.14);
     }
     button.primary{
-      background:var(--primary);
+      background:linear-gradient(135deg,var(--primary),#58a58d);
       color:#fff;
       border:none;
       cursor:pointer;
+      font-weight:650;
+      box-shadow:0 8px 18px rgba(63,138,114,0.22);
     }
-    button.primary:hover{background:var(--primary-hover)}
+    button.primary:hover{
+      background:linear-gradient(135deg,var(--primary-hover),var(--primary));
+      transform:translateY(-1px);
+    }
     button.primary:disabled{
       background:#93c5fd;
       cursor:not-allowed;
@@ -79,8 +98,9 @@
     .grow{flex:1}
     .section-title{
       font-size:15px;
-      font-weight:600;
-      margin-bottom:6px;
+      font-weight:750;
+      margin-bottom:8px;
+      letter-spacing:-0.01em;
     }
     .box-warn{
       background:var(--warn);
@@ -119,10 +139,11 @@
       border:1px solid var(--border);
       background:#fff;
       cursor:pointer;
-      padding:8px 10px;
+      padding:8px 11px;
       border-radius:999px;
       font-size:13px;
       color:var(--muted);
+      box-shadow:0 3px 10px rgba(15,23,42,0.035);
     }
     .ui-btn.active{
       border-color:var(--primary);
@@ -230,8 +251,8 @@
       background:#fff;
       border:1px solid var(--border);
       cursor:pointer;
-      border-radius:10px;
-      padding:8px 10px;
+      border-radius:12px;
+      padding:9px 12px;
       font-size:13px;
       color:var(--muted);
     }
@@ -241,28 +262,1205 @@
       color:var(--muted);
       margin-top:8px;
     }
-  </style>
+    .privacy-note{
+      margin-top:10px;
+      padding:12px 13px;
+      border-radius:14px;
+      border:1px solid rgba(63,138,114,0.24);
+      background:rgba(63,138,114,0.06);
+      color:#344154;
+      font-size:13px;
+    }
+    .privacy-note strong{
+      color:#172033;
+    }
+    .footer-links{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:8px 0 0;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .footer-links button{
+      background:none;
+      border:none;
+      padding:4px 6px;
+      color:var(--primary);
+      cursor:pointer;
+      box-shadow:none;
+      font-size:13px;
+    }
+    .footer-links button:hover{
+      text-decoration:underline;
+    }
+    .legal-mini{
+      max-width:900px;
+      margin:10px auto 0;
+      font-size:12px;
+      color:var(--muted);
+      text-align:center;
+    }
+    .photo-box{
+      margin:8px 0 12px;
+    }
+    .photo-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:6px;
+      margin-bottom:8px;
+    }
+    #sbPhotoFileName{
+      display:inline-block;
+      font-size:13px;
+      color:var(--muted);
+      word-break:break-word;
+    }
+    #lblUserLang{
+      margin-top:8px;
+      margin-bottom:4px;
+    }
+
+    /* =========================================================
+       PRO V2 visual polish
+       ========================================================= */
+    .top-card{
+      border:1px solid rgba(63,138,114,0.34);
+      border-top:6px solid var(--primary);
+      background:
+        radial-gradient(circle at top right, rgba(63,138,114,0.12), transparent 34%),
+        #ffffff;
+    }
+    .top-card h1{
+      color:#122033;
+      font-size:clamp(38px, 9vw, 58px);
+      line-height:1.02;
+    }
+    .top-card p{
+      font-size:clamp(18px, 4.6vw, 26px);
+      color:#5f6b7a;
+      max-width:720px;
+    }
+    .card{
+      border-color:rgba(63,138,114,0.24);
+    }
+    .card:hover{
+      border-color:rgba(63,138,114,0.34);
+    }
+    .photo-box{
+      border-color:rgba(63,138,114,0.30);
+      background:
+        linear-gradient(180deg, rgba(63,138,114,0.045), rgba(255,255,255,0.96));
+    }
+    textarea{
+      border-color:rgba(63,138,114,0.28);
+    }
+    select{
+      border-color:rgba(63,138,114,0.28);
+    }
+    #sourceLang,
+    #userLang{
+      width:100%;
+      max-width:520px;
+    }
+    #lblUserLang{
+      margin-top:14px;
+    }
+    #btnAnalyze{
+      width:100%;
+      max-width:520px;
+      margin-top:4px;
+      min-height:56px;
+      font-size:16px;
+      background:linear-gradient(135deg,#0e2a47,#17476f);
+      box-shadow:0 10px 22px rgba(14,42,71,0.24);
+    }
+    #btnAnalyze:hover{
+      background:linear-gradient(135deg,#0b2239,#123f63);
+    }
+    #sbChoosePhotoBtn,
+    #sbReadPhotoBtn{
+      background:linear-gradient(135deg,var(--primary),#58a58d);
+      color:#ffffff;
+      border:none;
+      box-shadow:0 7px 16px rgba(63,138,114,0.18);
+    }
+    #sbChoosePhotoBtn:hover,
+    #sbReadPhotoBtn:hover{
+      background:linear-gradient(135deg,var(--primary-hover),var(--primary));
+    }
+    .tool-btn{
+      border-color:rgba(63,138,114,0.22);
+      background:#ffffff;
+    }
+    .chip{
+      border-color:rgba(63,138,114,0.24);
+    }
+    @media (max-width:640px){
+      main{
+        padding:18px 14px 70px;
+      }
+      .card{
+        padding:16px;
+        border-radius:20px;
+      }
+      .row{
+        display:block;
+      }
+      .row select,
+      .row button{
+        display:block;
+        width:100%;
+        margin-bottom:10px;
+      }
+      #btnAnalyze{
+        margin-top:12px;
+      }
+      .tools{
+        margin-top:12px;
+      }
+      .tool-btn{
+        width:auto;
+      }
+    }
+
+
+    .ui-switch{
+      max-width:100%;
+    }
+    @media (max-width:640px){
+      .ui-switch{
+        gap:7px;
+      }
+      .ui-btn{
+        padding:8px 10px;
+        min-width:48px;
+      }
+    }
+
+
+    .analyze-status{
+      margin-top:10px;
+      font-size:14px;
+      font-weight:650;
+      color:#0e2a47;
+      min-height:22px;
+    }
+
+
+    .install-btn{
+      margin:10px 0 14px;
+      width:auto;
+      max-width:100%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 15px;
+      border-radius:999px;
+      border:1px solid rgba(63,138,114,0.28);
+      background:#ffffff;
+      color:#245c4d;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(15,23,42,0.04);
+      white-space:normal;
+      text-align:center;
+    }
+    .install-btn:hover{
+      background:rgba(63,138,114,0.07);
+      transform:translateY(-1px);
+    }
+
+    /* =========================================================
+       SENSE BRIDGE V2 - visible icons + stronger visual sections
+       Safe visual layer only: no logic changes
+       ========================================================= */
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#132033;
+    }
+    .section-title::before{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:28px;
+      height:28px;
+      border-radius:10px;
+      background:rgba(63,138,114,0.10);
+      border:1px solid rgba(63,138,114,0.22);
+      box-shadow:0 3px 8px rgba(15,23,42,0.04);
+      font-size:16px;
+      flex:0 0 auto;
+    }
+    #lblPaste::before{content:"📄";}
+    #lblUserLang::before{content:"🌐";}
+    #lblTranslation::before{content:"🌍";}
+    #lblSummary::before{content:"🏛️";}
+    #lblRisks::before{content:"⚠️";}
+    #lblExamples::before{content:"✍️";}
+    #lblExamplesDoc::before{content:"📨";}
+
+    #lblPhotoTitle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#132033;
+      font-size:15px;
+      margin-bottom:8px;
+    }
+    #lblPhotoTitle::before{
+      content:"🖼️";
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:28px;
+      height:28px;
+      border-radius:10px;
+      background:rgba(63,138,114,0.10);
+      border:1px solid rgba(63,138,114,0.22);
+      box-shadow:0 3px 8px rgba(15,23,42,0.04);
+      font-size:16px;
+      flex:0 0 auto;
+    }
+
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.94));
+      border-color:rgba(63,138,114,0.32);
+      box-shadow:
+        0 12px 28px rgba(15,23,42,0.055),
+        inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+    .card:not(.top-card){
+      position:relative;
+      overflow:hidden;
+    }
+    .card:not(.top-card)::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:4px;
+      background:linear-gradient(90deg, rgba(63,138,114,0.42), rgba(63,138,114,0.06));
+      pointer-events:none;
+    }
+
+    .photo-box{
+      padding:14px;
+      border:1px solid rgba(63,138,114,0.24);
+      border-radius:16px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    pre:empty::before{
+      content:"";
+      display:block;
+      height:20px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(63,138,114,0.08), rgba(63,138,114,0.02));
+    }
+
+    #summary:empty{
+      min-height:24px;
+      display:block;
+    }
+
+    .privacy-note{
+      border-left:5px solid var(--primary);
+      background:
+        linear-gradient(135deg, rgba(63,138,114,0.11), rgba(255,255,255,0.96));
+      box-shadow:0 8px 18px rgba(15,23,42,0.035);
+    }
+    .privacy-note::before{
+      content:"🔒";
+      margin-right:6px;
+    }
+
+    #footerPrivacy::before{content:"🔒 ";} 
+    #footerTerms::before{content:"📜 ";} 
+    #footerContact::before{content:"✉️ ";}
+
+    .footer-links{
+      padding:14px 10px 4px;
+    }
+    .footer-links button{
+      border-radius:999px;
+      background:rgba(63,138,114,0.08);
+      border:1px solid rgba(63,138,114,0.16);
+      padding:7px 10px;
+      text-decoration:none;
+    }
+    .footer-links button:hover{
+      background:rgba(63,138,114,0.14);
+      text-decoration:none;
+    }
+    .legal-mini{
+      padding:0 18px 18px;
+      line-height:1.45;
+    }
+
+    @media (max-width:640px){
+      .section-title::before,
+      #lblPhotoTitle::before{
+        width:30px;
+        height:30px;
+        border-radius:11px;
+        font-size:17px;
+      }
+      .section-title{
+        font-size:16px;
+      }
+      .photo-box{
+        padding:13px;
+      }
+      .footer-links{
+        gap:8px;
+      }
+    }
+
+
+    /* UA language added - keep language buttons mobile-safe */
+    @media (max-width:640px){
+      .ui-switch{
+        justify-content:flex-start;
+      }
+      .ui-btn{
+        min-width:47px;
+        padding:8px 9px;
+      }
+    }
+
+    /* Language buttons with flags - mobile safe */
+    .ui-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      white-space:nowrap;
+    }
+    @media (max-width:640px){
+      .ui-btn{
+        min-width:64px;
+        padding:8px 8px;
+        font-size:13px;
+      }
+    }
+
+    /* Manual payment / PENDING confirmation box */
+    .pending-confirm-box{
+      display:none;
+      margin-top:14px;
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(63,138,114,0.34);
+      background:
+        linear-gradient(135deg, rgba(63,138,114,0.12), rgba(255,255,255,0.98));
+      box-shadow:0 12px 26px rgba(15,23,42,0.06);
+    }
+    .pending-confirm-box.show{
+      display:block;
+    }
+    .pending-confirm-title{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      font-size:18px;
+      font-weight:900;
+      color:#132033;
+      margin-bottom:8px;
+    }
+    .pending-confirm-text{
+      color:#344154;
+      font-size:14px;
+      margin-bottom:10px;
+    }
+    .pending-bank-box{
+      background:#ffffff;
+      border:1px dashed rgba(63,138,114,0.42);
+      border-radius:14px;
+      padding:12px;
+      margin:10px 0;
+      color:#172033;
+      font-size:14px;
+    }
+    .pending-code{
+      display:block;
+      margin-top:6px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#0e2a47;
+      color:#ffffff;
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:.03em;
+      word-break:break-word;
+    }
+    .pending-small{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:8px;
+    }
+    .pending-copy-btn{
+      margin-top:10px;
+      background:#ffffff;
+      color:#245c4d;
+      border:1px solid rgba(63,138,114,0.28);
+      font-weight:800;
+      cursor:pointer;
+    }
+    .pending-copy-btn:hover{
+      background:rgba(63,138,114,0.08);
+    }
+    
+    /* =========================================================
+   SENSE BRIDGE THEME SWITCH — LIGHT DEFAULT / DARK PREMIUM
+   Safe visual layer only: no logic changes
+   ========================================================= */
+
+.theme-switch{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+.theme-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:38px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(63,138,114,0.26);
+  background:#ffffff;
+  color:#245c4d;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(15,23,42,0.05);
+}
+.theme-toggle:hover{
+  background:rgba(63,138,114,0.08);
+  transform:translateY(-1px);
+}
+@media (max-width:640px){
+  .theme-switch{justify-content:flex-start;margin-top:8px;}
+  .theme-toggle{min-width:106px;}
+}
+
+
+
+/* Sense Bridge custom modal — fixed overlay */
+.hidden{display:none !important;}
+.sb-modal{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(8,18,28,0.54);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.sb-modal-box{
+  width:min(92vw,420px);
+  border-radius:24px;
+  padding:24px;
+}
+.sb-modal-box h3{
+  margin:0 0 10px;
+  font-size:22px;
+  line-height:1.2;
+  font-weight:900;
+}
+.sb-modal-box p{
+  margin:0 0 16px;
+  font-size:16px;
+  line-height:1.45;
+}
+.sb-modal-input{
+  width:100%;
+  box-sizing:border-box;
+  min-height:48px;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:16px;
+  outline:none;
+}
+.sb-modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:16px;
+}
+.sb-modal-actions button{
+  min-height:44px;
+  border-radius:14px;
+  padding:10px 18px;
+  font-weight:900;
+  cursor:pointer;
+}
+@media (max-width:640px){
+  .sb-modal{padding:16px; align-items:center;}
+  .sb-modal-box{width:100%; padding:20px; border-radius:22px;}
+}
+
+body.light-mode{
+  color:#172033;
+}
+body.light-mode .sb-modal-box{
+  background:
+    radial-gradient(circle at top right, rgba(63,138,114,0.15), transparent 38%),
+    linear-gradient(180deg,#ffffff,#f6fbf8);
+  border:1px solid rgba(63,138,114,0.30);
+  box-shadow:0 24px 70px rgba(15,23,42,0.20), inset 0 1px 0 rgba(255,255,255,0.75);
+}
+body.light-mode .sb-modal-box h3{color:#172033;}
+body.light-mode .sb-modal-box p{color:#536173;}
+body.light-mode .sb-modal-input{
+  background:#ffffff !important;
+  color:#172033 !important;
+  border-color:rgba(63,138,114,0.30) !important;
+}
+body.light-mode .sb-modal-cancel{
+  background:#ffffff;
+  color:#245c4d;
+  border:1px solid rgba(63,138,114,0.22);
+}
+body.light-mode .sb-modal-ok{
+  background:linear-gradient(135deg,#3f8a72,#58a58d);
+  color:#ffffff;
+  border:none;
+}
+
+body.light-mode .fraud-box{
+  border:1px solid rgba(63,138,114,0.24);
+  background:linear-gradient(180deg,#ffffff,#f7fbf9);
+  color:#172033;
+}
+body.light-mode .fraud-box p{color:#536173 !important;}
+body.light-mode .fraud-list li{
+  background:rgba(63,138,114,0.055);
+  border:1px solid rgba(63,138,114,0.12);
+  color:#172033;
+}
+body.light-mode .fraud-small{color:#687385 !important;}
+
+body.dark-mode{
+  --bg:#050b12;
+  --card:#0b1420;
+  --text:#eafdf4;
+  --muted:#9fb5ad;
+  --primary:#2cff9a;
+  --primary-hover:#19d982;
+  --warn:#2a1d08;
+  --warn-text:#ffd36a;
+  --border:rgba(44,255,154,0.28);
+  --ok:#2cff9a;
+  --ok-hover:#19d982;
+  --danger:#ff4d6d;
+  background:
+    radial-gradient(circle at top right, rgba(44,255,154,0.14), transparent 32%),
+    radial-gradient(circle at bottom left, rgba(0,180,255,0.10), transparent 28%),
+    var(--bg);
+  color:var(--text);
+}
+
+body.dark-mode p,
+body.dark-mode .fine,
+body.dark-mode .hint,
+body.dark-mode .small,
+body.dark-mode #sbPhotoFileName,
+body.dark-mode .legal-mini{
+  color:var(--muted) !important;
+}
+
+body.dark-mode .card,
+body.dark-mode .access,
+body.dark-mode .plan,
+body.dark-mode .status-box,
+body.dark-mode .photo-box,
+body.dark-mode .pending-bank-box{
+  background:
+    linear-gradient(180deg, rgba(14,28,42,0.96), rgba(7,15,24,0.96)) !important;
+  border-color:rgba(44,255,154,0.24) !important;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+
+body.dark-mode .top-card{
+  background:
+    radial-gradient(circle at top right, rgba(44,255,154,0.18), transparent 38%),
+    linear-gradient(180deg, #0c1725, #07111d) !important;
+  border-top-color:var(--primary) !important;
+}
+
+body.dark-mode .top-card h1,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode .section-title,
+body.dark-mode #lblPhotoTitle,
+body.dark-mode .pending-confirm-title{
+  color:var(--text) !important;
+}
+
+body.dark-mode .top-card p{color:#b7c9c2 !important;}
+
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode input{
+  background:#07111d !important;
+  color:var(--text) !important;
+  border-color:rgba(44,255,154,0.28) !important;
+}
+
+body.dark-mode textarea::placeholder{color:#6f8a82 !important;}
+
+body.dark-mode textarea:focus,
+body.dark-mode select:focus,
+body.dark-mode input:focus{
+  border-color:var(--primary) !important;
+  box-shadow:0 0 0 4px rgba(44,255,154,0.16) !important;
+}
+
+body.dark-mode pre{
+  background:#050b12 !important;
+  color:#eafdf4 !important;
+  border-color:rgba(44,255,154,0.22) !important;
+}
+
+body.dark-mode button.primary,
+body.dark-mode #sbChoosePhotoBtn,
+body.dark-mode #sbReadPhotoBtn{
+  background:linear-gradient(135deg,#12d87d,#2cff9a) !important;
+  color:#04110b !important;
+  box-shadow:0 10px 22px rgba(44,255,154,0.20) !important;
+}
+
+body.dark-mode #btnAnalyze{
+  background:linear-gradient(135deg,#0ddf80,#2cff9a) !important;
+  color:#04110b !important;
+  box-shadow:0 12px 28px rgba(44,255,154,0.22) !important;
+}
+
+body.dark-mode button.primary:hover,
+body.dark-mode #btnAnalyze:hover,
+body.dark-mode #sbChoosePhotoBtn:hover,
+body.dark-mode #sbReadPhotoBtn:hover{
+  background:linear-gradient(135deg,#19d982,#73ffc0) !important;
+}
+
+body.dark-mode .ui-btn,
+body.dark-mode .tool-btn,
+body.dark-mode .chip,
+body.dark-mode .install-btn,
+body.dark-mode .pending-copy-btn,
+body.dark-mode .footer-links button,
+body.dark-mode .theme-toggle{
+  background:#081522 !important;
+  color:#c8e8dc !important;
+  border-color:rgba(44,255,154,0.22) !important;
+}
+
+body.dark-mode .ui-btn.active{
+  color:#04110b !important;
+  background:var(--primary) !important;
+  border-color:var(--primary) !important;
+  box-shadow:0 0 0 3px rgba(44,255,154,0.20) !important;
+}
+
+body.dark-mode .chip strong{color:var(--primary) !important;}
+
+body.dark-mode .privacy-note{
+  background:
+    linear-gradient(135deg, rgba(44,255,154,0.14), rgba(7,15,24,0.96)) !important;
+  color:#c8e8dc !important;
+  border-color:rgba(44,255,154,0.30) !important;
+  border-left:5px solid var(--primary) !important;
+}
+body.dark-mode .privacy-note strong{color:var(--primary) !important;}
+
+body.dark-mode .box-warn{
+  background:#261b08 !important;
+  color:#ffd36a !important;
+  border:1px solid rgba(255,211,106,0.22);
+}
+
+body.dark-mode .lock{
+  background:#2a0710 !important;
+  color:#ffb4c2 !important;
+  border-color:rgba(255,77,109,0.35) !important;
+}
+
+body.dark-mode .badge{
+  background:rgba(44,255,154,0.16) !important;
+  color:var(--primary) !important;
+  border-color:rgba(44,255,154,0.35) !important;
+}
+body.dark-mode .plan.best{border-color:var(--primary) !important;}
+body.dark-mode .pending-code{
+  background:#02070c !important;
+  color:var(--primary) !important;
+  border:1px solid rgba(44,255,154,0.28);
+}
+body.dark-mode a{color:var(--primary);}
+body.dark-mode .card:not(.top-card)::after{
+  background:linear-gradient(90deg, rgba(44,255,154,0.75), rgba(44,255,154,0.05)) !important;
+}
+body.dark-mode .section-title::before,
+body.dark-mode #lblPhotoTitle::before{
+  background:rgba(44,255,154,0.12) !important;
+  border-color:rgba(44,255,154,0.28) !important;
+}
+
+body.dark-mode .plan .name,
+body.dark-mode .plan .price,
+body.dark-mode .plan .meta{color:var(--text) !important;}
+body.dark-mode .plan .price{
+  color:var(--primary) !important;
+  text-shadow:0 0 14px rgba(44,255,154,0.22);
+}
+body.dark-mode .plan.best .price{color:#7dffbf !important;}
+body.dark-mode #payTitle{color:var(--text) !important;}
+body.dark-mode #payDesc,
+body.dark-mode #fine1,
+body.dark-mode #fine2{color:#b7c9c2 !important;}
+
+body.dark-mode .sb-modal-box{
+  background:
+    radial-gradient(circle at top right, rgba(44,255,154,0.18), transparent 36%),
+    linear-gradient(180deg, #0d1a28, #06101a);
+  border:1px solid rgba(44,255,154,0.30);
+  box-shadow:
+    0 24px 70px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.04) inset;
+}
+body.dark-mode .sb-modal-box h3{color:#eafdf4;}
+body.dark-mode .sb-modal-box p{color:#b7c9c2;}
+body.dark-mode .sb-modal-input{
+  background:#050b12 !important;
+  color:#eafdf4 !important;
+  border-color:rgba(44,255,154,0.30) !important;
+}
+body.dark-mode .sb-modal-cancel{
+  background:#081522;
+  color:#c8e8dc;
+  border:1px solid rgba(44,255,154,0.22);
+}
+body.dark-mode .sb-modal-ok{
+  background:linear-gradient(135deg,#12d87d,#2cff9a);
+  color:#04110b;
+  border:none;
+  box-shadow:0 10px 22px rgba(44,255,154,0.20);
+}
+
+body.dark-mode .pending-confirm-box{
+  background:
+    radial-gradient(circle at top right, rgba(44,255,154,0.14), transparent 36%),
+    linear-gradient(180deg, #0d1a28, #06101a) !important;
+  border:1px solid rgba(44,255,154,0.30) !important;
+  color:#eafdf4 !important;
+}
+body.dark-mode .pending-confirm-title{color:#eafdf4 !important;}
+body.dark-mode .pending-confirm-text,
+body.dark-mode .pending-small{color:#c8e8dc !important;}
+body.dark-mode .pending-bank-box{
+  background:#07111d !important;
+  color:#c8e8dc !important;
+  border:1px dashed rgba(44,255,154,0.35) !important;
+}
+body.dark-mode .pending-bank-box strong{color:#eafdf4 !important;}
+
+/* Sense Bridge — fraud risk UI */
+#lblFraudRisk::before{content:"🛡️";}
+.fraud-box{
+  border-radius:16px;
+  padding:14px;
+  border:1px solid rgba(44,255,154,0.24);
+  background:linear-gradient(180deg, rgba(7,17,29,0.96), rgba(5,11,18,0.96));
+  color:#eafdf4;
+}
+.fraud-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.fraud-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,0.14);
+}
+.fraud-low{
+  background:rgba(44,255,154,0.16);
+  color:#14532d;
+  border-color:rgba(44,255,154,0.35);
+}
+.fraud-medium{background:rgba(255,211,106,0.14);color:#ffd36a;border-color:rgba(255,211,106,0.35);}
+.fraud-high{background:rgba(255,77,109,0.14);color:#ff9aae;border-color:rgba(255,77,109,0.35);}
+.fraud-unknown{background:rgba(159,181,173,0.12);color:#c8e8dc;border-color:rgba(159,181,173,0.26);}
+.fraud-box p{color:#c8e8dc !important;margin:0 0 10px;}
+.fraud-list{margin:10px 0 0;padding:0;list-style:none;}
+.fraud-list li{
+  margin:7px 0;
+  padding:9px 10px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.07);
+  color:#eafdf4;
+}
+.fraud-small{font-size:12px;color:#9fb5ad !important;margin-top:10px !important;}
+
+  
+/* ============================================================
+   Sense Bridge UX SAFE PATCH v9
+   - LOW: calm info visuals, no warning feeling
+   - HIGH: stronger red danger visuals
+   - separator between document content and Sense Bridge guidance
+   CSS only + class hooks from JS
+   ============================================================ */
+
+.box-info{
+  background:rgba(63,138,114,0.065);
+  color:#245c4d;
+  border:1px solid rgba(63,138,114,0.16);
+  border-radius:10px;
+  padding:10px 12px;
+  margin-bottom:8px;
+}
+
+.sb-summary-separator{
+  margin:16px 0 14px;
+  border-top:1px dashed rgba(104,115,133,.42);
+  position:relative;
+  height:1px;
+}
+.sb-summary-separator span{
+  position:relative;
+  top:-12px;
+  display:inline-block;
+  background:var(--card);
+  padding:0 10px 0 0;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.01em;
+  color:var(--muted);
+}
+body.dark-mode .sb-summary-separator{
+  border-top-color:rgba(200,232,220,.24);
+}
+body.dark-mode .sb-summary-separator span{
+  background:#0b1420;
+  color:#9fb5ad;
+}
+
+.sb-low-risk-card #lblRisks::before{
+  content:"ℹ️" !important;
+}
+.sb-high-risk-card #lblRisks::before{
+  content:"🚨" !important;
+}
+
+#risks.low-risk .box-warn,
+#risks.low-risk .box-info,
+#consequences.low-risk .box-warn,
+#consequences.low-risk .box-info{
+  background:#eef7f3 !important;
+  color:#245c4d !important;
+  border:1px solid rgba(63,138,114,.16) !important;
+}
+
+#risks.medium-risk .box-warn,
+#risks.medium-risk .box-info,
+#consequences.medium-risk .box-warn,
+#consequences.medium-risk .box-info{
+  background:#fef3c7 !important;
+  color:#92400e !important;
+  border:1px solid rgba(250,204,21,.34) !important;
+}
+
+#risks.high-risk .box-warn,
+#risks.high-risk .box-info,
+#consequences.high-risk .box-warn,
+#consequences.high-risk .box-info{
+  background:#fee2e2 !important;
+  color:#7f1d1d !important;
+  border:1px solid #fca5a5 !important;
+  box-shadow:0 8px 22px rgba(239,68,68,.10) !important;
+}
+
+#consequences.high-risk{
+  border-top:2px solid rgba(239,68,68,.45);
+  margin-top:14px;
+  padding-top:12px;
+}
+
+body.dark-mode #risks.low-risk .box-warn,
+body.dark-mode #risks.low-risk .box-info,
+body.dark-mode #consequences.low-risk .box-warn,
+body.dark-mode #consequences.low-risk .box-info{
+  background:rgba(44,255,154,.08) !important;
+  color:#d8ffe9 !important;
+  border-color:rgba(44,255,154,.22) !important;
+}
+
+body.dark-mode #risks.high-risk .box-warn,
+body.dark-mode #risks.high-risk .box-info,
+body.dark-mode #consequences.high-risk .box-warn,
+body.dark-mode #consequences.high-risk .box-info{
+  background:rgba(255,77,109,.16) !important;
+  color:#ffd1da !important;
+  border-color:rgba(255,77,109,.45) !important;
+}
+
+#fraudRiskBox.fraud-box-high .fraud-box,
+.fraud-box.fraud-box-high{
+  border-color:rgba(239,68,68,.42) !important;
+  background:linear-gradient(180deg, rgba(254,242,242,.94), rgba(255,255,255,.98)) !important;
+}
+
+#fraudRiskBox.fraud-box-low .fraud-box,
+.fraud-box.fraud-box-low{
+  border-color:rgba(34,197,94,.25) !important;
+  background:linear-gradient(180deg, rgba(240,253,244,.90), rgba(255,255,255,.98)) !important;
+}
+
+/* =========================================================
+   Sense Bridge V2 UX experiment — camera + clear path cards
+   Additive layer only: keeps existing OCR/analyze logic
+   ========================================================= */
+.sb-photo-actions-v2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:10px 0 10px;
+}
+.sb-photo-action{
+  min-height:58px;
+  border-radius:18px;
+  border:1px solid rgba(63,138,114,0.24);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-weight:850;
+  font-size:15px;
+  box-shadow:0 8px 18px rgba(15,23,42,0.08);
+}
+.sb-photo-action .ico{
+  font-size:20px;
+  line-height:1;
+}
+#sbTakePhotoBtn{
+  background:linear-gradient(135deg,#0e2a47,#17476f);
+  color:#ffffff;
+  border:none;
+}
+#sbTakePhotoBtn:hover{
+  background:linear-gradient(135deg,#0b2239,#123f63);
+  transform:translateY(-1px);
+}
+#sbChoosePhotoBtn.sb-photo-action{
+  background:linear-gradient(135deg,var(--primary),#58a58d);
+  color:#ffffff;
+  border:none;
+}
+#sbChoosePhotoBtn.sb-photo-action:hover{
+  background:linear-gradient(135deg,var(--primary-hover),var(--primary));
+  transform:translateY(-1px);
+}
+#sbReadPhotoBtn{
+  min-height:48px;
+  border-radius:16px;
+  font-weight:850;
+}
+.sb-flow-cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0 0;
+}
+.sb-flow-card{
+  border:1px solid rgba(63,138,114,0.18);
+  background:linear-gradient(180deg,#ffffff,#f8fbfa);
+  border-radius:16px;
+  padding:12px;
+  box-shadow:0 7px 16px rgba(15,23,42,0.05);
+}
+.sb-flow-card strong{
+  display:block;
+  font-size:13px;
+  color:#172033;
+  margin-bottom:4px;
+}
+.sb-flow-card span{
+  display:block;
+  font-size:12px;
+  color:#687385;
+  line-height:1.35;
+}
+body.dark-mode .sb-flow-card{
+  background:linear-gradient(180deg,#0b1a28,#081522) !important;
+  border-color:rgba(44,255,154,0.20) !important;
+  box-shadow:0 9px 22px rgba(0,0,0,0.30) !important;
+}
+body.dark-mode .sb-flow-card strong{
+  color:#eafdf4 !important;
+}
+body.dark-mode .sb-flow-card span{
+  color:#9fb5ad !important;
+}
+body.dark-mode #sbTakePhotoBtn{
+  background:linear-gradient(135deg,#0ddf80,#2cff9a) !important;
+  color:#04110b !important;
+}
+body.dark-mode #sbChoosePhotoBtn.sb-photo-action{
+  background:linear-gradient(135deg,#12d87d,#2cff9a) !important;
+  color:#04110b !important;
+}
+@media (max-width:640px){
+  .sb-photo-actions-v2{
+    grid-template-columns:1fr;
+  }
+  .sb-photo-action{
+    width:100%;
+    min-height:56px;
+  }
+  .sb-flow-cards{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* =========================================================
+   Sense Bridge — clear data button with open red trash icon
+   Additive UX layer only: no logic changes
+   ========================================================= */
+.tools{
+  gap:10px;
+  align-items:flex-start;
+}
+.tool-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:46px;
+  padding:12px 18px;
+  border-radius:16px;
+  border:1px solid rgba(14,42,71,0.16);
+  background:linear-gradient(180deg,#ffffff,#fbfdfc);
+  color:#233044;
+  font-size:15px;
+  font-weight:750;
+  letter-spacing:-0.01em;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.tool-btn:hover{
+  border-color:rgba(14,42,71,0.26);
+  box-shadow:0 10px 22px rgba(15,23,42,0.11), inset 0 1px 0 rgba(255,255,255,0.95);
+  transform:translateY(-1px);
+}
+.tool-btn:active{
+  transform:translateY(0);
+  box-shadow:0 5px 12px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.clear-data-btn{
+  border-color:rgba(220,38,38,0.24);
+  background:linear-gradient(180deg,#ffffff,#fffafa);
+  color:#263244;
+}
+.clear-data-btn:hover{
+  border-color:rgba(220,38,38,0.38);
+  background:linear-gradient(180deg,#ffffff,#fff5f5);
+}
+.trash-red{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:#dc2626;
+  flex:0 0 auto;
+}
+.trash-red svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
+.clear-label{
+  line-height:1.2;
+}
+body.dark-mode .tool-btn{
+  background:linear-gradient(180deg,#0b1a28,#081522) !important;
+  color:#e8fff5 !important;
+  border-color:rgba(44,255,154,0.24) !important;
+  box-shadow:0 9px 22px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+body.dark-mode .clear-data-btn{
+  border-color:rgba(255,77,109,0.36) !important;
+  background:linear-gradient(180deg,#150d14,#081522) !important;
+}
+body.dark-mode .clear-data-btn:hover{
+  border-color:rgba(255,77,109,0.56) !important;
+}
+body.dark-mode .clear-data-btn .trash-red{
+  color:#ff4d6d !important;
+}
+@media (max-width:640px){
+  .tools{gap:10px;}
+  .tool-btn{min-height:48px; padding:12px 16px; font-size:15px; border-radius:16px;}
+  .clear-data-btn{width:auto; max-width:100%;}
+}
+
+</style>
 </head>
 
 <body>
 <main>
 
-  <div class="card">
+  <div class="card top-card">
     <div class="topbar">
       <div>
         <h1 id="hTitle">Sense Bridge</h1>
+        <button id="installAppBtn" class="install-btn" type="button" onclick="installApp()">📲 Dodaj skrót aplikacji do telefonu</button>
         <p id="hDesc">Pomaga zrozumieć pisma urzędowe. Bez porad. Bez presji.</p>
       </div>
 
       <div class="ui-switch" aria-label="Język strony">
-        <button class="ui-btn" type="button" data-ui="PL" onclick="setUiLang('PL')">PL</button>
-        <button class="ui-btn" type="button" data-ui="NL" onclick="setUiLang('NL')">NL</button>
-        <button class="ui-btn" type="button" data-ui="EN" onclick="setUiLang('EN')">EN</button>
-        <button class="ui-btn" type="button" data-ui="DE" onclick="setUiLang('DE')">DE</button>
+        <button class="ui-btn" type="button" data-ui="PL" onclick="setUiLang('PL')">🇵🇱 PL</button>
+        <button class="ui-btn" type="button" data-ui="UA" onclick="setUiLang('UA')">🇺🇦 UA</button>
+        <button class="ui-btn" type="button" data-ui="NL" onclick="setUiLang('NL')">🇳🇱 NL</button>
+        <button class="ui-btn" type="button" data-ui="EN" onclick="setUiLang('EN')">🇬🇧 EN</button>
+        <button class="ui-btn" type="button" data-ui="DE" onclick="setUiLang('DE')">🇩🇪 DE</button>
+        <button class="ui-btn" type="button" data-ui="FR" onclick="setUiLang('FR')">🇫🇷 FR</button>
+        <button class="ui-btn" type="button" data-ui="IT" onclick="setUiLang('IT')">🇮🇹 IT</button>
+        <button class="ui-btn" type="button" data-ui="ES" onclick="setUiLang('ES')">🇪🇸 ES</button>
+        <button class="ui-btn" type="button" data-ui="PT" onclick="setUiLang('PT')">🇵🇹 PT</button>
+      </div>
+
+      <div class="theme-switch" aria-label="Motyw strony">
+        <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">☀️ Jasny</button>
       </div>
     </div>
 
-    <!-- ✅ paid message OUTSIDE topbar but inside header card -->
     <div id="paidMsg" class="card" style="display:none;margin:12px 0 0;">
       <p id="paidText" style="margin:0;color:#1f2937;font-weight:600;"></p>
     </div>
@@ -270,31 +1468,97 @@
 
   <div class="card">
     <div class="section-title" id="lblPaste">Wklej pismo</div>
+
+    <div class="photo-box">
+      <label id="lblPhotoTitle" for="sbPhotoInput"><strong>Zdjęcie pisma</strong></label>
+
+      <input id="sbPhotoInput" type="file" accept="image/*" style="display:none;" />
+      <input id="sbCameraInput" type="file" accept="image/*" capture="environment" style="display:none;" />
+
+      <div class="sb-photo-actions-v2">
+        <button id="sbTakePhotoBtn" class="sb-photo-action" type="button">
+          <span class="ico" aria-hidden="true">📸</span>
+          <span id="sbTakePhotoLabel">Zrób zdjęcie</span>
+        </button>
+        <button id="sbChoosePhotoBtn" class="sb-photo-action" type="button">
+          <span class="ico" aria-hidden="true">🖼️</span>
+          <span id="sbChoosePhotoLabel">Wybierz z galerii</span>
+        </button>
+      </div>
+
+      <span id="sbPhotoFileName">Nie wybrano zdjęcia</span>
+
+      <button id="sbReadPhotoBtn" type="button">Wczytaj tekst ze zdjęcia</button>
+
+      <div id="sbPhotoStatus" style="font-size:13px; opacity:.8; margin-top:6px;"></div>
+
+      <div id="sbFlowCards" class="sb-flow-cards" aria-label="Przebieg analizy">
+        <div class="sb-flow-card">
+          <strong id="sbFlow1Title">1. Co to znaczy?</strong>
+          <span id="sbFlow1Text">Krótko wyjaśnia sens pisma.</span>
+        </div>
+        <div class="sb-flow-card">
+          <strong id="sbFlow2Title">2. Co zrobić teraz?</strong>
+          <span id="sbFlow2Text">Pokazuje najbliższy krok.</span>
+        </div>
+        <div class="sb-flow-card">
+          <strong id="sbFlow3Title">3. Czy to bezpieczne?</strong>
+          <span id="sbFlow3Text">Sprawdza ryzyko oszustwa.</span>
+        </div>
+      </div>
+    </div>
+
     <textarea id="inputText" placeholder="Wklej treść pisma lub e-maila z urzędu…"></textarea>
 
     <div class="row" style="margin-top:8px">
       <select id="sourceLang" aria-label="Język dokumentu">
+
         <option value="AUTO">Język dokumentu: AUTO</option>
-        <option value="NL">NL</option>
-        <option value="DE">DE</option>
-        <option value="EN">EN</option>
-        <option value="PL">PL</option>
+        <option value="PL">🇵🇱 Polski</option>
+        <option value="UA">🇺🇦 Українська</option>
+        <option value="NL">🇳🇱 Nederlands</option>
+        <option value="EN">🇬🇧 English</option>
+        <option value="DE">🇩🇪 Deutsch</option>
+        <option value="FR">🇫🇷 Français</option>
+        <option value="IT">🇮🇹 Italiano</option>
+        <option value="ES">🇪🇸 Español</option>
+        <option value="PT">🇵🇹 Português</option>
+
       </select>
 
-      <select id="userLang" aria-label="Twój język">
-        <option value="PL">Twój język: PL</option>
-        <option value="DE">DE</option>
-        <option value="NL">NL</option>
-        <option value="EN">EN</option>
-      </select>
+      <div>
+        <div id="lblUserLang" class="section-title">Twój język</div>
+        <select id="userLang" aria-label="Twój język">
+
+        <option value="PL">🇵🇱 Polski</option>
+        <option value="UA">🇺🇦 Українська</option>
+        <option value="NL">🇳🇱 Nederlands</option>
+        <option value="EN">🇬🇧 English</option>
+        <option value="DE">🇩🇪 Deutsch</option>
+        <option value="FR">🇫🇷 Français</option>
+        <option value="IT">🇮🇹 Italiano</option>
+        <option value="ES">🇪🇸 Español</option>
+        <option value="PT">🇵🇹 Português</option>
+
+        </select>
+      </div>
 
       <button id="btnAnalyze" class="primary grow" onclick="analyze()">Analizuj pismo</button>
+      <div id="analyzeStatus" class="analyze-status"></div>
     </div>
 
     <div class="tools">
-      <button class="tool-btn" type="button" onclick="clearInput()">Wyczyść</button>
+      <button id="btnClearData" class="tool-btn clear-data-btn" type="button" onclick="clearInput()">
+        <span class="trash-red" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false" role="img">
+            <path fill="currentColor" d="M8.8 3.1 19.6 6l-.5 1.9L8.3 5l.5-1.9Zm2.9-1.8 5.8 1.6-.5 1.9-5.8-1.6.5-1.9ZM6 8h13l-1.2 12.1A2.1 2.1 0 0 1 15.7 22H9.3a2.1 2.1 0 0 1-2.1-1.9L6 8Zm3.2 2 .8 9h1.8l-.6-9h-2Zm4.6 0-.6 9H15l.8-9h-2Z"></path>
+          </svg>
+        </span>
+        <span class="clear-label">Wyczyść dane po analizie</span>
+      </button>
       <button class="tool-btn" type="button" onclick="copyText('translation')">Kopiuj tłumaczenie</button>
       <button class="tool-btn" type="button" onclick="copyText('examples')">Kopiuj odpowiedzi</button>
+      <button class="tool-btn" type="button" onclick="copyText('examplesDoc')" id="btnCopyExamplesDoc">Kopiuj odpowiedzi do wysłania</button>
     </div>
 
     <div class="statusbar">
@@ -314,7 +1578,24 @@
     <div class="hint" id="hintUI">
       „UI” to po prostu <strong>język strony</strong> (przycisków i opisów) — nie zmienia treści dokumentu ani analizy.
     </div>
+
+    <div class="privacy-note" id="privacyNote">
+      <strong>Prywatność:</strong> Dokumenty nie są publicznie zapisywane ani udostępniane. Wklejaj tylko treści, które chcesz przeanalizować. Sense Bridge pomaga zrozumieć pismo, ale nie zastępuje porady prawnej.
+    </div>
   </div>
+
+<div class="card" id="fraudInfoCard">
+
+  <div class="section-title" id="lblFraudInfo">
+    🛡️ Sprawdzenie bezpieczeństwa dokumentu
+  </div>
+
+  <div class="resultBox" id="fraudInfoText">
+    Sense Bridge po analizie sprawdzi również możliwe ryzyko oszustwa,
+    podszywania się pod instytucję oraz podejrzane elementy dokumentu.
+  </div>
+
+</div>
 
   <div class="card">
     <div class="section-title" id="lblTranslation">Tłumaczenie</div>
@@ -322,8 +1603,23 @@
   </div>
 
   <div class="card">
-    <div class="section-title" id="lblSummary">Co urząd komunikuje</div>
+    <div class="section-title" id="lblSummary">Co pismo komunikuje</div>
     <p id="summary"></p>
+    <div id="sbSummarySeparator" class="sb-summary-separator" style="display:none;"><span>Sense Bridge assessment and steps</span></div>
+    <div id="legalStatus"></div>
+    <div id="urgencyBox" class="box-info"></div>
+
+<div id="actions"></div>
+<div id="consequences"></div>
+<div id="help"></div>
+<div id="helpLinks"></div>
+<div id="institutionBox"></div>
+  </div>
+  
+  <div class="card" id="fraudCard" style="display:none;">
+    
+    <div class="section-title" id="lblFraudRisk">Analiza ryzyka oszustwa</div>
+    <div id="fraudRiskBox"></div>
   </div>
 
   <div class="card">
@@ -332,8 +1628,13 @@
   </div>
 
   <div class="card">
-    <div class="section-title" id="lblExamples">Przykłady odpowiedzi</div>
+    <div class="section-title" id="lblExamples">Przykłady odpowiedzi (Twój język)</div>
     <pre id="examples"></pre>
+  </div>
+
+  <div class="card">
+    <div class="section-title" id="lblExamplesDoc">Przykłady odpowiedzi (język dokumentu)</div>
+    <pre id="examplesDoc"></pre>
   </div>
 
   <section id="access" class="access hidden" aria-label="Dostęp Sense Bridge">
@@ -370,21 +1671,183 @@
     </p>
   </section>
 
+  <div id="paymentBox" class="card" style="display:none;">
+    <h3 id="paymentBoxTitle">Zakup dostępu</h3>
+    <p><b id="paymentAmountLabel">Kwota:</b> <span id="amountText"></span></p>
+
+    <p><b id="paymentTransferLabel">Zapłać przelewem:</b></p>
+    <p>
+      IBAN: <b>NL60 RABO 0324 8128 84</b><br>
+      <span id="paymentReceiverLabel">Odbiorca:</span> <b>I. Madej</b>
+    </p>
+
+    <p><b id="paymentTitleLabel">Tytuł przelewu:</b><br>
+      <span id="transferTitle"></span>
+    </p>
+
+    <button id="confirmPaidBtn" class="primary" type="button" onclick="confirmPaid()">✔ Zapłaciłem</button>
+
+    <div id="pendingConfirmBox" class="pending-confirm-box">
+      <div id="pendingConfirmTitle" class="pending-confirm-title">✅ Zgłoszenie zapisane</div>
+      <div id="pendingConfirmText" class="pending-confirm-text">
+        Dziękujemy. Wykonaj przelew używając dokładnie poniższego tytułu. Dostęp zostanie aktywowany po ręcznym potwierdzeniu płatności.
+      </div>
+      <div class="pending-bank-box">
+        <div><strong>IBAN:</strong> NL60 RABO 0324 8128 84</div>
+        <div><strong id="pendingReceiverLabel">Odbiorca:</strong> I. Madej</div>
+        <div><strong id="pendingTitleLabel">Tytuł przelewu:</strong></div>
+        <span id="pendingCodeView" class="pending-code"></span>
+      </div>
+      <button id="pendingCopyBtn" class="pending-copy-btn" type="button" onclick="copyPendingCode()">Kopiuj tytuł przelewu</button>
+      <div id="pendingSmallText" class="pending-small">
+        Po zaksięgowaniu płatności aktywujemy dostęp. Możesz później wrócić do strony i sprawdzić dostęp tym samym adresem e-mail.
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-links" aria-label="Informacje prawne">
+    <button type="button" id="footerPrivacy" onclick="showFooterInfo('privacy')">Prywatność</button>
+    <span>•</span>
+    <button type="button" id="footerTerms" onclick="showFooterInfo('terms')">Warunki</button>
+    <span>•</span>
+    <button type="button" id="footerContact" onclick="showFooterInfo('contact')">Kontakt</button>
+  </footer>
+  <div class="legal-mini" id="footerText">Sense Bridge ma charakter informacyjny i nie jest kancelarią prawną.</div>
+
 </main>
+<!-- Sense Bridge custom modal -->
+<div id="sbModal" class="sb-modal hidden">
+  <div class="sb-modal-box">
+    <h3 id="sbModalTitle">Sense Bridge</h3>
+    <p id="sbModalText"></p>
+
+    <input id="sbModalInput" class="sb-modal-input" type="text" style="display:none;" />
+
+    <div class="sb-modal-actions">
+      <button type="button" class="sb-modal-cancel" onclick="sbModalCancel()">Anuluj</button>
+      <button type="button" class="sb-modal-ok" onclick="sbModalOk()">OK</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/* =========================================================
-   CONFIG (Stripe + endpoints)
+  
+  /* =========================================================
+   SENSE BRIDGE CUSTOM MODAL
    ========================================================= */
-const STRIPE_LINKS = {
-  "24h": "https://buy.stripe.com/test_dRm5kCgTk7wUeF2dgO53O00",
-  "7d":  "https://buy.stripe.com/test_cNi7sKauWaJ68gE2Ca53O01",
-  "30d": "https://buy.stripe.com/test_14A3cu5aC4kIfJ6dgO53O02"
+let sbModalResolve = null;
+
+function sbShowModal({ title = "Sense Bridge", text = "", input = false, placeholder = "" }) {
+  return new Promise((resolve) => {
+    sbModalResolve = resolve;
+
+    const modal = document.getElementById("sbModal");
+    const titleEl = document.getElementById("sbModalTitle");
+    const textEl = document.getElementById("sbModalText");
+    const inputEl = document.getElementById("sbModalInput");
+
+    titleEl.textContent = title;
+    textEl.textContent = text;
+
+    if (input) {
+      inputEl.style.display = "block";
+      inputEl.value = "";
+      inputEl.placeholder = placeholder;
+      inputEl.type = "email";
+      setTimeout(() => inputEl.focus(), 150);
+    } else {
+      inputEl.style.display = "none";
+      inputEl.value = "";
+    }
+
+    modal.classList.remove("hidden");
+  });
+}
+
+function sbModalOk() {
+  const modal = document.getElementById("sbModal");
+  const inputEl = document.getElementById("sbModalInput");
+  const value = inputEl.style.display === "block" ? inputEl.value.trim() : true;
+
+  modal.classList.add("hidden");
+
+  if (sbModalResolve) {
+    sbModalResolve(value);
+    sbModalResolve = null;
+  }
+}
+
+function sbModalCancel() {
+  const modal = document.getElementById("sbModal");
+  modal.classList.add("hidden");
+
+  if (sbModalResolve) {
+    sbModalResolve(null);
+    sbModalResolve = null;
+  }
+}
+
+/* =========================================================
+   THEME MODE — LIGHT DEFAULT / DARK PREMIUM
+   ========================================================= */
+const THEME = {
+  key: "sb_theme_mode_v1",
+  fallback: "light"
 };
+
+function getTheme(){
+  const saved = (localStorage.getItem(THEME.key) || "").trim().toLowerCase();
+  if(saved === "dark" || saved === "light") return saved;
+  return THEME.fallback;
+}
+
+function getThemeText(theme){
+  const lang = (UI && UI.lang) ? UI.lang : "PL";
+  const labels = {
+    PL: { light:"☀️ Jasny", dark:"🌙 Ciemny" },
+    EN: { light:"☀️ Light", dark:"🌙 Dark" },
+    NL: { light:"☀️ Licht", dark:"🌙 Donker" },
+    DE: { light:"☀️ Hell", dark:"🌙 Dunkel" },
+    UA: { light:"☀️ Світла", dark:"🌙 Темна" },
+    FR: { light:"☀️ Clair", dark:"🌙 Sombre" },
+    IT: { light:"☀️ Chiaro", dark:"🌙 Scuro" },
+    ES: { light:"☀️ Claro", dark:"🌙 Oscuro" },
+    PT: { light:"☀️ Claro", dark:"🌙 Escuro" }
+  };
+  const t = labels[lang] || labels.PL;
+  return theme === "dark" ? t.dark : t.light;
+}
+
+function applyTheme(theme){
+  const mode = (theme === "dark") ? "dark" : "light";
+  document.body.classList.remove("light-mode", "dark-mode");
+  document.body.classList.add(mode + "-mode");
+  document.documentElement.setAttribute("data-theme", mode);
+
+  const toggle = document.getElementById("themeToggle");
+  if(toggle){
+    toggle.textContent = getThemeText(mode);
+    toggle.setAttribute("aria-label", getThemeText(mode));
+  }
+}
+
+function toggleTheme(){
+  const current = getTheme();
+  const next = current === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME.key, next);
+  applyTheme(next);
+}
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const STRIPE_LINKS = {};
 
 const ENDPOINTS = {
   analyze: "/.netlify/functions/analyze",
-  translate: "/.netlify/functions/translate"
+  translate: "/.netlify/functions/translate",
+  accessSet: "/.netlify/functions/pending_set",
+  accessCheck: "/.netlify/functions/access_check"
 };
 
 /* =========================================================
@@ -393,7 +1856,7 @@ const ENDPOINTS = {
 const SB = {
   freeMax: 3,
   keyFreeUsed: "sb_free_used_v2",
-  keyPass: "sb_pass_v2" // {type, exp}
+  keyPass: "sb_pass_v2"
 };
 
 function nowMs(){ return Date.now(); }
@@ -465,7 +1928,23 @@ function updatePaidMessage(){
 
   if(access.mode === "PASS"){
     const until = new Date(access.until).toLocaleString();
-    text.innerHTML = `✅ <strong>Dostęp aktywny</strong> • ważny do: <strong>${until}</strong>`;
+    const lang = (UI && UI.lang) ? UI.lang : "PL";
+
+const paidLabels = {
+  PL: ["Dostęp aktywny", "ważny do"],
+  EN: ["Access active", "valid until"],
+  NL: ["Toegang actief", "geldig tot"],
+  DE: ["Zugang aktiv", "gültig bis"],
+  UA: ["Доступ активний", "дійсний до"],
+  FR: ["Accès actif", "valable jusqu’au"],
+  IT: ["Accesso attivo", "valido fino a"],
+  ES: ["Acceso activo", "válido hasta"],
+  PT: ["Acesso ativo", "válido até"]
+};
+
+const l = paidLabels[lang] || paidLabels.PL;
+
+text.innerHTML = `✅ <strong>${l[0]}</strong> • ${l[1]}: <strong>${until}</strong>`;
     box.style.display = "block";
   } else {
     box.style.display = "none";
@@ -523,37 +2002,127 @@ const UI = {
       title: "Sense Bridge",
       desc: "Pomaga zrozumieć pisma urzędowe. Bez porad. Bez presji.",
       paste: "Wklej pismo",
+      photoTitle: "Zdjęcie pisma",
+      choosePhoto: "Wybierz zdjęcie",
+      noPhoto: "Nie wybrano zdjęcia",
+      readPhoto: "Wczytaj tekst ze zdjęcia",
       placeholder: "Wklej treść pisma lub e-maila z urzędu…",
       btnAnalyze: "Analizuj pismo",
+      userLang: "Twój język",
+      fraudInfoTitle:"🛡️ Sprawdzenie bezpieczeństwa dokumentu",
+fraudInfoText:"Sense Bridge po analizie sprawdzi również możliwe ryzyko oszustwa, podszywania się pod instytucję oraz podejrzane elementy dokumentu.",
+      installApp: '📲 Dodaj skrót aplikacji do telefonu',
+      installHelp: '',
       free: "FREE:",
       analyses: "analizy",
       access: "Dostęp:",
       reset: "Reset testowy",
       lock: "Limit FREE został wykorzystany. Wybierz dostęp poniżej, aby kontynuować.",
       translation: "Tłumaczenie",
-      summary: "Co urząd komunikuje",
+      summary: "Co pismo komunikuje",
       risks: "Ryzyka komunikacyjne",
       examples: "Przykłady odpowiedzi",
+      examplesUser: 'Przykłady odpowiedzi (Twój język)',
+      examplesDoc: 'Przykłady odpowiedzi (język dokumentu)',
+      copyExDoc: 'Kopiuj odpowiedzi do wysłania',
+      examplesDocEmpty: 'Po analizie pojawi się tutaj wersja odpowiedzi w języku dokumentu.',
       payTitle: "Dostęp bez abonamentu",
       payDesc: "Masz 3 analizy FREE na sprawdzenie działania. Potem wybierasz spokojny dostęp czasowy.",
       p24meta: "Dla jednego pilnego pisma",
       p7meta: "Na serię wiadomości / odpowiedzi",
       p30meta: "Spokój na cały miesiąc",
+      
+      p7name: "7 dni",
+p30name: "30 dni",
       best: "Najlepsza wartość",
       fine1: "Sense Bridge nie daje porad prawnych. Pomaga zrozumieć sens, ton i ryzyka pisma, abyś mógł podjąć własną decyzję.",
       fine2: "Sprzedajemy spokój i zrozumienie, nie „AI”.",
       hintUI: "„UI” to po prostu <strong>język strony</strong> (przycisków i opisów) — nie zmienia treści dokumentu ani analizy.",
+      privacyNote: "<strong>Prywatność:</strong> Dokumenty nie są publicznie zapisywane ani udostępniane. Wklejaj tylko treści, które chcesz przeanalizować. Sense Bridge pomaga zrozumieć pismo, ale nie zastępuje porady prawnej.",
+      footerPrivacy: "Prywatność",
+      footerTerms: "Warunki",
+      footerContact: "Kontakt",
+      footerDefault: "Sense Bridge ma charakter informacyjny i nie jest kancelarią prawną.",
+      footerPrivacyText: "Prywatność: nie publikujemy dokumentów użytkownika. Dane techniczne i informacje o dostępie mogą być użyte tylko do działania usługi.",
+      footerTermsText: "Warunki: użytkownik odpowiada za treści, które wkleja. Analiza ma charakter informacyjny i nie stanowi porady prawnej.",
+      footerContactText: "Kontakt: w sprawach dostępu lub płatności użyj adresu kontaktowego podanego przez Sense Bridge.",
+      analyzingLetter: "Analizuję pismo...",
+      helpLinksTitle: "Pomocne strony",
       srcAuto: "Język dokumentu: AUTO",
-      clear: "Wyczyść",
+      clear: "Wyczyść dane po analizie",
       copyTr: "Kopiuj tłumaczenie",
-      copyEx: "Kopiuj odpowiedzi"
+      copyEx: 'Kopiuj odpowiedzi (mój język)'
+    },
+    UA: {
+      title: "Sense Bridge",
+      desc: "Допомагає зрозуміти офіційні листи. Без порад. Без тиску.",
+      paste: "Вставте лист",
+      photoTitle: "Фото листа",
+      choosePhoto: "Вибрати фото",
+      noPhoto: "Фото не вибрано",
+      readPhoto: "Зчитати текст з фото",
+      placeholder: "Вставте текст офіційного листа або e-mail…",
+      btnAnalyze: "Аналізувати лист",
+      userLang: "Ваша мова",
+      fraudInfoTitle:"🛡️ Перевірка безпеки документа",
+fraudInfoText:"Після аналізу Sense Bridge також перевірить можливий ризик шахрайства, підробки установи та підозрілі елементи документа.",
+      installApp: '📲 Додати ярлик застосунку на телефон',
+      installHelp: 'Щоб додати ярлик застосунку на телефон:\\n\\nНатисніть 3 крапки у браузері\\n→ Додати на головний екран',
+      free: "FREE:",
+      analyses: "аналізи",
+      access: "Доступ:",
+      reset: "Тестове скидання",
+      lock: "Ліміт FREE використано. Виберіть доступ нижче, щоб продовжити.",
+      translation: "Переклад",
+      summary: "Що повідомляє установа",
+      risks: "Комунікаційні ризики",
+      examples: "Приклади відповідей",
+      examplesUser: 'Приклади відповідей (ваша мова)',
+      examplesDoc: 'Приклади відповідей (мова документа)',
+      copyExDoc: 'Копіювати відповідь для відправлення',
+      examplesDocEmpty: 'Після аналізу тут з’явиться версія відповіді мовою документа.',
+      payTitle: "Доступ без підписки",
+      payDesc: "У вас є 3 FREE-аналізи для перевірки. Потім можна вибрати часовий доступ.",
+      p24meta: "Для одного термінового листа",
+      p7meta: "Для серії повідомлень / відповідей",
+      
+      p7name: "7 днів",
+p30name: "30 днів",
+      p30meta: "Спокій на цілий місяць",
+      best: "Найкраща вартість",
+      fine1: "Sense Bridge не надає юридичних консультацій. Він допомагає зрозуміти зміст, тон і ризики листа, щоб ви могли прийняти власне рішення.",
+      fine2: "Ми продаємо спокій і розуміння, а не «AI».",
+      hintUI: "«UI» — це просто <strong>мова сторінки</strong> (кнопок і описів) — вона не змінює зміст документа або аналіз.",
+      privacyNote: "<strong>Конфіденційність:</strong> Документи не зберігаються публічно і не передаються іншим. Вставляйте лише той текст, який хочете проаналізувати. Sense Bridge допомагає зрозуміти лист, але не замінює юридичну консультацію.",
+      footerPrivacy: "Конфіденційність",
+      footerTerms: "Умови",
+      footerContact: "Контакт",
+      footerDefault: "Sense Bridge має інформаційний характер і не є юридичною фірмою.",
+      footerPrivacyText: "Конфіденційність: ми не публікуємо документи користувачів. Технічні дані та інформація про доступ можуть використовуватися лише для роботи сервісу.",
+      footerTermsText: "Умови: користувач відповідає за текст, який вставляє. Аналіз має інформаційний характер і не є юридичною консультацією.",
+      footerContactText: "Контакт: з питань доступу або оплати використовуйте контактну адресу, вказану Sense Bridge.",
+      analyzingLetter: "Аналізую документ...",
+      helpLinksTitle: "Корисні посилання",
+      srcAuto: "Мова документа: AUTO",
+      clear: "Очистити дані після аналізу",
+      copyTr: "Копіювати переклад",
+      copyEx: 'Копіювати відповіді (моя мова)'
     },
     NL: {
       title: "Sense Bridge",
       desc: "Helpt officiële brieven begrijpen. Geen advies. Geen druk.",
       paste: "Plak de brief",
+      photoTitle: "Foto van de brief",
+      choosePhoto: "Kies foto",
+      noPhoto: "Geen foto gekozen",
+      readPhoto: "Tekst uit foto lezen",
       placeholder: "Plak de tekst van de brief of e-mail…",
       btnAnalyze: "Analyseer brief",
+      userLang: "Jouw taal",
+      fraudInfoTitle:"🛡️ Controle van documentveiligheid",
+fraudInfoText:"Sense Bridge controleert na de analyse ook mogelijke fraude, imitatie van instanties en verdachte elementen in het document.",
+      installApp: '📲 Snelkoppeling op telefoon zetten',
+      installHelp: 'Om een snelkoppeling op je telefoon te zetten:\\n\\nTik op de 3 puntjes in de browser\\n→ Toevoegen aan startscherm',
       free: "FREE:",
       analyses: "analyses",
       access: "Toegang:",
@@ -563,26 +2132,52 @@ const UI = {
       summary: "Wat de instantie bedoelt",
       risks: "Communicatierisico’s",
       examples: "Voorbeelden van antwoorden",
+      examplesUser: 'Voorbeelden van antwoorden (jouw taal)',
+      examplesDoc: 'Voorbeelden van antwoorden (taal van het document)',
+      copyExDoc: 'Kopieer antwoord om te versturen',
+      examplesDocEmpty: 'Na de analyse verschijnt hier de antwoordversie in de taal van het document.',
       payTitle: "Toegang zonder abonnement",
       payDesc: "Je krijgt 3 FREE-analyses om te testen. Daarna kies je rustige tijdstoegang.",
       p24meta: "Voor één urgente brief",
       p7meta: "Voor een reeks berichten",
       p30meta: "Rust voor een hele maand",
+      
+      p7name: "7 dagen",
+p30name: "30 dagen",
       best: "Beste waarde",
       fine1: "Sense Bridge geeft geen juridisch advies. Het helpt je de betekenis, toon en risico’s te begrijpen zodat je zelf beslist.",
       fine2: "We verkopen rust en begrip, niet ‘AI’.",
       hintUI: "‘UI’ is gewoon de taal van de pagina (knoppen en teksten) — dit verandert de analyse niet.",
+      privacyNote: "<strong>Privacy:</strong> Documenten worden niet openbaar opgeslagen of gedeeld. Plak alleen inhoud die je wilt laten analyseren. Sense Bridge helpt je de brief te begrijpen, maar vervangt geen juridisch advies.",
+      footerPrivacy: "Privacy",
+      footerTerms: "Voorwaarden",
+      footerContact: "Contact",
+      footerDefault: "Sense Bridge is informatief en is geen advocatenkantoor.",
+      footerPrivacyText: "Privacy: wij publiceren geen documenten van gebruikers. Technische gegevens en toegangsgegevens kunnen alleen worden gebruikt om de dienst te laten werken.",
+      footerTermsText: "Voorwaarden: de gebruiker is verantwoordelijk voor de inhoud die hij plakt. De analyse is informatief en geen juridisch advies.",
+      footerContactText: "Contact: gebruik voor toegang of betaling het contactadres van Sense Bridge.",
+      analyzingLetter: "Brief analyseren...",
+      helpLinksTitle: "Nuttige links",
       srcAuto: "Taal document: AUTO",
-      clear: "Wissen",
+      clear: "Gegevens wissen na analyse",
       copyTr: "Kopieer vertaling",
-      copyEx: "Kopieer antwoorden"
+      copyEx: 'Kopieer antwoorden (mijn taal)'
     },
     EN: {
       title: "Sense Bridge",
       desc: "Helps you understand official letters. No advice. No pressure.",
       paste: "Paste the letter",
+      photoTitle: "Letter photo",
+      choosePhoto: "Choose photo",
+      noPhoto: "No photo selected",
+      readPhoto: "Read text from photo",
       placeholder: "Paste the content of the letter or email…",
       btnAnalyze: "Analyze letter",
+      userLang: "Your language",
+      fraudInfoTitle:"🛡️ Document safety check",
+fraudInfoText:"After the analysis, Sense Bridge will also check for possible fraud risk, impersonation of an institution, and suspicious elements in the document.",
+      installApp: '📲 Add app shortcut to phone',
+      installHelp: 'To add an app shortcut to your phone:\\n\\nTap the 3 dots in your browser\\n→ Add to Home screen',
       free: "FREE:",
       analyses: "analyses",
       access: "Access:",
@@ -592,26 +2187,52 @@ const UI = {
       summary: "What the office is communicating",
       risks: "Communication risks",
       examples: "Reply examples",
+      examplesUser: 'Reply examples (your language)',
+      examplesDoc: 'Reply examples (document language)',
+      copyExDoc: 'Copy reply to send',
+      examplesDocEmpty: 'After analysis, the reply version in the document language will appear here.',
       payTitle: "No-subscription access",
       payDesc: "You get 3 FREE analyses to test. Then choose a calm time pass.",
       p24meta: "For one urgent letter",
       p7meta: "For a series of messages",
       p30meta: "Peace for a whole month",
+      
+      p7name: "7 days",
+p30name: "30 days",
       best: "Best value",
       fine1: "Sense Bridge does not provide legal advice. It helps you understand meaning, tone and risks so you can decide yourself.",
       fine2: "We sell peace and understanding, not ‘AI’.",
       hintUI: "‘UI’ is simply the page language (buttons and labels) — it doesn’t change the analysis.",
+      privacyNote: "<strong>Privacy:</strong> Documents are not publicly stored or shared. Paste only content you want to analyze. Sense Bridge helps you understand the letter, but does not replace legal advice.",
+      footerPrivacy: "Privacy",
+      footerTerms: "Terms",
+      footerContact: "Contact",
+      footerDefault: "Sense Bridge is informational and is not a law firm.",
+      footerPrivacyText: "Privacy: we do not publish user documents. Technical data and access information may be used only to run the service.",
+      footerTermsText: "Terms: the user is responsible for the content they paste. The analysis is informational and is not legal advice.",
+      footerContactText: "Contact: for access or payment issues, use the contact address provided by Sense Bridge.",
+      analyzingLetter: "Analyzing letter...",
+      helpLinksTitle: "Helpful links",
       srcAuto: "Document language: AUTO",
-      clear: "Clear",
+      clear: "Clear data after analysis",
       copyTr: "Copy translation",
-      copyEx: "Copy replies"
+      copyEx: 'Copy replies (my language)'
     },
     DE: {
       title: "Sense Bridge",
       desc: "Hilft, amtliche Schreiben zu verstehen. Keine Beratung. Kein Druck.",
       paste: "Schreiben einfügen",
+      photoTitle: "Foto des Schreibens",
+      choosePhoto: "Foto wählen",
+      noPhoto: "Kein Foto ausgewählt",
+      readPhoto: "Text aus Foto lesen",
       placeholder: "Füge den Text des Schreibens oder der E-Mail ein…",
       btnAnalyze: "Schreiben analysieren",
+      userLang: "Deine Sprache",
+      fraudInfoTitle:"🛡️ Sicherheitsprüfung des Dokuments",
+fraudInfoText:"Nach der Analyse prüft Sense Bridge auch ein mögliches Betrugsrisiko, die Nachahmung einer Institution und verdächtige Elemente im Dokument.",
+      installApp: '📲 App-Verknüpfung zum Handy hinzufügen',
+      installHelp: 'So fügst du eine App-Verknüpfung hinzu:\\n\\nTippe auf die 3 Punkte im Browser\\n→ Zum Startbildschirm hinzufügen',
       free: "FREE:",
       analyses: "Analysen",
       access: "Zugang:",
@@ -621,19 +2242,257 @@ const UI = {
       summary: "Was die Behörde mitteilt",
       risks: "Kommunikationsrisiken",
       examples: "Antwortbeispiele",
+      examplesUser: 'Antwortbeispiele (deine Sprache)',
+      examplesDoc: 'Antwortbeispiele (Dokumentsprache)',
+      copyExDoc: 'Antwort zum Senden kopieren',
+      examplesDocEmpty: 'Nach der Analyse erscheint hier die Antwortversion in der Dokumentsprache.',
       payTitle: "Zugang ohne Abo",
       payDesc: "Du hast 3 FREE-Analysen zum Testen. Danach wählst du einen ruhigen Zeitpass.",
       p24meta: "Für ein dringendes Schreiben",
       p7meta: "Für mehrere Nachrichten",
       p30meta: "Ruhe für einen ganzen Monat",
+      
+      p7name: "7 Tage",
+p30name: "30 Tage",
       best: "Bester Wert",
       fine1: "Sense Bridge gibt keine Rechtsberatung. Es hilft dir, Sinn, Ton und Risiken zu verstehen, damit du selbst entscheiden kannst.",
       fine2: "Wir verkaufen Ruhe und Verständnis, nicht ‘KI’.",
       hintUI: "‘UI’ ist einfach die Seitensprache (Buttons & Texte) — das ändert die Analyse nicht.",
+      privacyNote: "<strong>Datenschutz:</strong> Dokumente werden nicht öffentlich gespeichert oder geteilt. Füge nur Inhalte ein, die du analysieren möchtest. Sense Bridge hilft beim Verstehen, ersetzt aber keine Rechtsberatung.",
+      footerPrivacy: "Datenschutz",
+      footerTerms: "Bedingungen",
+      footerContact: "Kontakt",
+      footerDefault: "Sense Bridge ist informativ und keine Kanzlei.",
+      footerPrivacyText: "Datenschutz: Wir veröffentlichen keine Nutzerdokumente. Technische Daten und Zugangsdaten können nur zum Betrieb des Dienstes verwendet werden.",
+      footerTermsText: "Bedingungen: Der Nutzer ist für eingefügte Inhalte verantwortlich. Die Analyse ist informativ und keine Rechtsberatung.",
+      footerContactText: "Kontakt: Bei Zugangs- oder Zahlungsfragen nutze die von Sense Bridge angegebene Kontaktadresse.",
+      analyzingLetter: "Brief wird analysiert...",
+      helpLinksTitle: "Hilfreiche Links",
       srcAuto: "Dokumentsprache: AUTO",
-      clear: "Leeren",
+      clear: "Daten nach der Analyse löschen",
       copyTr: "Übersetzung kopieren",
-      copyEx: "Antworten kopieren"
+      copyEx: 'Antworten kopieren (meine Sprache)'
+    },
+    FR: {
+      title: "Sense Bridge",
+      desc: "Aide à comprendre les courriers officiels. Sans conseil. Sans pression.",
+      paste: "Coller le courrier",
+      photoTitle: "Photo du courrier",
+      choosePhoto: "Choisir une photo",
+      noPhoto: "Aucune photo sélectionnée",
+      readPhoto: "Lire le texte de la photo",
+      placeholder: "Collez le texte du courrier ou de l’e-mail…",
+      btnAnalyze: "Analyser le courrier",
+      userLang: "Votre langue",
+      fraudInfoTitle:"🛡️ Vérification de sécurité du document",
+fraudInfoText:"Après l’analyse, Sense Bridge vérifiera également les risques possibles de fraude, d’usurpation d’une institution et les éléments suspects du document.",
+      installApp: '📲 Ajouter le raccourci au téléphone',
+      installHelp: 'Pour ajouter le raccourci sur le téléphone:\\n\\nAppuyez sur les 3 points du navigateur\\n→ Ajouter à l’écran d’accueil',
+      free: "FREE:",
+      analyses: "analyses",
+      access: "Accès:",
+      reset: "Réinitialisation test",
+      lock: "Votre limite FREE est utilisée. Choisissez un accès ci-dessous pour continuer.",
+      translation: "Traduction",
+      summary: "Ce que l’organisme communique",
+      risks: "Risques de communication",
+      examples: "Exemples de réponses",
+      examplesUser: 'Exemples de réponses (votre langue)',
+      examplesDoc: 'Exemples de réponses (langue du document)',
+      copyExDoc: 'Copier la réponse à envoyer',
+      examplesDocEmpty: 'Après l’analyse, la version de réponse dans la langue du document apparaîtra ici.',
+      payTitle: "Accès sans abonnement",
+      payDesc: "Vous avez 3 analyses FREE pour tester. Ensuite, choisissez un accès temporaire.",
+      p24meta: "Pour un courrier urgent",
+      p7meta: "Pour plusieurs messages",
+      p30meta: "Tranquillité pendant un mois",
+      
+      p7name: "7 jours",
+p30name: "30 jours",
+      best: "Meilleure valeur",
+      fine1: "Sense Bridge ne donne pas de conseils juridiques. Il aide à comprendre le sens, le ton et les risques afin que vous puissiez décider vous-même.",
+      fine2: "Nous vendons de la tranquillité et de la compréhension, pas de l’« IA ».",
+      hintUI: "« UI » signifie simplement la langue de la page (boutons et textes) — cela ne change pas l’analyse.",
+      privacyNote: "<strong>Confidentialité :</strong> Les documents ne sont pas enregistrés publiquement ni partagés. Collez uniquement le contenu que vous souhaitez analyser. Sense Bridge aide à comprendre le courrier, mais ne remplace pas un conseil juridique.",
+      footerPrivacy: "Confidentialité",
+      footerTerms: "Conditions",
+      footerContact: "Contact",
+      footerDefault: "Sense Bridge est informatif et n’est pas un cabinet juridique.",
+      footerPrivacyText: "Confidentialité : nous ne publions pas les documents des utilisateurs. Les données techniques et d’accès peuvent être utilisées uniquement pour faire fonctionner le service.",
+      footerTermsText: "Conditions : l’utilisateur est responsable du contenu collé. L’analyse est informative et ne constitue pas un conseil juridique.",
+      footerContactText: "Contact : pour l’accès ou le paiement, utilisez l’adresse de contact indiquée par Sense Bridge.",
+      analyzingLetter: "Analyse du courrier...",
+      helpLinksTitle: "Liens utiles",
+      srcAuto: "Langue du document: AUTO",
+      clear: "Effacer les données après analyse",
+      copyTr: "Copier la traduction",
+      copyEx: 'Copier les réponses (ma langue)'
+    },
+    IT: {
+      title: "Sense Bridge",
+      desc: "Aiuta a capire le lettere ufficiali. Nessun consiglio. Nessuna pressione.",
+      paste: "Incolla la lettera",
+      photoTitle: "Foto della lettera",
+      choosePhoto: "Scegli foto",
+      noPhoto: "Nessuna foto selezionata",
+      readPhoto: "Leggi testo dalla foto",
+      placeholder: "Incolla il testo della lettera o dell’e-mail…",
+      btnAnalyze: "Analizza lettera",
+      userLang: "La tua lingua",
+      fraudInfoTitle:"🛡️ Controllo di sicurezza del documento",
+fraudInfoText:"Dopo l’analisi, Sense Bridge controllerà anche il possibile rischio di frode, imitazione di un’istituzione ed elementi sospetti nel documento.",
+      installApp: '📲 Aggiungi scorciatoia al telefono',
+      installHelp: 'Per aggiungere la scorciatoia al telefono:\\n\\nTocca i 3 puntini nel browser\\n→ Aggiungi alla schermata iniziale',
+      free: "FREE:",
+      analyses: "analisi",
+      access: "Accesso:",
+      reset: "Reset test",
+      lock: "Il tuo limite FREE è stato usato. Scegli un accesso qui sotto per continuare.",
+      translation: "Traduzione",
+      summary: "Cosa comunica l’ente",
+      risks: "Rischi comunicativi",
+      examples: "Esempi di risposte",
+      examplesUser: 'Esempi di risposte (la tua lingua)',
+      examplesDoc: 'Esempi di risposte (lingua del documento)',
+      copyExDoc: 'Copia risposta da inviare',
+      examplesDocEmpty: 'Dopo l’analisi, qui apparirà la versione della risposta nella lingua del documento.',
+      payTitle: "Accesso senza abbonamento",
+      payDesc: "Hai 3 analisi FREE per provare. Poi scegli un accesso temporaneo.",
+      p24meta: "Per una lettera urgente",
+      p7meta: "Per una serie di messaggi",
+      p30meta: "Tranquillità per tutto il mese",
+      
+      p7name: "7 giorni",
+p30name: "30 giorni",
+      best: "Miglior valore",
+      fine1: "Sense Bridge non fornisce consulenza legale. Aiuta a capire significato, tono e rischi, così puoi decidere tu.",
+      fine2: "Vendiamo tranquillità e comprensione, non ‘AI’.",
+      hintUI: "‘UI’ è semplicemente la lingua della pagina (pulsanti e testi) — non cambia l’analisi.",
+      privacyNote: "<strong>Privacy:</strong> I documenti non vengono salvati pubblicamente né condivisi. Incolla solo contenuti che vuoi analizzare. Sense Bridge aiuta a capire la lettera, ma non sostituisce una consulenza legale.",
+      footerPrivacy: "Privacy",
+      footerTerms: "Termini",
+      footerContact: "Contatto",
+      footerDefault: "Sense Bridge ha carattere informativo e non è uno studio legale.",
+      footerPrivacyText: "Privacy: non pubblichiamo i documenti degli utenti. Dati tecnici e informazioni di accesso possono essere usati solo per il funzionamento del servizio.",
+      footerTermsText: "Termini: l’utente è responsabile dei contenuti che incolla. L’analisi è informativa e non è consulenza legale.",
+      footerContactText: "Contatto: per accesso o pagamenti usa l’indirizzo di contatto indicato da Sense Bridge.",
+      analyzingLetter: "Analisi del documento...",
+      helpLinksTitle: "Link utili",
+      srcAuto: "Lingua del documento: AUTO",
+      clear: "Cancella dati dopo analisi",
+      copyTr: "Copia traduzione",
+      copyEx: 'Copia risposte (mia lingua)'
+    },
+    ES: {
+      title: "Sense Bridge",
+      desc: "Ayuda a entender cartas oficiales. Sin asesoramiento. Sin presión.",
+      paste: "Pegar la carta",
+      photoTitle: "Foto de la carta",
+      choosePhoto: "Elegir foto",
+      noPhoto: "No se ha seleccionado foto",
+      readPhoto: "Leer texto de la foto",
+      placeholder: "Pega el texto de la carta o del correo…",
+      btnAnalyze: "Analizar carta",
+      userLang: "Tu idioma",
+      fraudInfoTitle:"🛡️ Comprobación de seguridad del documento",
+fraudInfoText:"Después del análisis, Sense Bridge también comprobará posibles riesgos de fraude, suplantación de una institución y elementos sospechosos del documento.",
+
+      installApp: '📲 Añadir acceso directo al teléfono',
+      installHelp: 'Para añadir el acceso directo al teléfono:\\n\\nToca los 3 puntos del navegador\\n→ Añadir a pantalla de inicio',
+      free: "FREE:",
+      analyses: "análisis",
+      access: "Acceso:",
+      reset: "Reinicio de prueba",
+      lock: "Has usado tu límite FREE. Elige un acceso abajo para continuar.",
+      translation: "Traducción",
+      summary: "Qué comunica la institución",
+      risks: "Riesgos de comunicación",
+      examples: "Ejemplos de respuesta",
+      examplesUser: 'Ejemplos de respuesta (tu idioma)',
+      examplesDoc: 'Ejemplos de respuesta (idioma del documento)',
+      copyExDoc: 'Copiar respuesta para enviar',
+      examplesDocEmpty: 'Después del análisis aparecerá aquí la versión de respuesta en el idioma del documento.',
+      payTitle: "Acceso sin suscripción",
+      payDesc: "Tienes 3 análisis FREE para probar. Después eliges un acceso temporal.",
+      p24meta: "Para una carta urgente",
+      p7meta: "Para varios mensajes",
+      p30meta: "Tranquilidad durante todo el mes",
+      
+      p7name: "7 días",
+p30name: "30 días",
+      best: "Mejor valor",
+      fine1: "Sense Bridge no ofrece asesoramiento legal. Ayuda a entender el significado, el tono y los riesgos para que puedas decidir por ti mismo.",
+      fine2: "Vendemos tranquilidad y comprensión, no ‘IA’.",
+      hintUI: "‘UI’ es simplemente el idioma de la página (botones y textos) — no cambia el análisis.",
+      privacyNote: "<strong>Privacidad:</strong> Los documentos no se guardan públicamente ni se comparten. Pega solo el contenido que quieras analizar. Sense Bridge ayuda a entender la carta, pero no sustituye el asesoramiento legal.",
+      footerPrivacy: "Privacidad",
+      footerTerms: "Condiciones",
+      footerContact: "Contacto",
+      footerDefault: "Sense Bridge es informativo y no es un despacho legal.",
+      footerPrivacyText: "Privacidad: no publicamos documentos de usuarios. Los datos técnicos y de acceso pueden usarse solo para el funcionamiento del servicio.",
+      footerTermsText: "Condiciones: el usuario es responsable del contenido que pega. El análisis es informativo y no constituye asesoramiento legal.",
+      footerContactText: "Contacto: para acceso o pagos usa la dirección de contacto indicada por Sense Bridge.",
+      analyzingLetter: "Analizando la carta...",
+      helpLinksTitle: "Enlaces útiles",
+      srcAuto: "Idioma del documento: AUTO",
+      clear: "Borrar datos después del análisis",
+      copyTr: "Copiar traducción",
+      copyEx: 'Copiar respuestas (mi idioma)'
+    },
+    PT: {
+      title: "Sense Bridge",
+      desc: "Ajuda a entender cartas oficiais. Sem aconselhamento. Sem pressão.",
+      paste: "Colar a carta",
+      photoTitle: "Foto da carta",
+      choosePhoto: "Escolher foto",
+      noPhoto: "Nenhuma foto selecionada",
+      readPhoto: "Ler texto da foto",
+      placeholder: "Cole o texto da carta ou do e-mail…",
+      btnAnalyze: "Analisar carta",
+      userLang: "O seu idioma",
+      fraudInfoTitle:"🛡️ Verificação de segurança do documento",
+fraudInfoText:"Após a análise, o Sense Bridge também verificará possíveis riscos de fraude, falsificação de uma instituição e elementos suspeitos no documento.",
+      installApp: '📲 Adicionar atalho ao telefone',
+      installHelp: 'Para adicionar o atalho ao telefone:\\n\\nToque nos 3 pontos do navegador\\n→ Adicionar ao ecrã inicial',
+      free: "FREE:",
+      analyses: "análises",
+      access: "Acesso:",
+      reset: "Reset de teste",
+      lock: "O seu limite FREE foi usado. Escolha um acesso abaixo para continuar.",
+      translation: "Tradução",
+      summary: "O que a entidade comunica",
+      risks: "Riscos de comunicação",
+      examples: "Exemplos de respostas",
+      examplesUser: 'Exemplos de respostas (o seu idioma)',
+      examplesDoc: 'Exemplos de respostas (idioma do documento)',
+      copyExDoc: 'Copiar resposta para enviar',
+      examplesDocEmpty: 'Após a análise, aparecerá aqui a versão da resposta no idioma do documento.',
+      payTitle: "Acesso sem subscrição",
+      payDesc: "Tem 3 análises FREE para testar. Depois escolhe um acesso temporário.",
+      p24meta: "Para uma carta urgente",
+      p7meta: "Para uma série de mensagens",
+      p30meta: "Tranquilidade por todo o mês",
+      
+      p7name: "7 dias",
+p30name: "30 dias",
+      best: "Melhor valor",
+      fine1: "Sense Bridge não fornece aconselhamento jurídico. Ajuda a entender o significado, o tom e os riscos para que possa decidir por si.",
+      fine2: "Vendemos tranquilidade e compreensão, não ‘IA’.",
+      hintUI: "‘UI’ é simplesmente o idioma da página (botões e textos) — isso não altera a análise.",
+      privacyNote: "<strong>Privacidade:</strong> Os documentos não são guardados publicamente nem partilhados. Cole apenas conteúdo que deseja analisar. O Sense Bridge ajuda a compreender a carta, mas não substitui aconselhamento jurídico.",
+      footerPrivacy: "Privacidade",
+      footerTerms: "Termos",
+      footerContact: "Contacto",
+      footerDefault: "O Sense Bridge é informativo e não é um escritório de advocacia.",
+      footerPrivacyText: "Privacidade: não publicamos documentos de utilizadores. Dados técnicos e informações de acesso podem ser usados apenas para o funcionamento do serviço.",
+      footerTermsText: "Termos: o utilizador é responsável pelo conteúdo que cola. A análise é informativa e não constitui aconselhamento jurídico.",
+      footerContactText: "Contacto: para acesso ou pagamentos use o endereço de contacto indicado pelo Sense Bridge.",
+      analyzingLetter: "A analisar o documento...",
+      helpLinksTitle: "Links úteis",
+      srcAuto: "Idioma do documento: AUTO",
+      clear: "Limpar dados após análise",
+      copyTr: "Copiar tradução",
+      copyEx: 'Copiar respostas (meu idioma)'
     }
   }
 };
@@ -649,16 +2508,176 @@ function setUiLang(lang){
   UI.lang = L;
   localStorage.setItem(UI.key, L);
   applyUiLang();
+  applyTheme(getTheme());
+
+  if(typeof updatePaidMessage === "function"){
+    updatePaidMessage();
+  }
 }
+
+function sbV2Text(key){
+  const lang = (UI && UI.lang) ? UI.lang : "PL";
+  const map = {
+    PL:{
+      takePhoto:"Zrób zdjęcie",
+      chooseGallery:"Wybierz z galerii",
+      flow1Title:"1. Co to znaczy?",
+      flow1Text:"Krótko wyjaśnia sens pisma.",
+      flow2Title:"2. Co zrobić teraz?",
+      flow2Text:"Pokazuje najbliższy krok.",
+      flow3Title:"3. Czy to bezpieczne?",
+      flow3Text:"Sprawdza ryzyko oszustwa."
+    },
+    EN:{
+      takePhoto:"Take a photo",
+      chooseGallery:"Choose from gallery",
+      flow1Title:"1. What does it mean?",
+      flow1Text:"Explains the document simply.",
+      flow2Title:"2. What now?",
+      flow2Text:"Shows the next step.",
+      flow3Title:"3. Is it safe?",
+      flow3Text:"Checks scam risk."
+    },
+    NL:{
+      takePhoto:"Maak een foto",
+      chooseGallery:"Kies uit galerij",
+      flow1Title:"1. Wat betekent dit?",
+      flow1Text:"Legt de brief eenvoudig uit.",
+      flow2Title:"2. Wat nu?",
+      flow2Text:"Toont de volgende stap.",
+      flow3Title:"3. Is het veilig?",
+      flow3Text:"Controleert op oplichting."
+    },
+    DE:{
+      takePhoto:"Foto machen",
+      chooseGallery:"Aus Galerie wählen",
+      flow1Title:"1. Was bedeutet das?",
+      flow1Text:"Erklärt das Schreiben einfach.",
+      flow2Title:"2. Was jetzt tun?",
+      flow2Text:"Zeigt den nächsten Schritt.",
+      flow3Title:"3. Ist es sicher?",
+      flow3Text:"Prüft Betrugsrisiken."
+    },
+    UA:{
+      takePhoto:"Зробити фото",
+      chooseGallery:"Вибрати з галереї",
+      flow1Title:"1. Що це означає?",
+      flow1Text:"Просто пояснює зміст листа.",
+      flow2Title:"2. Що робити зараз?",
+      flow2Text:"Показує наступний крок.",
+      flow3Title:"3. Чи це безпечно?",
+      flow3Text:"Перевіряє ризик шахрайства."
+    },
+    FR:{
+      takePhoto:"Prendre une photo",
+      chooseGallery:"Choisir dans la galerie",
+      flow1Title:"1. Qu’est-ce que cela signifie ?",
+      flow1Text:"Explique le document simplement.",
+      flow2Title:"2. Que faire maintenant ?",
+      flow2Text:"Montre la prochaine étape.",
+      flow3Title:"3. Est-ce sûr ?",
+      flow3Text:"Vérifie le risque de fraude."
+    },
+    IT:{
+      takePhoto:"Scatta una foto",
+      chooseGallery:"Scegli dalla galleria",
+      flow1Title:"1. Cosa significa?",
+      flow1Text:"Spiega il documento in modo semplice.",
+      flow2Title:"2. Cosa fare ora?",
+      flow2Text:"Mostra il prossimo passo.",
+      flow3Title:"3. È sicuro?",
+      flow3Text:"Controlla il rischio di truffa."
+    },
+    ES:{
+      takePhoto:"Hacer una foto",
+      chooseGallery:"Elegir de la galería",
+      flow1Title:"1. ¿Qué significa?",
+      flow1Text:"Explica el documento de forma simple.",
+      flow2Title:"2. ¿Qué hacer ahora?",
+      flow2Text:"Muestra el siguiente paso.",
+      flow3Title:"3. ¿Es seguro?",
+      flow3Text:"Comprueba riesgo de fraude."
+    },
+    PT:{
+      takePhoto:"Tirar foto",
+      chooseGallery:"Escolher da galeria",
+      flow1Title:"1. O que significa?",
+      flow1Text:"Explica o documento de forma simples.",
+      flow2Title:"2. O que fazer agora?",
+      flow2Text:"Mostra o próximo passo.",
+      flow3Title:"3. É seguro?",
+      flow3Text:"Verifica risco de fraude."
+    }
+  };
+  return (map[lang] && map[lang][key]) || (map.PL && map.PL[key]) || "";
+}
+
+function sbSetText(id, value){
+  const el = document.getElementById(id);
+  if(el) el.textContent = value;
+}
+
+function sbActivePhotoInput(){
+  const camera = document.getElementById("sbCameraInput");
+  const gallery = document.getElementById("sbPhotoInput");
+  if(camera && camera.files && camera.files[0]) return camera;
+  return gallery;
+}
+
+
+function sbClearButtonHtml(label){
+  return '<span class="trash-red" aria-hidden="true">' +
+    '<svg viewBox="0 0 24 24" focusable="false" role="img">' +
+      '<path fill="currentColor" d="M8.8 3.1 19.6 6l-.5 1.9L8.3 5l.5-1.9Zm2.9-1.8 5.8 1.6-.5 1.9-5.8-1.6.5-1.9ZM6 8h13l-1.2 12.1A2.1 2.1 0 0 1 15.7 22H9.3a2.1 2.1 0 0 1-2.1-1.9L6 8Zm3.2 2 .8 9h1.8l-.6-9h-2Zm4.6 0-.6 9H15l.8-9h-2Z"></path>' +
+    '</svg>' +
+  '</span>' +
+  '<span class="clear-label">' + label + '</span>';
+}
+
 function applyUiLang(){
   const t = UI.dict[UI.lang];
 
   document.getElementById("hTitle").textContent = t.title;
   document.getElementById("hDesc").textContent = t.desc;
 
+  const installBtn = document.getElementById("installAppBtn");
+  if(installBtn) installBtn.textContent = t.installApp;
+
   document.getElementById("lblPaste").textContent = t.paste;
   document.getElementById("inputText").placeholder = t.placeholder;
   document.getElementById("btnAnalyze").textContent = t.btnAnalyze;
+
+  document.getElementById("lblPhotoTitle").innerHTML = "<strong>" + t.photoTitle + "</strong>";
+  const choosePhotoBtn = document.getElementById("sbChoosePhotoBtn");
+  if(choosePhotoBtn){
+    choosePhotoBtn.innerHTML = '<span class="ico" aria-hidden="true">🖼️</span><span id="sbChoosePhotoLabel">' + sbV2Text("chooseGallery") + '</span>';
+  }
+  const takePhotoBtn = document.getElementById("sbTakePhotoBtn");
+  if(takePhotoBtn){
+    takePhotoBtn.innerHTML = '<span class="ico" aria-hidden="true">📸</span><span id="sbTakePhotoLabel">' + sbV2Text("takePhoto") + '</span>';
+  }
+  document.getElementById("sbReadPhotoBtn").textContent = t.readPhoto;
+  sbSetText("sbFlow1Title", sbV2Text("flow1Title"));
+  sbSetText("sbFlow1Text", sbV2Text("flow1Text"));
+  sbSetText("sbFlow2Title", sbV2Text("flow2Title"));
+  sbSetText("sbFlow2Text", sbV2Text("flow2Text"));
+  sbSetText("sbFlow3Title", sbV2Text("flow3Title"));
+  sbSetText("sbFlow3Text", sbV2Text("flow3Text"));
+
+  const fileNameEl = document.getElementById("sbPhotoFileName");
+  if (fileNameEl && !fileNameEl.dataset.hasFile) {
+    fileNameEl.textContent = t.noPhoto;
+  }
+
+  const userLangSelect = document.getElementById("userLang");
+  if (userLangSelect) {
+    userLangSelect.setAttribute("aria-label", t.userLang);
+  }
+
+  const lblUserLang = document.getElementById("lblUserLang");
+  if (lblUserLang) {
+    lblUserLang.textContent = t.userLang;
+  }
 
   document.getElementById("lblFree").textContent = t.free;
   document.getElementById("lblAnalyses").textContent = t.analyses;
@@ -667,19 +2686,45 @@ function applyUiLang(){
   document.getElementById("lockBox").textContent = t.lock;
 
   document.getElementById("lblTranslation").textContent = t.translation;
+  document.getElementById("lblFraudInfo").textContent =
+UI.dict[UI.lang].fraudInfoTitle;
+
+document.getElementById("fraudInfoText").textContent =
+UI.dict[UI.lang].fraudInfoText;
   document.getElementById("lblSummary").textContent = t.summary;
+  const sep = document.querySelector("#sbSummarySeparator span");
+  if (sep) sep.textContent = sbResultText("separatorText", sbGetResultLang());
+  const lblFraudRisk = document.getElementById("lblFraudRisk");
+  if (lblFraudRisk) lblFraudRisk
+  .textContent = sbResultText
+  ("fraudRiskTitle", UI.lang);
   document.getElementById("lblRisks").textContent = t.risks;
-  document.getElementById("lblExamples").textContent = t.examples;
+  document.getElementById("lblExamples").textContent = t.examplesUser || t.examples;
+  document.getElementById("lblExamplesDoc").textContent = t.examplesDoc;
 
   document.getElementById("payTitle").textContent = t.payTitle;
   document.getElementById("payDesc").textContent = t.payDesc;
   document.getElementById("p24meta").textContent = t.p24meta;
   document.getElementById("p7meta").textContent = t.p7meta;
   document.getElementById("p30meta").textContent = t.p30meta;
+  document.getElementById("p7name").textContent = t.p7name || "7 dni";
+document.getElementById("p30name").textContent = t.p30name || "30 dni";
   document.getElementById("pBest").textContent = t.best;
   document.getElementById("fine1").textContent = t.fine1;
   document.getElementById("fine2").textContent = t.fine2;
   document.getElementById("hintUI").innerHTML = t.hintUI;
+
+  const privacyNote = document.getElementById("privacyNote");
+  if(privacyNote) privacyNote.innerHTML = t.privacyNote;
+
+  const footerPrivacy = document.getElementById("footerPrivacy");
+  const footerTerms = document.getElementById("footerTerms");
+  const footerContact = document.getElementById("footerContact");
+  const footerText = document.getElementById("footerText");
+  if(footerPrivacy) footerPrivacy.textContent = t.footerPrivacy;
+  if(footerTerms) footerTerms.textContent = t.footerTerms;
+  if(footerContact) footerContact.textContent = t.footerContact;
+  if(footerText) footerText.textContent = t.footerDefault;
 
   const src = document.getElementById("sourceLang");
   if(src && src.options && src.options.length){
@@ -690,25 +2735,210 @@ function applyUiLang(){
     b.classList.toggle("active", b.getAttribute("data-ui") === UI.lang);
   });
 
-  const toolButtons = document.querySelectorAll(".tool-btn");
+  const toolButtons = document.querySelectorAll(".tools .tool-btn");
   if(toolButtons.length >= 3){
-    toolButtons[0].textContent = t.clear;
+    const clearBtn = document.getElementById("btnClearData") || toolButtons[0];
+    if(clearBtn){
+      clearBtn.classList.add("clear-data-btn");
+      clearBtn.innerHTML = sbClearButtonHtml(t.clear);
+    }
     toolButtons[1].textContent = t.copyTr;
     toolButtons[2].textContent = t.copyEx;
+    if(toolButtons[3]) toolButtons[3].textContent = t.copyExDoc;
   }
+
+  applyPaymentLang();
 }
+
+function showFooterInfo(type){
+  const t = UI.dict[UI.lang] || UI.dict.PL;
+  const footerText = document.getElementById("footerText");
+  if(!footerText) return;
+
+  if(type === "privacy") footerText.textContent = t.footerPrivacyText || t.footerDefault;
+  else if(type === "terms") footerText.textContent = t.footerTermsText || t.footerDefault;
+  else if(type === "contact") footerText.textContent = t.footerContactText || t.footerDefault;
+  else footerText.textContent = t.footerDefault;
+
+  footerText.scrollIntoView({ behavior:"smooth", block:"nearest" });
+}
+
+function getPaymentLangText(){
+  const lang = (UI && UI.lang) ? UI.lang : "PL";
+
+  const map = {
+    PL:{
+      title:"Zakup dostępu",
+      amount:"Kwota:",
+      transfer:"Zapłać przelewem:",
+      receiver:"Odbiorca:",
+      transferTitle:"Tytuł przelewu:",
+      paid:"✔ Zapłaciłem",
+      saved:"✅ Zgłoszenie zapisane",
+      savedText:"Dziękujemy. Wykonaj przelew używając dokładnie poniższego tytułu. Dostęp zostanie aktywowany po ręcznym potwierdzeniu płatności.",
+      copy:"Kopiuj tytuł przelewu",
+      small:"Po zaksięgowaniu płatności aktywujemy dostęp. Możesz później wrócić do strony i sprawdzić dostęp tym samym adresem e-mail."
+    },
+    EN:{
+      title:"Purchase access",
+      amount:"Amount:",
+      transfer:"Pay by bank transfer:",
+      receiver:"Recipient:",
+      transferTitle:"Transfer title:",
+      paid:"✔ I paid",
+      saved:"✅ Request saved",
+      savedText:"Thank you. Make the bank transfer using exactly the transfer title below. Access will be activated after manual payment confirmation.",
+      copy:"Copy transfer title",
+      small:"After the payment is received, we will activate access. You can later return to the page and check access using the same email address."
+    },
+    NL:{
+      title:"Toegang kopen",
+      amount:"Bedrag:",
+      transfer:"Betaal via bankoverschrijving:",
+      receiver:"Ontvanger:",
+      transferTitle:"Omschrijving:",
+      paid:"✔ Ik heb betaald",
+      saved:"✅ Aanvraag opgeslagen",
+      savedText:"Dank je. Doe de overschrijving met exact de onderstaande omschrijving. Toegang wordt geactiveerd na handmatige bevestiging van de betaling.",
+      copy:"Kopieer omschrijving",
+      small:"Na ontvangst van de betaling activeren we de toegang. Je kunt later terugkomen naar de pagina en de toegang controleren met hetzelfde e-mailadres."
+    },
+    DE:{
+      title:"Zugang kaufen",
+      amount:"Betrag:",
+      transfer:"Per Banküberweisung bezahlen:",
+      receiver:"Empfänger:",
+      transferTitle:"Verwendungszweck:",
+      paid:"✔ Ich habe bezahlt",
+      saved:"✅ Anfrage gespeichert",
+      savedText:"Danke. Führe die Überweisung genau mit dem unten angegebenen Verwendungszweck aus. Der Zugang wird nach manueller Zahlungsbestätigung aktiviert.",
+      copy:"Verwendungszweck kopieren",
+      small:"Nach Zahlungseingang aktivieren wir den Zugang. Du kannst später zur Seite zurückkehren und den Zugang mit derselben E-Mail-Adresse prüfen."
+    },
+    UA:{
+      title:"Купівля доступу",
+      amount:"Сума:",
+      transfer:"Оплатіть банківським переказом:",
+      receiver:"Отримувач:",
+      transferTitle:"Призначення платежу:",
+      paid:"✔ Я оплатив",
+      saved:"✅ Запит збережено",
+      savedText:"Дякуємо. Виконайте переказ, використовуючи точно вказане нижче призначення платежу. Доступ буде активовано після ручного підтвердження оплати.",
+      copy:"Скопіювати призначення платежу",
+      small:"Після зарахування платежу ми активуємо доступ. Пізніше ви можете повернутися на сторінку і перевірити доступ за тією ж електронною адресою."
+    },
+    FR:{
+      title:"Acheter l’accès",
+      amount:"Montant :",
+      transfer:"Payer par virement bancaire :",
+      receiver:"Bénéficiaire :",
+      transferTitle:"Libellé du virement :",
+      paid:"✔ J’ai payé",
+      saved:"✅ Demande enregistrée",
+      savedText:"Merci. Effectuez le virement en utilisant exactement le libellé ci-dessous. L’accès sera activé après confirmation manuelle du paiement.",
+      copy:"Copier le libellé du virement",
+      small:"Après réception du paiement, nous activerons l’accès. Vous pourrez revenir plus tard sur la page et vérifier l’accès avec la même adresse e-mail."
+    },
+    IT:{
+      title:"Acquisto accesso",
+      amount:"Importo:",
+      transfer:"Paga con bonifico bancario:",
+      receiver:"Beneficiario:",
+      transferTitle:"Causale del bonifico:",
+      paid:"✔ Ho pagato",
+      saved:"✅ Richiesta salvata",
+      savedText:"Grazie. Effettua il bonifico usando esattamente la causale indicata qui sotto. L’accesso sarà attivato dopo la conferma manuale del pagamento.",
+      copy:"Copia causale del bonifico",
+      small:"Dopo la ricezione del pagamento, attiveremo l’accesso. Potrai tornare più tardi alla pagina e verificare l’accesso con lo stesso indirizzo email."
+    },
+    ES:{
+      title:"Comprar acceso",
+      amount:"Importe:",
+      transfer:"Paga por transferencia bancaria:",
+      receiver:"Beneficiario:",
+      transferTitle:"Concepto de la transferencia:",
+      paid:"✔ He pagado",
+      saved:"✅ Solicitud guardada",
+      savedText:"Gracias. Realiza la transferencia usando exactamente el concepto indicado abajo. El acceso se activará tras la confirmación manual del pago.",
+      copy:"Copiar concepto de transferencia",
+      small:"Después de recibir el pago, activaremos el acceso. Puedes volver más tarde a la página y comprobar el acceso con el mismo correo electrónico."
+    },
+    PT:{
+      title:"Comprar acesso",
+      amount:"Valor:",
+      transfer:"Pagar por transferência bancária:",
+      receiver:"Beneficiário:",
+      transferTitle:"Referência da transferência:",
+      paid:"✔ Já paguei",
+      saved:"✅ Pedido guardado",
+      savedText:"Obrigado. Faça a transferência usando exatamente a referência abaixo. O acesso será ativado após confirmação manual do pagamento.",
+      copy:"Copiar referência da transferência",
+      small:"Após recebermos o pagamento, ativaremos o acesso. Pode voltar mais tarde à página e verificar o acesso com o mesmo endereço de email."
+    }
+  };
+
+  return map[lang] || map.PL;
+}
+
+function applyPaymentLang(){
+  const t = getPaymentLangText();
+
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+
+  setText("paymentBoxTitle", t.title);
+  setText("paymentAmountLabel", t.amount);
+  setText("paymentTransferLabel", t.transfer);
+  setText("paymentReceiverLabel", t.receiver);
+  setText("paymentTitleLabel", t.transferTitle);
+  setText("confirmPaidBtn", t.paid);
+  setText("pendingConfirmTitle", t.saved);
+  setText("pendingConfirmText", t.savedText);
+  setText("pendingReceiverLabel", t.receiver);
+  setText("pendingTitleLabel", t.transferTitle);
+  setText("pendingCopyBtn", t.copy);
+  setText("pendingSmallText", t.small);
+}
+
 
 /* =========================================================
    HELPERS
    ========================================================= */
+async function checkAccessServer(email){
+  try{
+    const res = await fetch("/.netlify/functions/access_check",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok) return null;
+
+    return data;
+  } catch(e){
+    return null;
+  }
+}
+
 function clearInput(){
   document.getElementById("inputText").value = "";
+  ["translation","summary","examples","examplesDoc"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = "";
+  });
+  const risks = document.getElementById("risks");
+  if(risks) risks.innerHTML = "";
 }
+  
 async function copyText(id){
   const el = document.getElementById(id);
   const txt = (el && (el.textContent || "")).trim();
   if(!txt){
-    alert("Brak treści do skopiowania.");
+    alert(UI.dict[UI.lang].emptyCopy || "Brak treści do skopiowania.");
     return;
   }
   try{
@@ -726,17 +2956,749 @@ function safeArr(a){
   return Array.isArray(a) ? a : [];
 }
 
+
 /* =========================================================
-   PAY (Stripe redirect)
+   RESULT LANGUAGE PATCH — keeps analysis UI labels in userLang
+   Safe text layer only: no OCR/paywall/API logic changes
    ========================================================= */
-function goPay(which){
-  const url = STRIPE_LINKS[which];
-  if(!url){
-    alert("Brak linku płatności dla: " + which);
+function sbGetResultLang(){
+  const sel = document.getElementById("userLang");
+  return String((sel && sel.value) || (UI && UI.lang) || "PL").toUpperCase();
+}
+
+function sbResultText(key, lang){
+  const L = String(lang || sbGetResultLang() || "PL").toUpperCase();
+  
+  if (UI && UI.dict && UI.dict[L] && UI.dict[L][key]) return UI.dict[L][key];
+if (UI && UI.dict && UI.dict.PL && UI.dict.PL[key]) return UI.dict.PL[key];
+  
+  const dict = {
+    PL: {
+      fraudRiskTitle:"Analiza ryzyka oszustwa",
+      separatorText:"Ocena i kroki Sense Bridge",
+      fraudUnknown:"Nie da się ocenić autentyczności",
+      fraudLow:"Wygląda raczej wiarygodnie",
+      fraudMedium:"Warto zweryfikować nadawcę",
+      fraudHigh:"Wysokie ryzyko oszustwa",
+      fraudDisclaimer:"To jest analiza ryzyka, nie potwierdzenie autentyczności dokumentu.",
+      confidence:"Pewność",
+      signals:"Sygnały do sprawdzenia",
+      suspicious:"Podejrzane elementy",
+      safeSteps:"Bezpieczne kroki",
+      country:"Kraj",
+      officialWebsite:"Oficjalna strona",
+      verifyInstitution:"Zweryfikuj sytuację przez oficjalną stronę instytucji.",
+      recognitionConfidence:"Pewność rozpoznania",
+      legalNone:"Brak potrzeby pomocy prawnej",
+      legalRecommended:"Warto skonsultować sytuację",
+      legalUrgent:"Pilna pomoc prawna może być potrzebna",
+      urgencyHigh:"PILNE – wymagane szybkie działanie",
+      urgencyMedium:"ŚREDNIA PILNOŚĆ – warto zareagować",
+      urgencyLow:"NISKA PILNOŚĆ – możesz spokojnie sprawdzić",
+      replyNeutral:"NEUTRALNIE",
+      replyPolite:"UPRZEJMIE",
+      replyFirm:"STANOWCZO",
+      examplesDocFallback:"Nie udało się automatycznie przygotować odpowiedzi w języku dokumentu. Wybierz ręcznie język dokumentu zamiast AUTO i spróbuj ponownie."
+    },
+    EN: {
+      fraudRiskTitle:"Fraud risk analysis",
+      separatorText:"Sense Bridge assessment and steps",
+      fraudUnknown:"Authenticity cannot be assessed",
+      fraudLow:"Looks rather credible",
+      fraudMedium:"Verify the sender",
+      fraudHigh:"High fraud risk",
+      fraudDisclaimer:"This is a risk analysis, not a confirmation of the document's authenticity.",
+      confidence:"Confidence",
+      signals:"Signals to check",
+      suspicious:"Suspicious elements",
+      safeSteps:"Safe steps",
+      country:"Country",
+      officialWebsite:"Official website",
+      verifyInstitution:"Verify the situation through the institution's official website.",
+      recognitionConfidence:"Recognition confidence",
+      legalNone:"No legal help needed",
+      legalRecommended:"It may be worth consulting the situation",
+      legalUrgent:"Urgent legal help may be needed",
+      urgencyHigh:"URGENT – quick action required",
+      urgencyMedium:"MEDIUM URGENCY – it is worth responding",
+      urgencyLow:"LOW URGENCY – you can check calmly",
+      replyNeutral:"NEUTRAL",
+      replyPolite:"POLITE",
+      replyFirm:"FIRM",
+      examplesDocFallback:"The reply in the document language could not be prepared automatically. Select the document language manually instead of AUTO and try again."
+    },
+    NL: {
+      fraudRiskTitle:"Analyse van frauderisico",
+      separatorText:"Sense Bridge beoordeling en stappen",
+      fraudUnknown:"Echtheid kan niet worden beoordeeld",
+      fraudLow:"Lijkt redelijk betrouwbaar",
+      fraudMedium:"Controleer de afzender",
+      fraudHigh:"Hoog frauderisico",
+      fraudDisclaimer:"Dit is een risicoanalyse, geen bevestiging van de echtheid van het document.",
+      confidence:"Zekerheid",
+      signals:"Signalen om te controleren",
+      suspicious:"Verdachte elementen",
+      safeSteps:"Veilige stappen",
+      country:"Land",
+      officialWebsite:"Officiële website",
+      verifyInstitution:"Controleer de situatie via de officiële website van de instantie.",
+      recognitionConfidence:"Herkenningszekerheid",
+      legalNone:"Geen juridische hulp nodig",
+      legalRecommended:"Het kan verstandig zijn de situatie te bespreken",
+      legalUrgent:"Dringende juridische hulp kan nodig zijn",
+      urgencyHigh:"DRINGEND – snelle actie nodig",
+      urgencyMedium:"MIDDELHOGE URGENTIE – reageren is verstandig",
+      urgencyLow:"LAGE URGENTIE – u kunt rustig controleren",
+      replyNeutral:"NEUTRAAL",
+      replyPolite:"BELEEFD",
+      replyFirm:"STELLIG",
+      examplesDocFallback:"Het antwoord in de documenttaal kon niet automatisch worden voorbereid. Kies handmatig de documenttaal in plaats van AUTO en probeer opnieuw."
+    },
+    DE: {
+      fraudRiskTitle:"Analyse des Betrugsrisikos",
+      separatorText:"Sense Bridge Einschätzung und Schritte",
+      fraudUnknown:"Echtheit kann nicht beurteilt werden",
+      fraudLow:"Wirkt eher glaubwürdig",
+      fraudMedium:"Absender prüfen",
+      fraudHigh:"Hohes Betrugsrisiko",
+      fraudDisclaimer:"Dies ist eine Risikoanalyse, keine Bestätigung der Echtheit des Dokuments.",
+      confidence:"Sicherheit",
+      signals:"Zu prüfende Signale",
+      suspicious:"Verdächtige Elemente",
+      safeSteps:"Sichere Schritte",
+      country:"Land",
+      officialWebsite:"Offizielle Website",
+      verifyInstitution:"Prüfen Sie die Situation über die offizielle Website der Institution.",
+      recognitionConfidence:"Erkennungs-Sicherheit",
+      legalNone:"Keine rechtliche Hilfe nötig",
+      legalRecommended:"Es kann sinnvoll sein, die Situation zu besprechen",
+      legalUrgent:"Dringende rechtliche Hilfe kann nötig sein",
+      urgencyHigh:"DRINGEND – schnelles Handeln erforderlich",
+      urgencyMedium:"MITTLERE DRINGLICHKEIT – reagieren ist sinnvoll",
+      urgencyLow:"NIEDRIGE DRINGLICHKEIT – Sie können ruhig prüfen",
+      replyNeutral:"NEUTRAL",
+      replyPolite:"HÖFLICH",
+      replyFirm:"BESTIMMT",
+      examplesDocFallback:"Die Antwort in der Dokumentsprache konnte nicht automatisch vorbereitet werden. Wählen Sie die Dokumentsprache manuell statt AUTO und versuchen Sie es erneut."
+    },
+    UA: {
+      fraudRiskTitle:"Аналіз ризику шахрайства",
+      separatorText:"Оцінка та кроки Sense Bridge",
+      fraudUnknown:"Неможливо оцінити автентичність",
+      fraudLow:"Виглядає досить достовірно",
+      fraudMedium:"Варто перевірити відправника",
+      fraudHigh:"Високий ризик шахрайства",
+      fraudDisclaimer:"Це аналіз ризику, а не підтвердження автентичності документа.",
+      confidence:"Впевненість",
+      signals:"Сигнали для перевірки",
+      suspicious:"Підозрілі елементи",
+      safeSteps:"Безпечні кроки",
+      country:"Країна",
+      officialWebsite:"Офіційний сайт",
+      verifyInstitution:"Перевірте ситуацію через офіційний сайт установи.",
+      recognitionConfidence:"Впевненість розпізнавання",
+      legalNone:"Юридична допомога не потрібна",
+      legalRecommended:"Варто проконсультувати ситуацію",
+      legalUrgent:"Може знадобитися термінова юридична допомога",
+      urgencyHigh:"ТЕРМІНОВО – потрібна швидка дія",
+      urgencyMedium:"СЕРЕДНЯ ТЕРМІНОВІСТЬ – варто відреагувати",
+      urgencyLow:"НИЗЬКА ТЕРМІНОВІСТЬ – можна спокійно перевірити",
+      replyNeutral:"НЕЙТРАЛЬНО",
+      replyPolite:"ВВІЧЛИВО",
+      replyFirm:"РІШУЧЕ",
+      examplesDocFallback:"Не вдалося автоматично підготувати відповідь мовою документа. Виберіть мову документа вручну замість AUTO і спробуйте знову."
+    },
+    FR: {
+      fraudRiskTitle:"Analyse du risque de fraude",
+      separatorText:"Évaluation et étapes Sense Bridge",
+      fraudUnknown:"L’authenticité ne peut pas être évaluée",
+      fraudLow:"Semble plutôt crédible",
+      fraudMedium:"Vérifiez l’expéditeur",
+      fraudHigh:"Risque élevé de fraude",
+      fraudDisclaimer:"Il s’agit d’une analyse de risque, pas d’une confirmation de l’authenticité du document.",
+      confidence:"Confiance",
+      signals:"Signaux à vérifier",
+      suspicious:"Éléments suspects",
+      safeSteps:"Étapes sûres",
+      country:"Pays",
+      officialWebsite:"Site officiel",
+      verifyInstitution:"Vérifiez la situation via le site officiel de l’institution.",
+      recognitionConfidence:"Confiance de reconnaissance",
+      legalNone:"Aucune aide juridique nécessaire",
+      legalRecommended:"Il peut être utile de consulter la situation",
+      legalUrgent:"Une aide juridique urgente peut être nécessaire",
+      urgencyHigh:"URGENT – action rapide requise",
+      urgencyMedium:"URGENCE MOYENNE – il est utile de répondre",
+      urgencyLow:"FAIBLE URGENCE – vous pouvez vérifier calmement",
+      replyNeutral:"NEUTRE",
+      replyPolite:"POLI",
+      replyFirm:"FERME",
+      examplesDocFallback:"La réponse dans la langue du document n’a pas pu être préparée automatiquement. Sélectionnez manuellement la langue du document au lieu d’AUTO et réessayez."
+    },
+    IT: {
+      fraudRiskTitle:"Analisi del rischio di frode",
+      separatorText:"Valutazione e passaggi Sense Bridge",
+      fraudUnknown:"Non è possibile valutare l’autenticità",
+      fraudLow:"Sembra abbastanza credibile",
+      fraudMedium:"Verifica il mittente",
+      fraudHigh:"Alto rischio di frode",
+      fraudDisclaimer:"Questa è un’analisi del rischio, non una conferma dell’autenticità del documento.",
+      confidence:"Affidabilità",
+      signals:"Segnali da verificare",
+      suspicious:"Elementi sospetti",
+      safeSteps:"Passaggi sicuri",
+      country:"Paese",
+      officialWebsite:"Sito ufficiale",
+      verifyInstitution:"Verifica la situazione tramite il sito ufficiale dell’istituzione.",
+      recognitionConfidence:"Affidabilità del riconoscimento",
+      legalNone:"Nessun aiuto legale necessario",
+      legalRecommended:"Può essere utile consultare la situazione",
+      legalUrgent:"Potrebbe essere necessario un aiuto legale urgente",
+      urgencyHigh:"URGENTE – azione rapida richiesta",
+      urgencyMedium:"URGENZA MEDIA – è utile rispondere",
+      urgencyLow:"BASSA URGENZA – puoi verificare con calma",
+      replyNeutral:"NEUTRALE",
+      replyPolite:"GENTILE",
+      replyFirm:"FERMO",
+      examplesDocFallback:"Non è stato possibile preparare automaticamente la risposta nella lingua del documento. Seleziona manualmente la lingua del documento invece di AUTO e riprova."
+    },
+    ES: {
+      fraudRiskTitle:"Análisis de riesgo de fraude",
+      separatorText:"Evaluación y pasos de Sense Bridge",
+      fraudUnknown:"No se puede evaluar la autenticidad",
+      fraudLow:"Parece bastante creíble",
+      fraudMedium:"Verifica el remitente",
+      fraudHigh:"Alto riesgo de fraude",
+      fraudDisclaimer:"Este es un análisis de riesgo, no una confirmación de la autenticidad del documento.",
+      confidence:"Confianza",
+      signals:"Señales para verificar",
+      suspicious:"Elementos sospechosos",
+      safeSteps:"Pasos seguros",
+      country:"País",
+      officialWebsite:"Sitio web oficial",
+      verifyInstitution:"Verifica la situación a través del sitio oficial de la institución.",
+      recognitionConfidence:"Confianza del reconocimiento",
+      legalNone:"No se necesita ayuda legal",
+      legalRecommended:"Puede ser útil consultar la situación",
+      legalUrgent:"Puede ser necesaria ayuda legal urgente",
+      urgencyHigh:"URGENTE – se requiere acción rápida",
+      urgencyMedium:"URGENCIA MEDIA – conviene responder",
+      urgencyLow:"BAJA URGENCIA – puedes verificar con calma",
+      replyNeutral:"NEUTRAL",
+      replyPolite:"CORTÉS",
+      replyFirm:"FIRME",
+      examplesDocFallback:"No se pudo preparar automáticamente la respuesta en el idioma del documento. Selecciona manualmente el idioma del documento en lugar de AUTO e inténtalo de nuevo."
+    },
+    PT: {
+      fraudRiskTitle:"Análise de risco de fraude",
+      separatorText:"Avaliação e passos do Sense Bridge",
+      fraudUnknown:"Não é possível avaliar a autenticidade",
+      fraudLow:"Parece bastante credível",
+      fraudMedium:"Verifique o remetente",
+      fraudHigh:"Alto risco de fraude",
+      fraudDisclaimer:"Esta é uma análise de risco, não uma confirmação da autenticidade do documento.",
+      confidence:"Confiança",
+      signals:"Sinais a verificar",
+      suspicious:"Elementos suspeitos",
+      safeSteps:"Passos seguros",
+      country:"País",
+      officialWebsite:"Site oficial",
+      verifyInstitution:"Verifique a situação através do site oficial da instituição.",
+      recognitionConfidence:"Confiança do reconhecimento",
+      legalNone:"Não é necessária ajuda jurídica",
+      legalRecommended:"Pode ser útil consultar a situação",
+      legalUrgent:"Pode ser necessária ajuda jurídica urgente",
+      urgencyHigh:"URGENTE – é necessária ação rápida",
+      urgencyMedium:"URGÊNCIA MÉDIA – vale a pena responder",
+      urgencyLow:"BAIXA URGÊNCIA – pode verificar com calma",
+      replyNeutral:"NEUTRO",
+      replyPolite:"EDUCADO",
+      replyFirm:"FIRME",
+      examplesDocFallback:"Não foi possível preparar automaticamente a resposta no idioma do documento. Selecione manualmente o idioma do documento em vez de AUTO e tente novamente."
+    }
+  };
+  const table = dict[L] || dict.PL;
+  return table[key] || (dict.EN && dict.EN[key]) || key;
+}
+
+function renderFraudRisk(data){
+  const card = document.getElementById("fraudCard");
+  const box = document.getElementById("fraudRiskBox");
+  if(!card || !box) return;
+
+  const fr = data.fraudRisk || data.scamRisk || data.authenticityRisk || null;
+  if(!fr || typeof fr !== "object"){
+    card.style.display = "none";
+    box.innerHTML = "";
     return;
   }
-  window.location.href = url;
+
+  const lang = sbGetResultLang();
+  const level = String(fr.level || "UNKNOWN").toUpperCase();
+  const confidence = Number(fr.confidence || 0);
+
+  let cls = "fraud-unknown";
+  let icon = "⚪";
+  let defaultLabel = sbResultText("fraudUnknown", lang);
+
+  if(level === "LOW"){
+    cls = "fraud-low";
+    icon = "🟢";
+    defaultLabel = sbResultText("fraudLow", lang);
+  }
+  if(level === "MEDIUM"){
+    cls = "fraud-medium";
+    icon = "🟡";
+    defaultLabel = sbResultText("fraudMedium", lang);
+  }
+  if(level === "HIGH"){
+    cls = "fraud-high";
+    icon = "🔴";
+    defaultLabel = sbResultText("fraudHigh", lang);
+  }
+
+  const label = String(fr.label || defaultLabel);
+  const summary = String(fr.summary || sbResultText("fraudDisclaimer", lang));
+  const signals = safeArr(fr.signals);
+  const suspicious = safeArr(fr.suspiciousElements);
+  const steps = safeArr(fr.safeSteps);
+  const disclaimer = String(fr.disclaimer || sbResultText("fraudDisclaimer", lang));
+
+  function list(title, arr){
+    if(!arr || !arr.length) return "";
+    return `
+      <p style="font-weight:900;margin-top:12px;">${escapeHtml(title)}</p>
+      <ul class="fraud-list">
+        ${arr.map(x => `<li>${escapeHtml(String(x))}</li>`).join("")}
+      </ul>
+    `;
+  }
+
+  box.innerHTML = `
+    <div class="fraud-box">
+      <div class="fraud-head">
+        <div class="fraud-pill ${cls}">${icon} ${escapeHtml(label)}</div>
+        <div class="chip"><span>${escapeHtml(sbResultText("confidence", lang))}:</span> <strong>${Number.isFinite(confidence) ? confidence : 0}%</strong></div>
+      </div>
+      <p>${escapeHtml(summary)}</p>
+      ${list(sbResultText("signals", lang), signals)}
+      ${list(sbResultText("suspicious", lang), suspicious)}
+      ${list(sbResultText("safeSteps", lang), steps)}
+      <p class="fraud-small">${escapeHtml(disclaimer)}</p>
+    </div>
+  `;
+  card.style.display = "block";
 }
+
+function renderInstitution(data){
+  const box = document.getElementById("institutionBox");
+  if(!box) return;
+
+  const inst = data.institution;
+
+  if(!inst || !inst.name){
+    box.innerHTML = "";
+    return;
+  }
+
+  const lang = sbGetResultLang();
+  const website = inst.officialWebsite || "";
+  const confidence = Number(inst.confidence || 0);
+
+  box.innerHTML = `
+    <div class="box-info" style="margin-top:12px;">
+      <strong>🏛 ${escapeHtml(inst.name)}</strong><br>
+
+      ${inst.country ? `🌍 ${escapeHtml(sbResultText("country", lang))}: ${escapeHtml(countryName(inst.country))}<br>` : ""}
+
+      ${website
+        ? `🌐 ${escapeHtml(sbResultText("officialWebsite", lang))}:
+        <a href="${escapeHtml(website)}"
+        target="_blank"
+        rel="noopener noreferrer">
+        ${escapeHtml(website)}
+        </a><br>`
+        : ""
+      }
+
+      ✅ ${escapeHtml(sbResultText("verifyInstitution", lang))}
+
+      ${confidence
+        ? `<br><small>${escapeHtml(sbResultText("recognitionConfidence", lang))}: ${confidence}%</small>`
+        : ""
+      }
+    </div>
+  `;
+}
+
+function countryName(code){
+  const map = {
+    DE: "Germany",
+PL: "Poland",
+JP: "Japan",
+IT: "Italy",
+FR: "France",
+ES: "Spain",
+PT: "Portugal",
+NL: "Netherlands",
+BE: "Belgium",
+UA: "Ukraine",
+US: "United States",
+CA: "Canada",
+KR: "South Korea",
+CN: "China",
+GB: "United Kingdom",
+IE: "Ireland",
+AU: "Australia",
+NZ: "New Zealand",
+AT: "Austria",
+CH: "Switzerland",
+SE: "Sweden",
+NO: "Norway",
+DK: "Denmark",
+FI: "Finland",
+CZ: "Czech Republic",
+SK: "Slovakia",
+HU: "Hungary",
+RO: "Romania",
+BG: "Bulgaria",
+HR: "Croatia",
+GR: "Greece",
+TR: "Turkey",
+IN: "India",
+BR: "Brazil",
+MX: "Mexico",
+AR: "Argentina",
+ZA: "South Africa",
+SG: "Singapore"
+  };
+  return map[String(code || "").toUpperCase()] || code;
+}
+
+function escapeHtml(s){
+  return String(s || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+async function syncAccess(){
+  const email = (localStorage.getItem("sb_user_email") || "").trim().toLowerCase();
+  if(!email) return;
+
+  try {
+    const res = await fetch(ENDPOINTS.accessCheck, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok || !data.ok) return;
+
+    if(data.status === "ACTIVE"){
+      setPass(data.plan, data.expires);
+    }
+
+    if(data.status === "EXPIRED" || data.status === "BLOCKED"){
+      clearPass();
+    }
+
+  } catch(e){
+    console.log("sync error", e);
+  }
+}
+
+/* =========================================================
+   PAY (manual payment + instant client access)
+   ========================================================= */
+let currentPlan = null;
+
+function getPayText(){
+  const lang = (UI && UI.lang) ? UI.lang : "PL";
+
+  const txt = {
+    PL:{
+      emailTitle:"Podaj swój email",
+      emailText:"Na ten adres przypiszemy zgłoszenie płatności i dostęp.",
+      placeholder:"twoj@email.com",
+      copied:"Skopiowano ✔",
+      copiedText:"Tytuł przelewu został skopiowany.",
+      noEmail:"Podaj email najpierw.",
+      noPlan:"Brak wybranego planu.",
+      blocked:"Ten email jest zablokowany.",
+      error:"Błąd: ",
+      activationError:"Błąd aktywacji",
+      pendingTitle:"Zgłoszenie zapisane ✔",
+      pendingText:"Wykonaj przelew z podanym tytułem. Dostęp zostanie aktywowany po potwierdzeniu płatności."
+    },
+    NL:{
+      emailTitle:"Voer je e-mailadres in",
+      emailText:"Aan dit adres koppelen we de betalingsmelding en toegang.",
+      placeholder:"jouw@email.com",
+      copied:"Gekopieerd ✔",
+      copiedText:"De omschrijving is gekopieerd.",
+      noEmail:"Voer eerst je e-mailadres in.",
+      noPlan:"Geen plan geselecteerd.",
+      blocked:"Dit e-mailadres is geblokkeerd.",
+      error:"Fout: ",
+      activationError:"Activatiefout",
+      pendingTitle:"Aanvraag opgeslagen ✔",
+      pendingText:"Voer de overschrijving uit met de opgegeven omschrijving. Toegang wordt geactiveerd na bevestiging van betaling."
+    },
+    EN:{
+      emailTitle:"Enter your email",
+      emailText:"We will assign the payment request and access to this address.",
+      placeholder:"your@email.com",
+      copied:"Copied ✔",
+      copiedText:"The transfer title has been copied.",
+      noEmail:"Enter your email first.",
+      noPlan:"No plan selected.",
+      blocked:"This email is blocked.",
+      error:"Error: ",
+      activationError:"Activation error",
+      pendingTitle:"Request saved ✔",
+      pendingText:"Make the transfer using the provided title. Access will be activated after payment confirmation."
+    },
+    DE:{
+      emailTitle:"Gib deine E-Mail-Adresse ein",
+      emailText:"An diese Adresse wird die Zahlungsanfrage und der Zugang zugewiesen.",
+      placeholder:"deine@email.com",
+      copied:"Kopiert ✔",
+      copiedText:"Der Verwendungszweck wurde kopiert.",
+      noEmail:"Bitte zuerst deine E-Mail eingeben.",
+      noPlan:"Kein Paket ausgewählt.",
+      blocked:"Diese E-Mail ist blockiert.",
+      error:"Fehler: ",
+      activationError:"Aktivierungsfehler",
+      pendingTitle:"Anfrage gespeichert ✔",
+      pendingText:"Führe die Überweisung mit dem angegebenen Verwendungszweck aus. Der Zugang wird nach Zahlungsbestätigung aktiviert."
+    },
+    UA:{
+      emailTitle:"Введіть свою електронну пошту",
+      emailText:"На цю адресу буде прив’язано заявку на оплату та доступ.",
+      placeholder:"your@email.com",
+      copied:"Скопійовано ✔",
+      copiedText:"Призначення платежу скопійовано.",
+      noEmail:"Спочатку введіть email.",
+      noPlan:"План не вибрано.",
+      blocked:"Цей email заблоковано.",
+      error:"Помилка: ",
+      activationError:"Помилка активації",
+      pendingTitle:"Запит збережено ✔",
+      pendingText:"Виконайте переказ із вказаним призначенням платежу. Доступ буде активовано після підтвердження оплати."
+    },
+    FR:{
+      emailTitle:"Entrez votre e-mail",
+      emailText:"Nous associerons la demande de paiement et l’accès à cette adresse.",
+      placeholder:"votre@email.com",
+      copied:"Copié ✔",
+      copiedText:"Le libellé du virement a été copié.",
+      noEmail:"Entrez d’abord votre e-mail.",
+      noPlan:"Aucun accès sélectionné.",
+      blocked:"Cet e-mail est bloqué.",
+      error:"Erreur : ",
+      activationError:"Erreur d’activation",
+      pendingTitle:"Demande enregistrée ✔",
+      pendingText:"Effectuez le virement avec le libellé indiqué. L’accès sera activé après confirmation du paiement."
+    },
+    IT:{
+      emailTitle:"Inserisci la tua email",
+      emailText:"A questo indirizzo assoceremo la richiesta di pagamento e l'accesso.",
+      placeholder:"tuo@email.com",
+      copied:"Copiato ✔",
+      copiedText:"La causale del bonifico è stata copiata.",
+      noEmail:"Inserisci prima la tua email.",
+      noPlan:"Nessun piano selezionato.",
+      blocked:"Questa email è bloccata.",
+      error:"Errore: ",
+      activationError:"Errore di attivazione",
+      pendingTitle:"Richiesta salvata ✔",
+      pendingText:"Effettua il bonifico usando la causale indicata. L'accesso sarà attivato dopo la conferma del pagamento."
+    },
+    ES:{
+      emailTitle:"Introduce tu email",
+      emailText:"Asignaremos la solicitud de pago y el acceso a esta dirección.",
+      placeholder:"tu@email.com",
+      copied:"Copiado ✔",
+      copiedText:"El concepto de la transferencia ha sido copiado.",
+      noEmail:"Introduce primero tu email.",
+      noPlan:"No se ha seleccionado ningún plan.",
+      blocked:"Este email está bloqueado.",
+      error:"Error: ",
+      activationError:"Error de activación",
+      pendingTitle:"Solicitud guardada ✔",
+      pendingText:"Realiza la transferencia con el concepto indicado. El acceso se activará después de confirmar el pago."
+    },
+    PT:{
+      emailTitle:"Introduza o seu email",
+      emailText:"Vamos associar o pedido de pagamento e o acesso a este endereço.",
+      placeholder:"seu@email.com",
+      copied:"Copiado ✔",
+      copiedText:"A referência da transferência foi copiada.",
+      noEmail:"Introduza primeiro o seu email.",
+      noPlan:"Nenhum plano selecionado.",
+      blocked:"Este email está bloqueado.",
+      error:"Erro: ",
+      activationError:"Erro de ativação",
+      pendingTitle:"Pedido guardado ✔",
+      pendingText:"Faça a transferência com a referência indicada. O acesso será ativado após confirmação do pagamento."
+    }
+  };
+
+  return txt[lang] || txt.PL;
+}
+
+async function goPay(which){
+  currentPlan = which;
+
+  let amount = "";
+  let title = "";
+  const tPay = getPayText();
+
+  const email = await sbShowModal({
+    title: tPay.emailTitle,
+    text: tPay.emailText,
+    input: true,
+    placeholder: tPay.placeholder
+  });
+
+  if(!email) return;
+
+  let planNum = "24";
+
+  if(which === "24h"){
+    amount = "3 €";
+    planNum = "24";
+  }
+
+  if(which === "7d"){
+    amount = "7 €";
+    planNum = "7";
+  }
+
+  if(which === "30d"){
+    amount = "15 €";
+    planNum = "30";
+  }
+
+  const code = Math.floor(1000 + Math.random() * 9000);
+  const namePart = email.split("@")[0].slice(0,5);
+  title = "SB" + planNum + "-" + code + "-" + namePart;
+
+  localStorage.setItem("sb_payment_code", code);
+
+  document.getElementById("amountText").textContent = amount;
+  document.getElementById("transferTitle").textContent = title;
+  localStorage.setItem("sb_user_email", email);
+
+  document.getElementById("paymentBox").style.display = "block";
+  document.getElementById("paymentBox").scrollIntoView({ behavior: "smooth" });
+}
+
+function showPendingConfirmBox(){
+  const box = document.getElementById("pendingConfirmBox");
+  const codeView = document.getElementById("pendingCodeView");
+  const transferTitleEl = document.getElementById("transferTitle");
+
+  if(codeView && transferTitleEl){
+    codeView.textContent = (transferTitleEl.textContent || "").trim();
+  }
+
+  if(box){
+    box.classList.add("show");
+    box.scrollIntoView({ behavior:"smooth", block:"center" });
+  }
+}
+
+async function copyPendingCode(){
+  const tPay = getPayText();
+  const transferTitleEl = document.getElementById("transferTitle");
+  const txt = transferTitleEl ? (transferTitleEl.textContent || "").trim() : "";
+  if(!txt) return;
+
+  try{
+    await navigator.clipboard.writeText(txt);
+  }catch{
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+
+  await sbShowModal({
+    title: tPay.copied,
+    text: tPay.copiedText,
+    input: false
+  });
+}
+
+async function confirmPaid(){
+  const tPay = getPayText();
+  const email = (localStorage.getItem("sb_user_email") || "").trim().toLowerCase();
+
+  if(!email){
+    alert(tPay.noEmail);
+    return;
+  }
+
+  if(!currentPlan){
+    alert(tPay.noPlan);
+    return;
+  }
+
+  const accessCheck = await checkAccessServer(email);
+
+  if (accessCheck && accessCheck.status === "BLOCKED") {
+    clearPass();
+    refreshUI();
+    updatePaidMessage();
+    alert(tPay.blocked);
+    return;
+  }
+
+  try {
+    const res = await fetch(ENDPOINTS.accessSet, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        plan: currentPlan,
+        paymentTitle: document.getElementById("transferTitle").textContent.trim()
+      })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok || !data.ok){
+      throw new Error(data.error || tPay.activationError);
+    }
+
+    trackEvent("pending");
+
+    clearPass();
+
+    showPendingConfirmBox();
+
+    await sbShowModal({
+      title: tPay.pendingTitle,
+      text: tPay.pendingText,
+      input: false
+    });
+
+    refreshUI();
+    updatePaidMessage();
+
+  } catch (e) {
+    alert(tPay.error + (e.message || e));
+  }
+}
+
 
 /* =========================================================
    CORE: analyze + translate fallback
@@ -746,7 +3708,6 @@ function checkPaywall(){
   if(access.mode === "LOCKED"){
     refreshUI();
     updatePaidMessage();
-    // pokaż sekcję płatności
     const accessSection = document.getElementById("access");
     if(accessSection) accessSection.classList.remove("hidden");
     const lockBox = document.getElementById("lockBox");
@@ -755,22 +3716,35 @@ function checkPaywall(){
   }
   return true;
 }
-async function analyze(){
 
+async function analyze(){
   if (!checkPaywall()) return;
 
   const btn = document.getElementById("btnAnalyze");
+  const statusEl = document.getElementById("analyzeStatus");
   btn.disabled = true;
+  if(statusEl){
+  statusEl.textContent =
+    "⏳ " + sbResultText("analyzingLetter", UI.lang);
+}
 
   try{
-    const text = (document.getElementById("inputText").value || "").trim();
-    const sourceLang = document.getElementById("sourceLang").value;
-    const userLang = document.getElementById("userLang").value;
+    let text = (document.getElementById("inputText").value || "").trim();
+const sourceLang = document.getElementById("sourceLang").value;
+const userLang = document.getElementById("userLang").value;
 
-    if(!text){
-      alert("Wklej treść pisma.");
-      return;
-    }
+const photoInput = (typeof sbActivePhotoInput === "function")
+  ? sbActivePhotoInput()
+  : document.getElementById("sbPhotoInput");
+
+if (!text && photoInput && photoInput.files && photoInput.files[0] && window.sbReadPhotoText) {
+  text = await window.sbReadPhotoText(true);
+}
+
+if(!text){
+  alert(UI.dict[UI.lang].emptyText || "Wklej treść pisma albo wybierz zdjęcie.");
+  return;
+}
 
     const res = await fetch(ENDPOINTS.analyze,{
       method:"POST",
@@ -785,22 +3759,207 @@ async function analyze(){
 
     document.getElementById("summary").textContent =
       (data.summary || data.whatOfficeSays || data.communication || "").trim();
+      renderFraudRisk(data);
+      renderInstitution(data);
+      // CZY POTRZEBNA POMOC PRAWNA
+const legalStatusEl = document.getElementById("legalStatus");
+
+if (legalStatusEl) {
+  const legal = String(data.legalHelpNeeded || "RECOMMENDED").toUpperCase();
+
+  const rLang = sbGetResultLang();
+  let legalText = "🟡 " + sbResultText("legalRecommended", rLang);
+  let bg = "#fef3c7";
+  let color = "#92400e";
+
+  if (legal === "NONE") {
+    legalText = "🟢 " + sbResultText("legalNone", rLang);
+    bg = "#dcfce7";
+    color = "#166534";
+  }
+
+  if (legal === "URGENT") {
+    legalText = "🔴 " + sbResultText("legalUrgent", rLang);
+    bg = "#fee2e2";
+    color = "#991b1b";
+  }
+
+  let bar = "";
+
+if (legal === "NONE") {
+  bar = "🟢────────────";
+}
+if (legal === "RECOMMENDED") {
+  bar = "🟡────────────";
+}
+if (legal === "URGENT") {
+  bar = "🔴────────────";
+}
+
+legalStatusEl.innerHTML = `
+  <div style="margin:10px 0 6px;font-size:18px;font-weight:900;">
+    ${bar}
+  </div>
+  <div style="margin-bottom:12px;font-weight:700;color:${color};">
+    ${legalText}
+  </div>
+`;
+}
+      // PILNOŚĆ
+const urgencyEl = document.getElementById("urgencyBox");
+const legal = (data.legalHelpNeeded || "").toUpperCase();
+
+if (legal === "URGENT") {
+  urgencyEl.textContent = "🔴 " + sbResultText("legalUrgent", sbGetResultLang());
+}
+else if (legal === "RECOMMENDED") {
+  urgencyEl.textContent = "🟡 " + sbResultText("legalRecommended", sbGetResultLang());
+}
+else {
+  urgencyEl.textContent = "🟢 " + sbResultText("legalNone", sbGetResultLang());
+}
+if(urgencyEl){
+  const u = (data.urgency || "").toUpperCase();
+  const rLang = sbGetResultLang();
+  if(u === "HIGH") urgencyEl.textContent = "⚠️ " + sbResultText("urgencyHigh", rLang);
+  else if(u === "MEDIUM") urgencyEl.textContent = "⏳ " + sbResultText("urgencyMedium", rLang);
+  else if(u === "LOW") urgencyEl.textContent = "🟢 " + sbResultText("urgencyLow", rLang);
+  else urgencyEl.textContent = "";
+}
+
+// DZIAŁANIA
+const actionsBox = document.getElementById("actions");
+actionsBox.innerHTML = "";
+(data.actions || []).forEach(a=>{
+  const d = document.createElement("div");
+  d.className = "box-info";
+  d.textContent = "👉 " + a;
+  actionsBox.appendChild(d);
+});
+
+const fraudLevel = String(
+  data?.fraudRisk?.level ||
+  data?.fraudLevel ||
+  "UNKNOWN"
+).toUpperCase();
+
+// KONSEKWENCJE
+const consBox = document.getElementById("consequences");
+consBox.innerHTML = "";
+(data.consequences || []).forEach(c=>{
+  const d = document.createElement("div");
+  if (fraudLevel === "LOW") {
+    d.className = "box-info";
+    d.textContent = String(c);
+  } else if (fraudLevel === "HIGH") {
+    d.className = "box-warn";
+    d.textContent = "⚠️ " + c;
+  } else {
+    d.className = "box-warn";
+    d.textContent = "⚠️ " + c;
+  }
+  consBox.appendChild(d);
+});
+
+// POMOC
+const helpBox = document.getElementById("help");
+helpBox.innerHTML = "";
+(data.help || []).forEach(h=>{
+  const d = document.createElement("div");
+  d.className = "box-info";
+  d.textContent = "🧭 " + h;
+  helpBox.appendChild(d);
+});
+// LINKI DO POMOCY
+const helpLinksBox = document.getElementById("helpLinks");
+if (helpLinksBox) {
+  helpLinksBox.innerHTML = "";
+
+  if (Array.isArray(data.helpLinks) && data.helpLinks.length > 0) {
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.style.marginTop = "12px";
+    title.textContent = sbResultText("helpLinksTitle", UI.lang);
+    helpLinksBox.appendChild(title);
+
+    data.helpLinks.forEach(link => {
+      if (!link || !link.url || !link.label) return;
+
+      const a = document.createElement("a");
+      a.href = link.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = "🔗 " + link.label;
+      a.style.display = "block";
+      a.style.padding = "10px 12px";
+      a.style.marginBottom = "8px";
+      a.style.borderRadius = "10px";
+      a.style.border = "1px solid rgba(63,138,114,0.28)";
+      a.style.background = "#ffffff";
+      a.style.color = "#245c4d";
+      a.style.fontWeight = "700";
+      a.style.textDecoration = "none";
+
+      helpLinksBox.appendChild(a);
+    });
+  }
+}
 
     const risksBox = document.getElementById("risks");
     risksBox.innerHTML = "";
     safeArr(data.risks || data.riskList || data.riskChips).forEach(r=>{
       const d=document.createElement("div");
-      d.className="box-warn";
+      d.className = fraudLevel === "LOW" ? "box-info" : "box-warn";
       d.textContent=String(r);
       risksBox.appendChild(d);
     });
 
+    sbApplyResultUxPatchV9(data);
+
     const ex = data.examples || data.responseExamples || data.replies || {};
     const parts = [];
-    if(ex.neutral) parts.push("NEUTRAL:\n" + ex.neutral);
-    if(ex.polite)  parts.push("UPRZEJMIE:\n" + ex.polite);
-    if(ex.firm)    parts.push("STANOWCZO:\n" + ex.firm);
+    const rLang = sbGetResultLang();
+    if(ex.neutral) parts.push(sbResultText("replyNeutral", rLang) + ":\n" + ex.neutral);
+    if(ex.polite)  parts.push(sbResultText("replyPolite", rLang) + ":\n" + ex.polite);
+    if(ex.firm)    parts.push(sbResultText("replyFirm", rLang) + ":\n" + ex.firm);
     document.getElementById("examples").textContent = parts.join("\n\n");
+
+    const examplesDocEl = document.getElementById("examplesDoc");
+
+let docText = "";
+const docTargetLang = sourceLang !== "AUTO" ? sourceLang : (data.detectedLang || data.language || "");
+
+if (docTargetLang && docTargetLang !== userLang && parts.length > 0) {
+  try {
+    const trDocRes = await fetch(ENDPOINTS.translate, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+  text: parts.join("\n\n"),
+  sourceLang: userLang,
+  targetLang: docTargetLang,
+  userLang: docTargetLang
+})
+    });
+
+    const trDocData = await trDocRes.json();
+
+    if (trDocRes.ok) {
+      docText = (
+        trDocData.translation ||
+        trDocData.translatedText ||
+        trDocData.translated ||
+        ""
+      ).replace(/"""/g, "").replace(/'''/g, "").trim();
+    }
+  } catch (e) {
+    console.log("examplesDoc translate error", e);
+  }
+}
+
+if (examplesDocEl) {
+  examplesDocEl.textContent = docText || sbResultText("examplesDocFallback", sbGetResultLang());
+}
 
     let translation = (data.translation || data.translatedText || data.translated || "").trim();
 
@@ -819,30 +3978,552 @@ async function analyze(){
 
     document.getElementById("translation").textContent = translation;
 
+fetch("/.netlify/functions/analyze_count", {
+  method: "POST",
+  headers: { "X-SB-Event": "analyze" }
+}).catch(()=>{});
     consumeFreeIfNeeded();
     refreshUI();
     updatePaidMessage();
 
+    if(statusEl){ statusEl.textContent = "✅ Gotowe – sprawdź poniżej"; }
     document.getElementById("translation").scrollIntoView({behavior:"smooth"});
   } catch (e){
+    if(statusEl){ statusEl.textContent = "❌ Błąd analizy"; }
     alert("Błąd: " + (e?.message || e));
   } finally {
     btn.disabled = false;
+    setTimeout(() => {
+      if(statusEl) statusEl.textContent = "";
+    }, 3000);
   }
 }
 
 /* =========================================================
    INIT
    ========================================================= */
-(function init(){
+(async function init(){
   UI.lang = getUiLang();
+  applyTheme(getTheme());
   applyUiLang();
+  applyTheme(getTheme());
+  
+  trackEvent("app_open");
+
+  if (localStorage.getItem("sb_seen_before") === "1") {
+  trackEvent("return_user");
+} else {
+  localStorage.setItem("sb_seen_before", "1");
+  }
+  
   applyPaidFromQuery();
+  fetch("/.netlify/functions/visit", {
+  method: "POST",
+  headers: { "X-SB-Event": "visit" }
+}).catch(()=>{});
+  await syncAccess();
   refreshUI();
   updatePaidMessage();
   enableDevReset();
 })();
+
+/* =========================================================
+   PHOTO OCR - mobile safe
+   ========================================================= */
+(function () {
+  const MAX_ORIGINAL_MB = 25;
+  const MAX_SIDE = 1600;
+  const JPEG_QUALITY = 0.78;
+
+  function msg(key) {
+    const fallback = {
+      statusChoosePhoto: "Najpierw wybierz zdjęcie.",
+      statusNoTextarea: "Nie znaleziono pola tekstowego.",
+      statusChooseImage: "Wybierz plik graficzny.",
+      statusTooBig: "Zdjęcie jest za duże. Maksymalnie",
+      statusReading: "Czytam tekst ze zdjęcia...",
+      statusInserted: "Tekst ze zdjęcia został wstawiony.",
+      statusError: "Błąd OCR:"
+    };
+    return (UI.dict[UI.lang] && UI.dict[UI.lang][key]) || fallback[key] || "";
+  }
+
+  function findTextArea() {
+    return document.getElementById("inputText") || document.querySelector("textarea");
+  }
+
+  function setStatus(text) {
+    const el = document.getElementById("sbPhotoStatus");
+    if (el) el.textContent = text || "";
+  }
+
+  function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("Nie udało się odczytać pliku."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function imageToCanvasDataUrl(dataUrl) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+
+      img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+
+        const scale = Math.min(1, MAX_SIDE / Math.max(w, h));
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+
+        resolve(canvas.toDataURL("image/jpeg", JPEG_QUALITY));
+      };
+
+      img.onerror = () => reject(new Error("Nie udało się przygotować zdjęcia."));
+      img.src = dataUrl;
+    });
+  }
+
+  async function readPhotoText(silent = false) {
+    const input = (typeof sbActivePhotoInput === "function")
+      ? sbActivePhotoInput()
+      : document.getElementById("sbPhotoInput");
+    const btn = document.getElementById("sbReadPhotoBtn");
+    const textarea = findTextArea();
+
+    if (!input || !input.files || !input.files[0]) {
+      if (!silent) setStatus(msg("statusChoosePhoto"));
+      return "";
+    }
+
+    if (!textarea) {
+      setStatus(msg("statusNoTextarea"));
+      return "";
+    }
+
+    const file = input.files[0];
+
+    if (!file.type.startsWith("image/")) {
+      setStatus(msg("statusChooseImage"));
+      return "";
+    }
+
+    if (file.size > MAX_ORIGINAL_MB * 1024 * 1024) {
+      setStatus(msg("statusTooBig") + " " + MAX_ORIGINAL_MB + " MB.");
+      return "";
+    }
+
+    try {
+      if (btn) btn.disabled = true;
+      setStatus(msg("statusReading"));
+
+      const originalDataUrl = await fileToDataUrl(file);
+      const imageDataUrl = await imageToCanvasDataUrl(originalDataUrl);
+
+      const res = await fetch("/.netlify/functions/ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageDataUrl })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "OCR error");
+      }
+
+      const text = String(data.text || "").trim();
+      textarea.value = text;
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+      setStatus(text ? msg("statusInserted") : "Nie udało się odczytać tekstu.");
+      if (text) trackEvent("ocr_use");
+      return text;
+
+    } catch (err) {
+      setStatus(msg("statusError") + " " + (err.message || err));
+      return "";
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  window.sbReadPhotoText = readPhotoText;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const readBtn = document.getElementById("sbReadPhotoBtn");
+    const chooseBtn = document.getElementById("sbChoosePhotoBtn");
+    const cameraBtn = document.getElementById("sbTakePhotoBtn");
+    const input = document.getElementById("sbPhotoInput");
+    const cameraInput = document.getElementById("sbCameraInput");
+    const fileName = document.getElementById("sbPhotoFileName");
+
+    if (readBtn) {
+      readBtn.addEventListener("click", function () {
+        readPhotoText(false);
+      });
+    }
+
+    if (chooseBtn && input) {
+      chooseBtn.addEventListener("click", function () {
+        if(cameraInput) cameraInput.value = "";
+        input.click();
+      });
+    }
+
+    if (cameraBtn && cameraInput) {
+      cameraBtn.addEventListener("click", function () {
+        if(input) input.value = "";
+        cameraInput.click();
+      });
+    }
+
+    function updateSelectedFileName(activeInput, fallbackText){
+      if (!fileName) return;
+      if (activeInput && activeInput.files && activeInput.files[0]) {
+        fileName.textContent = activeInput.files[0].name || fallbackText || "Zdjęcie dokumentu";
+        fileName.dataset.hasFile = "1";
+        setStatus("");
+      } else {
+        fileName.dataset.hasFile = "";
+        fileName.textContent = msg("noPhoto") || "Nie wybrano zdjęcia";
+      }
+    }
+
+    if (input && fileName) {
+      input.addEventListener("change", function () {
+        if(cameraInput) cameraInput.value = "";
+        updateSelectedFileName(input, "Zdjęcie z galerii");
+      });
+    }
+
+    if (cameraInput && fileName) {
+      cameraInput.addEventListener("change", function () {
+        if(input) input.value = "";
+        updateSelectedFileName(cameraInput, "Zdjęcie z aparatu");
+      });
+    }
+  });
+})();
+
+  async function trackEvent(eventName) {
+  try {
+    await fetch(
+      "https://sense-bridge-production.netlify.app/.netlify/functions/track_event",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          event: eventName
+        })
+      }
+    );
+  } catch (e) {
+    console.log("trackEvent error", e);
+  }
+  }
+
+// INSTALL APP (PWA)
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+function installApp() {
+
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+
+    if (typeof trackEvent === "function") {
+      trackEvent("shortcut_add");
+    }
+
+    deferredPrompt.userChoice.then(function() {
+      deferredPrompt = null;
+    });
+
+  } else {
+
+    var lang = (UI && UI.lang) ? UI.lang : "PL";
+
+    var txt = {
+
+      PL: {
+        title: "Dodaj Sense Bridge<br>do telefonu",
+        text: "To dziala jak aplikacja — bez sklepu Google Play.",
+        privacy: "Sense Bridge nie zapisuje i nie udostepnia Twoich dokumentow.",
+        why: "Dlatego dziala bez konta i bez klasycznej instalacji.",
+        step: "Kliknij <b>3 kropki</b> w przegladarce<br>i wybierz:",
+        add: "Dodaj do ekranu glownego",
+        ok: "Rozumiem"
+      },
+
+      NL: {
+        title: "Zet Sense Bridge<br>op je telefoon",
+        text: "Het werkt als een app — zonder Google Play.",
+        privacy: "Sense Bridge bewaart en deelt jouw documenten niet.",
+        why: "Daarom werkt het zonder account en zonder klassieke installatie.",
+        step: "Klik op de <b>3 puntjes</b> in de browser<br>en kies:",
+        add: "Toevoegen aan startscherm",
+        ok: "Ik begrijp het"
+      },
+
+      EN: {
+        title: "Add Sense Bridge<br>to your phone",
+        text: "It works like an app — without Google Play.",
+        privacy: "Sense Bridge does not save or share your documents.",
+        why: "That is why it works without an account and without classic installation.",
+        step: "Tap the <b>3 dots</b> in your browser<br>and choose:",
+        add: "Add to Home screen",
+        ok: "I understand"
+      },
+
+      DE: {
+        title: "Fuege Sense Bridge<br>zum Telefon hinzu",
+        text: "Es funktioniert wie eine App — ohne Google Play.",
+        privacy: "Sense Bridge speichert und teilt deine Dokumente nicht.",
+        why: "Deshalb funktioniert es ohne Konto und ohne klassische Installation.",
+        step: "Klicke auf die <b>3 Punkte</b> im Browser<br>und waehle:",
+        add: "Zum Startbildschirm hinzufuegen",
+        ok: "Verstanden"
+      },
+
+      UA: {
+  title: "Додайте Sense Bridge<br>на телефон",
+  text: "Працює як додаток — без Google Play.",
+  privacy: "Sense Bridge не зберігає і не передає ваші документи.",
+  why: "Тому працює без акаунта і без класичного встановлення.",
+  step: "Натисніть <b>3 крапки</b> у браузері<br>і виберіть:",
+  add: "Додати на головний екран",
+  ok: "Зрозуміло"
+},
+
+      FR: {
+        title: "Ajouter Sense Bridge<br>au telephone",
+        text: "Cela fonctionne comme une application — sans Google Play.",
+        privacy: "Sense Bridge ne sauvegarde ni ne partage vos documents.",
+        why: "C'est pourquoi cela fonctionne sans compte et sans installation classique.",
+        step: "Cliquez sur les <b>3 points</b> du navigateur<br>et choisissez :",
+        add: "Ajouter a l'ecran d'accueil",
+        ok: "Je comprends"
+      },
+
+      IT: {
+        title: "Aggiungi Sense Bridge<br>al telefono",
+        text: "Funziona come un'app — senza Google Play.",
+        privacy: "Sense Bridge non salva e non condivide i tuoi documenti.",
+        why: "Per questo funziona senza account e senza installazione classica.",
+        step: "Premi i <b>3 puntini</b> nel browser<br>e scegli:",
+        add: "Aggiungi alla schermata Home",
+        ok: "Ho capito"
+      },
+
+      ES: {
+        title: "Agregar Sense Bridge<br>al telefono",
+        text: "Funciona como una aplicacion — sin Google Play.",
+        privacy: "Sense Bridge no guarda ni comparte tus documentos.",
+        why: "Por eso funciona sin cuenta y sin instalacion clasica.",
+        step: "Pulsa los <b>3 puntos</b> del navegador<br>y elige:",
+        add: "Agregar a pantalla de inicio",
+        ok: "Entiendo"
+      },
+
+      PT: {
+        title: "Adicionar Sense Bridge<br>ao telefone",
+        text: "Funciona como uma aplicacao — sem Google Play.",
+        privacy: "Sense Bridge nao guarda nem partilha os teus documentos.",
+        why: "Por isso funciona sem conta e sem instalacao classica.",
+        step: "Clica nos <b>3 pontos</b> do navegador<br>e escolhe:",
+        add: "Adicionar ao ecra inicial",
+        ok: "Entendi"
+      }
+
+    };
+
+    var m = txt[lang] || txt.PL;
+
+    var oldBox = document.getElementById("sbInstallBox");
+    if (oldBox) oldBox.remove();
+
+    var overlay = document.createElement("div");
+    overlay.id = "sbInstallBox";
+
+    overlay.style.position = "fixed";
+    overlay.style.left = "0";
+    overlay.style.top = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,.55)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "99999";
+    overlay.style.padding = "18px";
+    overlay.style.backdropFilter = "blur(4px)";
+
+    var box = document.createElement("div");
+
+    box.style.maxWidth = "420px";
+    box.style.width = "100%";
+    box.style.background = "linear-gradient(180deg,#0e2a47,#123e61)";
+    box.style.border = "2px solid #32d296";
+    box.style.borderRadius = "24px";
+    box.style.padding = "20px";
+    box.style.color = "#fff";
+    box.style.boxShadow = "0 0 35px rgba(50,210,150,.25)";
+    box.style.fontFamily = "system-ui,sans-serif";
+    box.style.textAlign = "center";
+
+    box.innerHTML = `
+      <div style="font-size:26px;margin-bottom:8px;">📲</div>
+
+      <div style="font-size:25px;font-weight:900;line-height:1.15;margin-bottom:14px;">
+        ${m.title}
+      </div>
+
+      <div style="font-size:16px;line-height:1.55;color:rgba(255,255,255,.92);margin-bottom:16px;">
+        ${m.text}
+      </div>
+
+      <div style="
+        background:rgba(50,210,150,.10);
+        border:1px solid rgba(50,210,150,.28);
+        border-radius:18px;
+        padding:14px;
+        margin-bottom:16px;
+        line-height:1.5;
+        color:#dffdf2;
+        font-size:14px;
+      ">
+        🔒 ${m.privacy}<br><br>${m.why}
+      </div>
+
+      <div style="font-size:15px;line-height:1.55;margin-bottom:18px;">
+        ${m.step}
+      </div>
+
+      <div style="
+        display:inline-block;
+        background:#32d296;
+        color:#062b1f;
+        padding:8px 12px;
+        border-radius:12px;
+        font-weight:900;
+        font-size:14px;
+        margin-bottom:20px;
+      ">
+        ${m.add}
+      </div>
+
+      <button id="sbCloseInstall"
+        style="
+          width:100%;
+          border:none;
+          border-radius:16px;
+          padding:14px;
+          background:#32d296;
+          color:#062b1f;
+          font-size:17px;
+          font-weight:900;
+          cursor:pointer;
+        ">
+        ${m.ok}
+      </button>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    document.getElementById("sbCloseInstall").onclick = function() {
+      overlay.remove();
+    };
+  }
+}
+
+
+
+function sbApplyResultUxPatchV9(data){
+  try{
+    const level = String(data && data.fraudRisk && data.fraudRisk.level || "").toUpperCase();
+    const isHigh = level === "HIGH";
+    const isMedium = level === "MEDIUM";
+    const isLow = level === "LOW";
+    const lang = String((UI && UI.lang) || (data && data.userLang) || "PL").toUpperCase();
+
+    const risks = document.getElementById("risks");
+    const cons = document.getElementById("consequences");
+    const risksCard = risks ? risks.closest(".card") : null;
+
+    [risks, cons].forEach(function(el){
+      if(!el) return;
+      el.classList.remove("low-risk","medium-risk","high-risk");
+      el.classList.add(isHigh ? "high-risk" : isMedium ? "medium-risk" : "low-risk");
+    });
+
+    if(risksCard){
+      risksCard.classList.remove("sb-low-risk-card","sb-medium-risk-card","sb-high-risk-card");
+      risksCard.classList.add(isHigh ? "sb-high-risk-card" : isMedium ? "sb-medium-risk-card" : "sb-low-risk-card");
+    }
+
+    if(isLow){
+      [risks, cons].forEach(function(parent){
+        if(!parent) return;
+        parent.querySelectorAll(".box-warn").forEach(function(el){
+          el.classList.remove("box-warn");
+          el.classList.add("box-info");
+          el.textContent = (el.textContent || "").replace(/^⚠️\s*/,"");
+        });
+      });
+    }
+
+    if(isHigh){
+      [risks, cons].forEach(function(parent){
+        if(!parent) return;
+        parent.querySelectorAll(".box-warn,.box-info").forEach(function(el){
+          el.classList.remove("box-info");
+          el.classList.add("box-warn");
+          const t = (el.textContent || "").trim();
+          if(t && !t.startsWith("⚠️")) el.textContent = "⚠️ " + t;
+        });
+      });
+    }
+
+    const sep = document.getElementById("sbSummarySeparator");
+    if(sep){
+      sep.style.display = "block";
+      const labels = {
+        PL:"Ocena i kroki Sense Bridge",
+        EN:"Sense Bridge assessment and steps",
+        NL:"Beoordeling en stappen van Sense Bridge",
+        DE:"Bewertung und Schritte von Sense Bridge",
+        FR:"Évaluation et étapes Sense Bridge",
+        IT:"Valutazione e passi Sense Bridge",
+        ES:"Evaluación y pasos de Sense Bridge",
+        PT:"Avaliação e passos do Sense Bridge",
+        UA:"Оцінка та кроки Sense Bridge"
+      };
+      const span = sep.querySelector("span");
+      if(span) span.textContent = labels[lang] || labels.PL;
+    }
+  }catch(e){
+    console.warn("SB UX patch v9 skipped:", e);
+  }
+}
+
 </script>
 
 </body>
-</html>
+      </html>
